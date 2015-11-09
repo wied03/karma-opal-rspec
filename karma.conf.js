@@ -3,7 +3,7 @@
 
 // TODO: Put this in a separate file/require/module commonjs it/etc.
 
-var execSync = require('exec-sync');
+var exec = require('child_process').exec;
 var opalProcessor = function(args, config, logger,helper) {
     config = config || {};
 
@@ -19,11 +19,16 @@ var opalProcessor = function(args, config, logger,helper) {
     
     return function(content,file,done) {
         log.debug('Processing "%s".', file.originalPath);
-        var compiled = execSync("bundle exec opal -c "+command);
-        
+
         file.path = transformPath(file.originalPath);
-        
-        done(compiled);
+        exec("bundle exec opal -c --no-opal --no-exit "+file.originalPath, function(error,stdout,stderr) {
+          if (error != null) {
+            done(error, null);
+          }
+          else {
+            done(stdout);
+          }
+        });
     };
 };
 
@@ -45,7 +50,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'test/**/*spec.rb'
+      'spec/**/*spec.rb'
     ],
 
 
