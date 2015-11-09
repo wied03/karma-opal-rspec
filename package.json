@@ -1,0 +1,11 @@
+{
+  "name": "karma-rack-plugin",
+  "version": "1.0.0",
+  "description": "rack adapter",
+  "main": "karma.conf.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "wied03",
+  "license": "ISC"
+}

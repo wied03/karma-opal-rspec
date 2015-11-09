@@ -1,6 +1,37 @@
 // Karma configuration
 // Generated on Mon Nov 09 2015 15:27:11 GMT-0700 (MST)
 
+// TODO: Put this in a separate file/require/module commonjs it/etc.
+
+var execSync = require('exec-sync');
+var opalProcessor = function(args, config, logger,helper) {
+    config = config || {};
+
+    var log = logger.create('preprocessor.opal');
+    
+    var defaultOptions = {};
+    
+    var options = helper.merge(defaultOptions, args.options || {}, config.options || {});
+
+    var transformPath = args.transformPath || config.transformPath || function(filepath) {
+        return filepath.replace(/\.rb$/, '.js');
+    };
+    
+    return function(content,file,done) {
+        log.debug('Processing "%s".', file.originalPath);
+        var compiled = execSync("bundle exec opal -c "+command);
+        
+        file.path = transformPath(file.originalPath);
+        
+        done(compiled);
+    };
+};
+
+opalProcessor.$inject = ['args','config.opalPreprocessor', 'logger', 'helper'];
+// module.exports = {
+//     'preprocessor:opal': ['factory', opalProcessor]
+// };
+
 module.exports = function(config) {
   config.set({
 
@@ -12,10 +43,9 @@ module.exports = function(config) {
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['jasmine'],
 
-
     // list of files / patterns to load in the browser
     files: [
-      'test/**/*spec.js'
+      'test/**/*spec.rb'
     ],
 
 
@@ -27,7 +57,13 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+      '**/*.rb': ['opal']
     },
+    plugins: [
+      'karma-jasmine',
+      'karma-chrome-launcher',
+      {'preprocessor:opal': ['factory', opalProcessor]}
+    ],
 
 
     // test results reporter to use
