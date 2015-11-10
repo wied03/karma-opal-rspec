@@ -2,7 +2,7 @@
   "name": "karma-rack-plugin",
   "version": "1.0.0",
   "description": "rack adapter",
-  "main": "karma.conf.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,5 +11,8 @@
   "devDependencies": {
     "karma": "^0.13.15",
     "karma-chrome-launcher": "^0.2.1"
+  },
+  "dependencies": {
+    "tmp": "0.0.28"
   }
 }
