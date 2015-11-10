@@ -13,5 +13,5 @@ class Opal::RSpec::KarmaFormatter
 end
 
 RSpec.configure do |config|
-  config.default_formatter = Opal::RSpec::KarmaFormatter
+  #config.default_formatter = Opal::RSpec::KarmaFormatter
 end
