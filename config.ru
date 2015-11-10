@@ -6,4 +6,5 @@ run Opal::Server.new(sprockets: sprockets_env) { |s|
   sprockets_env.add_spec_paths_to_sprockets
   sprockets_env.append_path File.join(File.dirname(__FILE__), 'lib')
   s.debug = true
+  s.source_map = true
 }

@@ -23,6 +23,14 @@ module.exports = function(config) {
     ],
 
 
+    preprocessors: {
+      '**/*.js': ['sourcemap']
+    },
+
+    proxies: {
+        '/__OPAL_SOURCE_MAPS__/': 'http://localhost:9292/__OPAL_SOURCE_MAPS__/'
+    },
+
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     // TODO: https://github.com/karma-runner/karma/blob/master/test/unit/preprocessor.spec.js
@@ -30,7 +38,8 @@ module.exports = function(config) {
 
     plugins: [
       opalFramework,
-      'karma-chrome-launcher'
+      'karma-chrome-launcher',
+      'karma-sourcemap-loader'
     ],
 
 
