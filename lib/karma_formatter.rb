@@ -53,10 +53,15 @@ class Opal::RSpec::KarmaFormatter
   def report_example_done(notification, skipped, success)
     example = notification.example
     suite = example.example_group.parent_groups.reverse.map { |grp| grp.description }
+    log = if success
+            []
+          else
+            [notification.exception.message] + notification.formatted_backtrace
+          end
     result = {
         description: example.description,
         id: @id += 1,
-        log: success ? [] : notification.formatted_backtrace,
+        log: log,
         skipped: skipped,
         success: success,
         suite: suite,
