@@ -8,12 +8,8 @@ var querystring = require('querystring');
 var opalSourceMap = function (config) {
     return function (request, response, next) {
         if (request.url.endsWith(".map")) {
-            var requestedFilePath = querystring.unescape(request.url)
-                .replace(config.urlRoot, '/')
-                .replace(/\?.*$/, '')
-                .replace(/^\/absolute/, '')
-                .replace(/^\/base/, config.basePath);
-            var sourceMapUrl = config.sprockets_src_map[requestedFilePath];
+            console.log("got source map query for url "+request.url);
+            var sourceMapUrl = config.sprockets_src_map[request.url];
             console.log("fetching source maps from "+sourceMapUrl);
             http.get(sourceMapUrl, function (sprocketsResponse) {
                 response.writeHead(sprocketsResponse.statusCode, sprocketsResponse.headers);
@@ -27,16 +23,17 @@ var opalSourceMap = function (config) {
                 });
                 sprocketsResponse.on('end', function () {
                     var asJson = JSON.parse(rawSourceMap);
-                    if (requestedFilePath.indexOf("foo") != -1) {
+                    // TODO: Fix this hard coded stuff
+                    if (request.url.indexOf("foo") != -1) {
                         asJson.file = "/base/spec/foo.js";
                     }
-                    if (requestedFilePath.indexOf("something_spec") != -1) {
+                    if (request.url.indexOf("something_spec") != -1) {
                                             asJson.file = "/base/spec/foo.js";
                                         }
-                    if (requestedFilePath.indexOf("other_spec") != -1) {
+                    if (request.url.indexOf("other_spec") != -1) {
                                             asJson.file = "/base/spec/other_spec.js";
                                         }
-                    if (requestedFilePath.indexOf("via_sprockets") != -1) {
+                    if (request.url.indexOf("via_sprockets") != -1) {
                                             asJson.file = "/base/spec/via_sprockets.js";
                                         }
 
