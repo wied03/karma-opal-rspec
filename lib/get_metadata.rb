@@ -12,11 +12,6 @@ pre_run_locator = Opal::RSpec::PreRackLocator.new sprockets_env.spec_pattern,
                                                   sprockets_env.spec_exclude_pattern,
                                                   sprockets_env.spec_files
 locator = Opal::RSpec::PostRackLocator.new(pre_run_locator)
-# TODO: Duped logic
-test_requires = locator.get_opal_spec_requires.map do |r|
-  logical = sprockets_env[r].logical_path
-  logical.sub File.extname(logical), ''
-end
 
 with_dependencies = locator.get_opal_spec_requires.map do |r|
   compiler = Opal::Compiler.new(File.read(r))
@@ -30,13 +25,10 @@ end
 
 File.open ARGV[1], 'w' do |test_req_file|
   test_req_file << "Opal.require('opal/rspec');"
-  # test_requires.each do |req|
-  #   test_req_file << "Opal.require('#{req}');"
-  # end
 end
 
-result = {
-    files_to_add: opal_rspec_paths + [ARGV[1]] + test_paths
-}
+watch = lambda {|watch_it, arr| [*arr].map {|a| {file: a, watch: watch_it}}}
+
+result = watch[false, opal_rspec_paths] + watch[false, ARGV[1]] + watch[true, test_paths]
 
 puts result.to_json
