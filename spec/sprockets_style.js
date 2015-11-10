@@ -1,0 +1,2 @@
+//
+//= require via_sprockets
