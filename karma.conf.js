@@ -7,25 +7,39 @@ var http = require('http');
 var querystring = require('querystring');
 var opalSourceMap = function (config) {
     return function (request, response, next) {
-        if (request.url.endsWith(".map") && request.url.indexOf("foo") != -1) {
-            //var requestedFilePath = querystring.unescape(request.url)
-            //    .replace(config.urlRoot, '/')
-            //    .replace(/\?.*$/, '')
-            //    .replace(/^\/absolute/, '')
-            //    .replace(/^\/base/, config.basePath);
-            //var sourceMapUrl = config.sprockets_src_map[requestedFilePath];
-            var sourceMapUrl = "http://localhost:9292/__OPAL_SOURCE_MAPS__/foo.self.map";
+        if (request.url.endsWith(".map")) {
+            var requestedFilePath = querystring.unescape(request.url)
+                .replace(config.urlRoot, '/')
+                .replace(/\?.*$/, '')
+                .replace(/^\/absolute/, '')
+                .replace(/^\/base/, config.basePath);
+            var sourceMapUrl = config.sprockets_src_map[requestedFilePath];
             console.log("fetching source maps from "+sourceMapUrl);
             http.get(sourceMapUrl, function (sprocketsResponse) {
                 response.writeHead(sprocketsResponse.statusCode, sprocketsResponse.headers);
+                if (sprocketsResponse.statusCode == 404) {
+                    response.end();
+                    return;
+                }
                 var rawSourceMap = "";
                 sprocketsResponse.on('data', function (chunk) {
                     rawSourceMap += chunk.toString();
                 });
                 sprocketsResponse.on('end', function () {
                     var asJson = JSON.parse(rawSourceMap);
-                    asJson.sources = ["/ruby/base/spec/foo.rb"];
-                    asJson.file = "/base/spec/foo.js";
+                    if (requestedFilePath.indexOf("foo") != -1) {
+                        asJson.file = "/base/spec/foo.js";
+                    }
+                    if (requestedFilePath.indexOf("something_spec") != -1) {
+                                            asJson.file = "/base/spec/foo.js";
+                                        }
+                    if (requestedFilePath.indexOf("other_spec") != -1) {
+                                            asJson.file = "/base/spec/other_spec.js";
+                                        }
+                    if (requestedFilePath.indexOf("via_sprockets") != -1) {
+                                            asJson.file = "/base/spec/via_sprockets.js";
+                                        }
+
                     var asString = JSON.stringify(asJson);
                     console.log("end of source map "+asString);
                     response.end(asString);
@@ -59,7 +73,7 @@ module.exports = function (config) {
         middleware: ['opal_sourcemap'],
 
         proxies: {
-            '/ruby/base/spec/': 'http://localhost:9292/__OPAL_SOURCE_MAPS__/'
+            '/__OPAL_SOURCE_MAPS__/' : 'http://localhost:9292/__OPAL_SOURCE_MAPS__/'
         },
 
         // preprocess matching files before serving them to the browser
