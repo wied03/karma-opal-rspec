@@ -15,9 +15,7 @@ module.exports = function(config) {
     frameworks: ['opal'],
 
     // list of files / patterns to load in the browser
-    files: [
-      'spec/**/*spec.rb'
-    ],
+    files: [],
 
 
     // list of files to exclude
@@ -29,7 +27,7 @@ module.exports = function(config) {
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     // TODO: https://github.com/karma-runner/karma/blob/master/test/unit/preprocessor.spec.js
     // PR to include {dot: true} on mm call
-   
+
     plugins: [
       opalFramework,
       'karma-chrome-launcher'
