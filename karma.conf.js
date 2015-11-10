@@ -4,7 +4,6 @@
 var opalFramework = require('./lib/index.js');
 
 var http = require('http');
-var querystring = require('querystring');
 var opalSourceMap = function (config) {
     return function (request, response, next) {
         if (request.url.endsWith(".map")) {
