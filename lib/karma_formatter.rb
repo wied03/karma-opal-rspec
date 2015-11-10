@@ -30,7 +30,7 @@ class Opal::RSpec::KarmaFormatter
     `#{@karma}.info(#{contents.to_n})`
   end
 
-  def dump_summary(notification)
+  def dump_summary(*)
     `#{@karma}.complete()`
   end
 
@@ -69,8 +69,6 @@ class Opal::RSpec::KarmaFormatter
     }
     `#{@karma}.result(#{result.to_n})`
   end
-
-  # TODO: Register for what Karma supports, then call Karma using opal's native helpers
 end
 
 RSpec.configure do |config|

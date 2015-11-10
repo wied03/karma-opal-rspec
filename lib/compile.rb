@@ -1,6 +1,5 @@
 require 'opal/rspec'
 
-# TODO: Despite our attempt to stub out opal/rspec once we've taken care of it, it's not working (karma formatter is including stringio, etc.)
 # We already have this covered and cached, so don't worry about it
 STUB_IF_NOT_CORE = %w{opal opal-rspec opal/rspec opal/mini opal/base}
 
