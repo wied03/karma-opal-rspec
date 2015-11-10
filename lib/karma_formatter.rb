@@ -3,7 +3,9 @@ require 'native'
 
 class Opal::RSpec::KarmaFormatter
   ::RSpec::Core::Formatters.register self, :start,
-                              :example_passed, :example_failed,
+                              :example_started,
+                              :example_passed, 
+                              :example_failed,
                               :example_pending,
                               :dump_summary
                               
@@ -44,15 +46,20 @@ class Opal::RSpec::KarmaFormatter
     report_example_done notification, true, true
   end
   
+  def example_started(notification)
+    @start_time = `new Date().getTime()`
+  end
+  
   def report_example_done(notification, skipped, success)
+    example = notification.example
     result = {
-      description: notification.example.description,
+      description: example.description,
       id: @id += 1,
       log: success ? [] : notification.formatted_backtrace.split("\n").to_a,
       skipped: skipped,
       success: success,
       suite: [],
-      time: 0
+      time: skipped ? 0 : `new Date().getTime() - #{@start_time}`
     }
     `#{@karma}.result(#{result.to_n})`
   end  
