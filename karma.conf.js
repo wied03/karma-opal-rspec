@@ -25,16 +25,16 @@ var opalSourceMap = function (config) {
                     var asJson = JSON.parse(rawSourceMap);
                     // TODO: Fix this hard coded stuff
                     if (request.url.indexOf("foo") != -1) {
-                        asJson.file = "/base/spec/foo.js";
+                        asJson.file = "spec/foo.js";
                     }
                     if (request.url.indexOf("something_spec") != -1) {
-                                            asJson.file = "/base/spec/foo.js";
+                                            asJson.file = "spec/foo.js";
                                         }
                     if (request.url.indexOf("other_spec") != -1) {
-                                            asJson.file = "/base/spec/other_spec.js";
+                                            asJson.file = "spec/other_spec.js";
                                         }
                     if (request.url.indexOf("via_sprockets") != -1) {
-                                            asJson.file = "/base/spec/via_sprockets.js";
+                                            asJson.file = "spec/via_sprockets.js";
                                         }
 
                     var asString = JSON.stringify(asJson);
