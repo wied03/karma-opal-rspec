@@ -27,8 +27,10 @@ module.exports = function(config) {
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
+    // TODO: https://github.com/karma-runner/karma/blob/master/test/unit/preprocessor.spec.js
+    // PR to include {dot: true} on mm call
     preprocessors: {
-      '**/*.rb': ['opal']      
+      '/**/*.rb': ['opal']      
     },
     plugins: [
       opalFramework,
