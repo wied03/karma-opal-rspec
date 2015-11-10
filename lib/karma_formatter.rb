@@ -46,7 +46,7 @@ class Opal::RSpec::KarmaFormatter
     report_example_done notification, true, true
   end
 
-  def example_started(notification)
+  def example_started(*)
     @start_time = `new Date().getTime()`
   end
 
