@@ -5,9 +5,9 @@ require 'opal/rspec'
 STUB_IF_NOT_CORE = %w{opal opal-rspec opal/rspec opal/mini opal/base}
 
 # We load these from Karma
-CORE = %w{opal opal-rspec}
+CORE = %w{opal.rb opal-rspec.rb}
 input_asset = ARGV[0]
-unless CORE.any? {|c| input_asset.include?(c)}
+unless CORE.any? {|c| File.basename(input_asset) == c}
   STUB_IF_NOT_CORE.each { |s| Opal::Processor.stub_file s }
 end
 
