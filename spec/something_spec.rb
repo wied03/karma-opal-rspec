@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'sprockets_style'
+require 'via_sprockets'
 
 describe 'something' do
   subject { 42 }

@@ -1,6 +1,7 @@
 require 'opal/rspec'
 require 'json'
 
+# TODO: Share this with Rack config
 sprockets_env = Opal::RSpec::SprocketsEnvironment.new(spec_pattern=ARGV[0])
 Opal.paths.each { |p| sprockets_env.append_path p }
 sprockets_env.add_spec_paths_to_sprockets
@@ -33,8 +34,17 @@ GET_FULL_PATHS = %w{opal opal-rspec}
 INTERNAL_PATHS = %w{karma_formatter}
 opal_rspec_paths = map_assets[GET_FULL_PATHS, watch=false, include_deps=false]
 internal_paths = map_assets[INTERNAL_PATHS, watch=false, include_deps=false]
-with_dependencies = map_assets[locator.get_opal_spec_requires, watch=true]
+tests = map_assets[locator.get_opal_spec_requires, watch=true]
 
-result = opal_rspec_paths.merge(internal_paths).merge(with_dependencies)
+File.open ARGV[1], 'w' do |test_req_file|
+  test_req_file << "Opal.require('opal/rspec');\n"
+  locator.get_opal_spec_requires.each do |req|
+    logical_path = sprockets_env[req].logical_path
+    no_ext = logical_path.sub(File.extname(logical_path), '')
+    test_req_file << "Opal.require('#{no_ext}');\n"
+  end
+end
+
+result = opal_rspec_paths.merge(internal_paths).merge(tests)
 
 puts result.to_json
