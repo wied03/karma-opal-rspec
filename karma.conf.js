@@ -22,11 +22,6 @@ module.exports = function(config) {
     exclude: [
     ],
 
-
-    preprocessors: {
-      '**/*.js': ['sourcemap']
-    },
-
     proxies: {
         '/__OPAL_SOURCE_MAPS__/': 'http://localhost:9292/__OPAL_SOURCE_MAPS__/'
     },
@@ -38,8 +33,7 @@ module.exports = function(config) {
 
     plugins: [
       opalFramework,
-      'karma-chrome-launcher',
-      'karma-sourcemap-loader'
+      'karma-chrome-launcher'
     ],
 
 
