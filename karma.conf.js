@@ -3,6 +3,24 @@
 
 var opalFramework = require('./lib/index.js');
 
+var querystring = require('querystring');
+var opalSourceMap = function(config) {
+    return function (request,response, next) {
+        if (request.url.endsWith(".map")) {
+            var requestedFilePath = querystring.unescape(request.url)
+                  .replace(config.urlRoot, '/')
+                  .replace(/\?.*$/, '')
+                  .replace(/^\/absolute/, '')
+                  .replace(/^\/base/, config.basePath);
+            var sourceMapUrl = config.sprockets_src_map[requestedFilePath];
+            
+        }
+        else {
+            next();
+        }
+    };
+};
+
 module.exports = function(config) {
   config.set({
 
@@ -22,9 +40,7 @@ module.exports = function(config) {
     exclude: [
     ],
 
-    proxies: {
-        '/__OPAL_SOURCE_MAPS__/': 'http://localhost:9292/__OPAL_SOURCE_MAPS__/'
-    },
+    middleware: ['opal_sourcemap'],
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
@@ -33,7 +49,8 @@ module.exports = function(config) {
 
     plugins: [
       opalFramework,
-      'karma-chrome-launcher'
+      'karma-chrome-launcher',
+        {'middleware:opal_sourcemap' : ['factory', opalSourceMap]}
     ],
 
 
