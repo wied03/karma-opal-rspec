@@ -16,5 +16,8 @@
   },
   "dependencies": {
     "tmp": "0.0.28"
+  },
+  "engines": {
+    "node": "4.2.2"
   }
 }
