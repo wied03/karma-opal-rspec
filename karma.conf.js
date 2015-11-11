@@ -92,6 +92,7 @@ module.exports = function (config) {
         plugins: [
             opalFramework,
             'karma-chrome-launcher',
+            'karma-phantomjs-launcher',
             // TODO: Remove this once it's inside the plugin
             {'middleware:opal_sourcemap': ['factory', opalSourceMap]}
         ],
@@ -122,7 +123,7 @@ module.exports = function (config) {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['Chrome'],
+        browsers: ['PhantomJS'],
 
 
         // Continuous Integration mode
