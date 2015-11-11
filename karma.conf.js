@@ -3,6 +3,7 @@
 
 var opalFramework = require('./lib/index.js');
 
+// TODO: Move this into a separate file
 var http = require('http');
 var opalSourceMap = function (config) {
     return function (request, response, next) {
@@ -66,8 +67,10 @@ module.exports = function (config) {
         // list of files to exclude
         exclude: [],
 
+        // TODO: Move this inside the plugin
         middleware: ['opal_sourcemap'],
 
+        // TODO: Move this inside the plugin
         proxies: {
             '/__OPAL_SOURCE_MAPS__/' : 'http://localhost:9292/__OPAL_SOURCE_MAPS__/'
         },
@@ -80,6 +83,7 @@ module.exports = function (config) {
         plugins: [
             opalFramework,
             'karma-chrome-launcher',
+            // TODO: Remove this once it's inside the plugin
             {'middleware:opal_sourcemap': ['factory', opalSourceMap]}
         ],
 
