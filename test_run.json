@@ -1,0 +1,5 @@
+{
+    "something nested": {
+        "should eq 42": "PASSED"
+    }
+}

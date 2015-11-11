@@ -13,7 +13,8 @@
     "karma-chrome-launcher": "^0.2.1",
     "karma-phantomjs-launcher": "^0.2.1",
     "karma-spec-json-reporter": "0.0.8",
-    "phantomjs": "^1.9.18"
+    "phantomjs": "^1.9.18",
+    "require-self": "^0.1.0"
   },
   "dependencies": {
     "tmp": "0.0.28"

@@ -1,8 +1,6 @@
 // Karma configuration
 // Generated on Mon Nov 09 2015 15:27:11 GMT-0700 (MST)
 
-var opalFramework = require('./lib/index.js');
-
 module.exports = function (config) {
     config.set({
 
@@ -29,13 +27,6 @@ module.exports = function (config) {
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         // TODO: https://github.com/karma-runner/karma/blob/master/test/unit/preprocessor.spec.js
         // PR to include {dot: true} on mm call
-
-        plugins: [
-            opalFramework,
-            'karma-chrome-launcher',
-            'karma-phantomjs-launcher',
-            'karma-spec-json-reporter',
-        ],
 
 
         // test results reporter to use
