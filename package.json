@@ -17,7 +17,8 @@
     "require-self": "^0.1.0"
   },
   "dependencies": {
-    "tmp": "0.0.28"
+    "tmp": "0.0.28",
+    "urllib-sync": "^1.1.2"
   },
   "engines": {
     "node": "4.2.2"
