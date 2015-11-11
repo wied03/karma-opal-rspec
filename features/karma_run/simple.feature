@@ -1,8 +1,10 @@
 Feature: Run Karma Tests
 
-  Scenario: No requires, passing
+  Background:
     Given the 'karma.conf.js' Karma config file
-    And the simple tests
+
+  Scenario: No requires, passing
+    Given the simple tests
     When I run the Karma test
     Then the test passes with JSON results:
     """
@@ -14,8 +16,7 @@ Feature: Run Karma Tests
     """
 
   Scenario: Sprockets require
-    Given the 'karma.conf.js' Karma config file
-    And the sprockets_require tests
+    Given the sprockets_require tests
     When I run the Karma test
     Then the test passes with JSON results:
     """
@@ -27,14 +28,25 @@ Feature: Run Karma Tests
     """
 
   Scenario: Ruby require
-    Given the 'karma.conf.js' Karma config file
-    And the ruby_require tests
+    Given the ruby_require tests
     When I run the Karma test
     Then the test passes with JSON results:
     """
     {
         "Foo": {
             "should eq 42": "PASSED"
+        }
+    }
+    """
+
+  Scenario: Failed test
+    Given the failure tests
+    When I run the Karma test
+    Then the test fails with JSON results:
+    """
+    {
+        "something failure": {
+            "should eq 43": "FAILED"
         }
     }
     """

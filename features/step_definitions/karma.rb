@@ -11,8 +11,13 @@ When(/^I run the Karma test$/) do
   step 'I run `./node_modules/karma/bin/karma start --single-run --no-colors --log-level debug`'
 end
 
-Then(/^the test passes with JSON results:$/) do |expected_json|
-  step 'the exit status should be 0'
+Then(/^the test (passes|fails) with JSON results:$/) do |pass_fail, expected_json|
+  should_pass = pass_fail == 'passes'
+  if should_pass
+    step 'the exit status should be 0'
+  else
+    step 'the exit status should not be 0'
+  end
   filename = File.join(aruba.config.working_directory, 'test_run.json')
   expect(File).to exist(filename)
   actual = File.read(filename)
