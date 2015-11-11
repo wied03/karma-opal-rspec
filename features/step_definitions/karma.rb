@@ -1,3 +1,5 @@
+require 'json'
+
 Given(/^the '(.*)' Karma config file$/) do |config_path|
   path = File.expand_path(File.join(File.dirname(__FILE__), '../..', config_path))
   dest = File.expand_path(File.join(aruba.config.working_directory, 'karma.conf.js'))
@@ -9,11 +11,12 @@ When(/^I run the Karma test$/) do
   step 'I run `./node_modules/karma/bin/karma start --single-run --no-colors --log-level debug`'
 end
 
-Then(/^the results should be:$/) do |expected|
+Then(/^the test passes with JSON results:$/) do |expected_json|
+  step 'the exit status should be 0'
   filename = File.join(aruba.config.working_directory, 'test_run.json')
   expect(File).to exist(filename)
   actual = File.read(filename)
-  expect(actual).to eq expected
+  expect(JSON.parse(actual)).to eq JSON.parse(expected_json)
 end
 
 Given(/^the (\S+) tests$/) do |spec_path|
