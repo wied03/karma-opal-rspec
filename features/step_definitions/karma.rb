@@ -1,6 +1,8 @@
 Given(/^the '(.*)' Karma config file$/) do |config_path|
-  path = File.join(File.dirname(__FILE__), '../..', config_path)
-  FileUtils.cp path, File.join(aruba.config.working_directory,'karma.conf.js')
+  path = File.expand_path(File.join(File.dirname(__FILE__), '../..', config_path))
+  dest = File.expand_path(File.join(aruba.config.working_directory, 'karma.conf.js'))
+  # FileUtils cp was doing weird stuff for some reason
+  `cp -f #{path} #{dest}`
 end
 
 When(/^I run the Karma test$/) do

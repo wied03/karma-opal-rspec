@@ -2,3 +2,4 @@
 .idea
 Gemfile.lock
 /tmp
+test_run.json
