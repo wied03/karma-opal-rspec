@@ -1,9 +1,15 @@
 Feature: Simple run
 
+  @announce-output @announce-command
   Scenario: Stuff
-    Given I run `./node_modules/karma/bin/karma start --single-run`
+    Given the 'karma.conf.js' Karma config file
+    When I run the Karma test
     Then the exit status should be 0
-    And the output should contain:
+    And the results should be:
     """
-    Executed 1 of 1 SUCCESS
+    {
+        "something nested": {
+            "should eq 42": "PASSED"
+        }
+    }
     """
