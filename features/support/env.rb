@@ -8,3 +8,9 @@ Before do
   aruba.config.exit_timeout = 60
   aruba.config.io_wait_timeout = 60
 end
+
+After do |scenario|
+  if scenario.failed?
+    all_commands.each { |cmd| puts cmd.output }
+  end
+end

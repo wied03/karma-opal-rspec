@@ -1,6 +1,6 @@
-Feature: Simple run
+Feature: Run Karma Tests
 
-  Scenario: Stuff
+  Scenario: No requires, passing
     Given the 'karma.conf.js' Karma config file
     And the simple tests
     When I run the Karma test
@@ -9,6 +9,19 @@ Feature: Simple run
     {
         "something nested": {
             "should eq 42": "PASSED"
+        }
+    }
+    """
+
+  Scenario: Sprockets require
+    Given the 'karma.conf.js' Karma config file
+    And the sprockets_include tests
+    When I run the Karma test
+    Then the test passes with JSON results:
+    """
+    {
+        "something via sprockets": {
+            "should eq 22": "PASSED"
         }
     }
     """

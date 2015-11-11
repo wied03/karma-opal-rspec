@@ -1,0 +1,1 @@
+window.ViaSprockets = 22;
