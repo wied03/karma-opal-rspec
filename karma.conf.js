@@ -75,7 +75,9 @@ module.exports = function (config) {
         frameworks: ['opal'],
 
         // list of files / patterns to load in the browser
-        files: [],
+        files: [
+            'spec/simple/**/*_spec.rb'
+        ],
 
 
         // list of files to exclude

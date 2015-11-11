@@ -1,8 +1,8 @@
 require 'opal/rspec'
 require 'json'
 
-# TODO: Share this with Rack config
-sprockets_env = Opal::RSpec::SprocketsEnvironment.new(spec_pattern=ARGV[0])
+pattern = Pathname.new(ARGV[0]).relative_path_from(Pathname.new(Dir.pwd)).to_s
+sprockets_env = Opal::RSpec::SprocketsEnvironment.new(spec_pattern=pattern)
 Opal.paths.each { |p| sprockets_env.append_path p }
 sprockets_env.add_spec_paths_to_sprockets
 sprockets_env.append_path File.dirname(__FILE__)
