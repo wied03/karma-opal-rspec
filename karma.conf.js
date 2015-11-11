@@ -16,12 +16,8 @@ module.exports = function (config) {
             'spec/**/*_spec.rb'
         ],
 
-
         // list of files to exclude
         exclude: [],
-
-        // TODO: Move this inside the plugin
-        middleware: ['opal_sourcemap'],
 
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
