@@ -10,8 +10,14 @@ When(/^I run the Karma test$/) do
 end
 
 Then(/^the results should be:$/) do |expected|
-  filename = 'test_run.json'
+  filename = File.join(aruba.config.working_directory, 'test_run.json')
   expect(File).to exist(filename)
   actual = File.read(filename)
   expect(actual).to eq expected
+end
+
+Given(/^the (\S+) tests$/) do |spec_path|
+  path = File.expand_path(File.join(File.dirname(__FILE__), '../../spec', spec_path))
+  dest = File.expand_path(File.join(aruba.config.working_directory, 'spec'))
+  FileUtils.cp_r path, dest
 end
