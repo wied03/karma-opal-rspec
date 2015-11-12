@@ -9,6 +9,7 @@
   "author": "wied03",
   "license": "ISC",
   "devDependencies": {
+    "jshint": "^2.8.0",
     "karma": "^0.13.15",
     "karma-chrome-launcher": "^0.2.1",
     "karma-phantomjs-launcher": "^0.2.1",
