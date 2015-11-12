@@ -1,6 +1,7 @@
 require 'opal/rspec'
 
 patterns = ENV['PATTERN'].split(',')
+load_paths = ENV['OPAL_LOAD_PATH'].split(',')
 
 # Karma explodes the paths
 relative_patterns = patterns.map do |p|
@@ -14,6 +15,7 @@ run Opal::Server.new(sprockets: sprockets_env) { |s|
   sprockets_env.add_spec_paths_to_sprockets
   # formatter, etc.
   sprockets_env.append_path File.dirname(__FILE__)
+  load_paths.each { |p| sprockets_env.append_path p }
   s.debug = true
   s.source_map = true
 }
