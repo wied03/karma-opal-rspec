@@ -10,6 +10,8 @@ rvm:
   - "2.2.3"
 
 before_script:
+  - "nvm use 4.1"
+  - "node -v"
   - "npm install --no-bin-links"
   - "cp -fv preprocessor.modified.js node_modules/karma/lib/preprocessor.js"
 
