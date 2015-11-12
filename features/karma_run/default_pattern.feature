@@ -1,7 +1,7 @@
-Feature: Run Karma Tests
+Feature: Default pattern
 
   Background:
-    Given the 'karma.conf.js' Karma config file
+    Given the 'singlePattern.js' Karma config file
 
   Scenario: No requires, passing
     Given the simple tests
