@@ -30,3 +30,10 @@ Given(/^the (\S+) tests$/) do |spec_path|
   # FileUtils cp was doing weird stuff for some reason
   `cp -R #{path} #{dest}`
 end
+
+Given(/^I copy (\S+) to the working directory$/) do |path|
+  path = File.expand_path(File.join(File.dirname(__FILE__), '../../', path))
+  dest = File.expand_path(File.join(aruba.config.working_directory))
+  # FileUtils cp was doing weird stuff for some reason
+  `cp -R #{path} #{dest}`
+end
