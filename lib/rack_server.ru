@@ -15,6 +15,8 @@ end
 
 puts "Launching Rack server with pattern #{relative_patterns}"
 sprockets_env = Opal::RSpec::SprocketsEnvironment.new(spec_pattern=relative_patterns)
+# dependencies like opal and opal-rspec won't change much from 1 Karma run to the next, so using a persistent cache store
+sprockets_env.cache = Sprockets::Cache::FileStore.new('./tmp/cache/karma_opal_rspec')
 run Opal::Server.new(sprockets: sprockets_env) { |s|
   s.main = 'opal/rspec/sprockets_runner'
   sprockets_env.add_spec_paths_to_sprockets
