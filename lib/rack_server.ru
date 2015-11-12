@@ -1,5 +1,6 @@
 require 'opal/rspec'
 
+puts "environment is #{ENV.to_h}"
 patterns = ENV['PATTERN'].split(',')
 load_paths = ENV['OPAL_LOAD_PATH'].split(',')
 in_rails = ENV.has_key? 'RAILS_ENV'
