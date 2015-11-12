@@ -5,11 +5,12 @@ Feature: Rails
 
   Scenario: Rails specs js
     Given I copy spec/rails_case/* to the working directory
+    And I set the environment variable "RAILS_ENV" to "test"
     When I run the Karma test
     Then the test passes with JSON results:
     """
     {
-        "Bar": {
+        "ClassUnderTest ::howdy": {
             "should eq 42": "PASSED"
         }
     }
