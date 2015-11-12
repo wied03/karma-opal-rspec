@@ -1,5 +1,7 @@
 # karma-opal-rspec
 
+[![Build Status](http://img.shields.io/travis/wied03/karma-opal-rspec/master.svg?style=flat)](http://travis-ci.org/wied03/karma-opal-rspec)
+
 Allow Karma to run opal-rspec tests (and pull dependencies from Sprockets)
 
 ## Usage

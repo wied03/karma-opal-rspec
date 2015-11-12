@@ -21,6 +21,6 @@
     "urllib-sync": "^1.1.2"
   },
   "engines": {
-    "node": "4.2.2"
+    "node": ">= 4.1"
   }
 }

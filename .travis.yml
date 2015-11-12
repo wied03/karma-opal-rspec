@@ -1,0 +1,16 @@
+language: ruby
+sudo: false
+
+cache:
+  bundler: true
+  directories:
+    - node_modules
+
+rvm:
+  - "2.2.3"
+
+before_script:
+  - "npm install --no-bin-links"
+
+script:
+  - "bundle exec rake"
