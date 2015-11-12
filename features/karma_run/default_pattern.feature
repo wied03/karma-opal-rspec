@@ -62,3 +62,27 @@ Feature: Default pattern
         }
     }
     """
+
+  Scenario: Focus on example groups
+    Given the example_grp_focus tests
+    When I run the Karma test
+    Then the test passes with JSON results:
+    """
+    {
+        "something": {
+            "should eq 42": "PASSED"
+        }
+    }
+    """
+
+  Scenario: Focus on example
+    Given the example_focus tests
+    When I run the Karma test
+    Then the test passes with JSON results:
+    """
+    {
+        "something": {
+            "should eq 42": "PASSED"
+        }
+    }
+    """
