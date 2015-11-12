@@ -1,4 +1,3 @@
-require 'opal/rspec'
 require 'native'
 
 class Opal::RSpec::KarmaFormatter
