@@ -2,12 +2,13 @@
 require 'opal/rspec'
 require 'json'
 
-map_assets = lambda do |assets, watch, include_deps=true|
+map_assets = lambda do |assets, watch, roll_up=false|
   assets.inject({}) do |result, asset|
     main_asset = environment.find_asset(asset)
-    with_deps = [main_asset]
-    with_deps += main_asset.included.map { |dep| environment.find_asset(dep) } if include_deps
-    as_array = with_deps.map do |dep_asset|
+    assets = [main_asset]
+    dependencies = main_asset.included.map { |dep| environment.find_asset(dep) }
+    assets += dependencies unless roll_up
+    as_array = assets.uniq.map do |dep_asset|
       [
           dep_asset.filename,
           {
@@ -22,8 +23,8 @@ end
 
 get_full_paths = %w{opal opal-rspec}
 internal_paths = %w{karma_formatter}
-opal_rspec_paths = map_assets[get_full_paths, watch=false, include_deps=false]
-internal_paths = map_assets[internal_paths, watch=false, include_deps=false]
+opal_rspec_paths = map_assets[get_full_paths, watch=false, roll_up=true]
+internal_paths = map_assets[internal_paths, watch=false]
 tests = map_assets[environment.get_opal_spec_requires, watch=true]
 result = opal_rspec_paths.merge(internal_paths).merge(tests)
 
