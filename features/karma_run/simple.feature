@@ -50,3 +50,15 @@ Feature: Run Karma Tests
         }
     }
     """
+
+  Scenario: Already required
+    Given the already_required tests
+    When I run the Karma test
+    Then the test passes with JSON results:
+    """
+    {
+        "Bar": {
+            "should eq 42": "PASSED"
+        }
+    }
+    """
