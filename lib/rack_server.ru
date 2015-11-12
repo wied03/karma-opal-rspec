@@ -2,7 +2,7 @@ require 'opal/rspec'
 
 patterns = ENV['PATTERN'].split(',')
 load_paths = ENV['OPAL_LOAD_PATH'].split(',')
-in_rails = ENV['RAILS_ENV'] != nil
+in_rails = ENV.has_key? 'RAILS_ENV'
 
 if in_rails
   require File.expand_path('config/environment')
