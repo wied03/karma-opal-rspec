@@ -11,6 +11,7 @@ rvm:
 
 before_script:
   - "npm install --no-bin-links"
+  - "cp -fv preprocessor.modified.js node_modules/karma/lib/preprocessor.js"
 
 script:
   - "bundle exec rake"
