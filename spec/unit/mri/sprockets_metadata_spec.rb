@@ -19,7 +19,6 @@ describe SprocketsMetadata do
       files.each do |file|
         FileUtils.mkdir_p File.dirname(file)
         FileUtils.touch file
-        yield file if block_given?
       end
     end
 
@@ -56,13 +55,8 @@ describe SprocketsMetadata do
 
     context '1 level of dependencies, 2 files' do
       before do
-        create_dummy_spec_files 'single_file.rb', 'other_file.rb' do |file|
-          if file.include? 'single_file.rb'
-            File.open file, 'w' do |f|
-              f << 'require "other_file"'
-            end
-          end
-        end
+        create_dummy_spec_files 'single_file.rb', 'other_file.rb'
+        File.write absolute_path('single_file.rb'), 'require "other_file"'
       end
 
       let(:files) { %w{single_file} }
@@ -83,19 +77,115 @@ describe SprocketsMetadata do
     end
 
     context 'nested dependencies' do
-      pending 'write this'
+      before do
+        create_dummy_spec_files 'single_file.rb', 'level2.rb', 'level3.rb'
+        File.write absolute_path('single_file.rb'), 'require "level2"'
+        File.write absolute_path('level2.rb'), 'require "level3"'
+      end
+
+      let(:files) { %w{single_file} }
+
+      it { is_expected.to eq([
+                                 {
+                                     filename: absolute_path('single_file.rb'),
+                                     logical_path: 'single_file.js',
+                                     dependencies: [
+                                         {
+                                             filename: absolute_path('level3.rb'),
+                                             logical_path: 'level3.self.js',
+                                             dependencies: []
+                                         },
+                                         # Sprockets doesn't do this in a nested way, but that's OK for what we need
+                                         {
+                                             filename: absolute_path('level2.rb'),
+                                             logical_path: 'level2.self.js',
+                                             dependencies: []
+                                         }
+                                     ]
+                                 }
+                             ]) }
     end
 
     context 'self-referential' do
-      pending 'write this'
+      before do
+        create_dummy_spec_files 'single_file.rb', 'other_file.rb'
+        File.write absolute_path('single_file.rb'), 'require "other_file"'
+        File.write absolute_path('other_file.rb'), 'require "single_file"'
+      end
+
+      let(:files) { %w{single_file} }
+
+      it { is_expected.to eq([
+                                 {
+                                     filename: absolute_path('single_file.rb'),
+                                     logical_path: 'single_file.js',
+                                     dependencies: [
+                                         {
+                                             filename: absolute_path('other_file.rb'),
+                                             logical_path: 'other_file.self.js',
+                                             dependencies: []
+                                         }
+                                     ]
+                                 }
+                             ]) }
     end
 
     context 'sprockets style require' do
-      pending 'write this'
+      before do
+        create_dummy_spec_files 'single_file.js', 'other_file.rb'
+        File.write absolute_path('single_file.js'), "//\n//= require other_file\n"
+      end
+
+      let(:files) { %w{single_file} }
+
+      it { is_expected.to eq([
+                                 {
+                                     filename: absolute_path('single_file.js'),
+                                     logical_path: 'single_file.js',
+                                     dependencies: [
+                                         {
+                                             filename: absolute_path('other_file.rb'),
+                                             logical_path: 'other_file.self.js',
+                                             dependencies: []
+                                         }
+                                     ]
+                                 }
+                             ]) }
     end
 
     context 'shared dependencies' do
-      pending 'write this'
+      before do
+        create_dummy_spec_files 'single_file.rb', 'other_file.rb', 'third_file.rb'
+        File.write absolute_path('single_file.rb'), 'require "other_file"'
+        File.write absolute_path('third_file.rb'), 'require "other_file"'
+      end
+
+      let(:files) { %w{single_file third_file} }
+
+      it { is_expected.to eq([
+                                 {
+                                     filename: absolute_path('single_file.rb'),
+                                     logical_path: 'single_file.js',
+                                     dependencies: [
+                                         {
+                                             filename: absolute_path('other_file.rb'),
+                                             logical_path: 'other_file.self.js',
+                                             dependencies: []
+                                         }
+                                     ]
+                                 },
+                                 {
+                                     filename: absolute_path('third_file.rb'),
+                                     logical_path: 'third_file.js',
+                                     dependencies: [
+                                         {
+                                             filename: absolute_path('other_file.rb'),
+                                             logical_path: 'other_file.self.js',
+                                             dependencies: []
+                                         }
+                                     ]
+                                 }
+                             ]) }
     end
   end
 end
