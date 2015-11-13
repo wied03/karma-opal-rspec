@@ -13,7 +13,9 @@ module SprocketsMetadata
       }
                      .reject { |a| a.filename == asset.filename } # don't want ourself in here, sprockets includes that
       if already_processed.include? file_asset
-        raise 'foo'
+        our_path = asset.logical_path
+        referring_paths = already_processed.map { |p| p.is_a?(Sprockets::Asset) ? p.logical_path : p.to_s }
+        raise "Circular dependency, one of #{referring_paths} refers to #{our_path} and #{our_path} refers to one of those files."
       end
       dependencies = get_dependency_graph sprockets_env, raw_deps, (already_processed + [file_asset])
       Asset.new(asset.filename,

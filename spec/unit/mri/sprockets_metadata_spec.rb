@@ -120,7 +120,7 @@ describe SprocketsMetadata do
 
       subject { lambda { SprocketsMetadata.get_dependency_graph sprockets_env, files } }
 
-      it { is_expected.to raise_exception 'Circular dependency, single_file.rb requires other_file.rb and other_file.rb requires single_file.rb!' }
+      it { is_expected.to raise_exception 'Circular dependency, one of ["single_file", "other_file.js", "single_file.js"] refers to other_file.js and other_file.js refers to one of those files.' }
     end
 
     context 'sprockets style require' do
