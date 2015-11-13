@@ -52,11 +52,34 @@ describe SprocketsMetadata do
                                      dependencies: []
                                  }
                              ]) }
-      pending 'write this'
     end
 
-    context '1 level of dependencies' do
-      pending 'write this'
+    context '1 level of dependencies, 2 files' do
+      before do
+        create_dummy_spec_files 'single_file.rb', 'other_file.rb' do |file|
+          if file.include? 'single_file.rb'
+            File.open file, 'w' do |f|
+              f << 'require "other_file"'
+            end
+          end
+        end
+      end
+
+      let(:files) { %w{single_file} }
+
+      it { is_expected.to eq([
+                                 {
+                                     filename: absolute_path('single_file.rb'),
+                                     logical_path: 'single_file.js',
+                                     dependencies: [
+                                         {
+                                             filename: absolute_path('other_file.rb'),
+                                             logical_path: 'other_file.self.js',
+                                             dependencies: []
+                                         }
+                                     ]
+                                 }
+                             ]) }
     end
 
     context 'nested dependencies' do
@@ -64,6 +87,14 @@ describe SprocketsMetadata do
     end
 
     context 'self-referential' do
+      pending 'write this'
+    end
+
+    context 'sprockets style require' do
+      pending 'write this'
+    end
+
+    context 'shared dependencies' do
       pending 'write this'
     end
   end
