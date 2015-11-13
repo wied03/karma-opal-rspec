@@ -16,11 +16,13 @@ module SprocketsMetadata
   def self.get_metadata(dependency_graph, roll_up_list, watch_list)
     dep_hash = {}
     dependency_graph.each do |dep|
-      dep_hash.merge!(get_metadata(dep.dependencies, roll_up_list, watch_list))
+      base_asset_name = File.basename(dep.filename)
+      roll_up = roll_up_list.include? base_asset_name
+      dep_hash.merge!(get_metadata(dep.dependencies, roll_up_list, watch_list)) unless roll_up
       dep_hash[dep.filename] = {
           logical_path: dep.logical_path,
-          watch: watch_list.include?(File.basename(dep.filename)),
-          roll_up: false
+          watch: watch_list.include?(base_asset_name),
+          roll_up: roll_up
       }
     end
     dep_hash
