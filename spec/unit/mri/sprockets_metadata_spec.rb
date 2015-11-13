@@ -159,4 +159,62 @@ describe SprocketsMetadata do
                              ] }
     end
   end
+
+  describe '::get_metadata' do
+    let(:roll_up_list) { [] }
+    let(:watch_list) { [] }
+    subject { SprocketsMetadata.get_metadata dependency_graph, roll_up_list, watch_list }
+
+    context 'no dependencies' do
+      context 'no dupes' do
+        let(:dependency_graph) do
+          [
+              SprocketsMetadata::Asset.new('/some/dir/file1.rb',
+                                           'file1.js',
+                                           []),
+              SprocketsMetadata::Asset.new('/some/dir/file2.rb',
+                                           'file2.js',
+                                           [])
+          ]
+        end
+
+        it { is_expected.to eq({
+                                   '/some/dir/file1.rb' => {
+                                       logical_path: 'file1.js',
+                                       watch: false
+                                   },
+                                   '/some/dir/file2.rb' => {
+                                       logical_path: 'file2.js',
+                                       watch: false
+                                   }
+                               }) }
+      end
+
+      context 'dupes' do
+        pending 'write this'
+      end
+    end
+
+    context 'dependencies' do
+      context 'no dupes' do
+        pending 'write this'
+      end
+
+      context 'dupes' do
+        pending 'write this'
+      end
+    end
+
+    context 'watches enabled' do
+      pending 'write this'
+    end
+
+    context 'roll up enabled' do
+      pending 'write this'
+    end
+
+    context 'dupes between rolled up and non-rolled up' do
+      pending 'write this'
+    end
+  end
 end
