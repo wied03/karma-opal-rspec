@@ -372,7 +372,78 @@ describe SprocketsMetadata do
     end
 
     context 'dupes between rolled up and non-rolled up' do
-      pending 'write this'
+      let(:roll_up_list) do
+        %w{file1.rb}
+      end
+
+      let(:dependency_graph) do
+        [
+            SprocketsMetadata::Asset.new('/some/dir/file1.rb',
+                                         'file1.js',
+                                         [
+                                             SprocketsMetadata::Asset.new('/some/dir/file3.rb',
+                                                                          'file3.js',
+                                                                          [])
+                                         ]),
+            SprocketsMetadata::Asset.new('/some/dir/file2.rb',
+                                         'file2.js',
+                                         []),
+            SprocketsMetadata::Asset.new('/some/dir/file3.rb',
+                                         'file3.js',
+                                         [])
+        ]
+      end
+
+
+      it { is_expected.to eq({
+                                 '/some/dir/file1.rb' => {
+                                     logical_path: 'file1.js',
+                                     watch: false,
+                                     roll_up: true
+                                 },
+                                 '/some/dir/file2.rb' => {
+                                     logical_path: 'file2.js',
+                                     watch: false,
+                                     roll_up: false
+                                 }
+                             }) }
+    end
+
+    context 'roll up asset comes later in list' do
+      let(:roll_up_list) do
+        %w{file1.rb}
+      end
+
+      let(:dependency_graph) do
+        [
+            SprocketsMetadata::Asset.new('/some/dir/file2.rb',
+                                         'file2.js',
+                                         []),
+            SprocketsMetadata::Asset.new('/some/dir/file3.rb',
+                                         'file3.js',
+                                         []),
+            SprocketsMetadata::Asset.new('/some/dir/file1.rb',
+                                         'file1.js',
+                                         [
+                                             SprocketsMetadata::Asset.new('/some/dir/file3.rb',
+                                                                          'file3.js',
+                                                                          [])
+                                         ]),
+        ]
+      end
+
+      it { is_expected.to eq({
+                                 '/some/dir/file1.rb' => {
+                                     logical_path: 'file1.js',
+                                     watch: false,
+                                     roll_up: true
+                                 },
+                                 '/some/dir/file2.rb' => {
+                                     logical_path: 'file2.js',
+                                     watch: false,
+                                     roll_up: false
+                                 }
+                             }) }
     end
   end
 end
