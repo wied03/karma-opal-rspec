@@ -409,7 +409,6 @@ describe SprocketsMetadata do
     end
 
     context 'dupes between rolled up and non-rolled up' do
-      pending 'this might work again'
       let(:roll_up_list) do
         %w{file1.rb}
       end
@@ -443,11 +442,43 @@ describe SprocketsMetadata do
                                      logical_path: 'file2.js',
                                      watch: false,
                                      roll_up: false
+                                 }
+                             }) }
+    end
+
+    context '2 files both have the same dependency and 1 is rolled up' do
+      let(:roll_up_list) do
+        %w{file1.rb}
+      end
+
+      let(:dependency_graph) do
+        [
+            SprocketsMetadata::Asset.new('/some/dir/file1.rb',
+                                         'file1.js',
+                                         [
+                                             SprocketsMetadata::Asset.new('/some/dir/file3.rb',
+                                                                          'file3.js',
+                                                                          [])
+                                         ]),
+            SprocketsMetadata::Asset.new('/some/dir/file2.rb',
+                                         'file2.js',
+                                         [
+                                             SprocketsMetadata::Asset.new('/some/dir/file3.rb',
+                                                                          'file3.js',
+                                                                          [])
+                                         ])
+        ]
+      end
+
+
+      it { is_expected.to eq({
+                                 '/some/dir/file1.rb' => {
+                                     logical_path: 'file1.js',
+                                     watch: false,
+                                     roll_up: true
                                  },
-                                 '/some/dir/file3.rb' => {
-                                     # Unless we disable caching, sprockets will always return all of the nested deps on the 1st outer call and not allow us to fetch deps at each level
-                                     # therefore, no easy way to get purely nested dependencies, so we'll see these twice
-                                     logical_path: 'file3.js',
+                                 '/some/dir/file2.rb' => {
+                                     logical_path: 'file2.js',
                                      watch: false,
                                      roll_up: false
                                  }
@@ -485,13 +516,6 @@ describe SprocketsMetadata do
                                  },
                                  '/some/dir/file2.rb' => {
                                      logical_path: 'file2.js',
-                                     watch: false,
-                                     roll_up: false
-                                 },
-                                 '/some/dir/file3.rb' => {
-                                     # Unless we disable caching, sprockets will always return all of the nested deps on the 1st outer call and not allow us to fetch deps at each level
-                                     # therefore, no easy way to get purely nested dependencies, so we'll see these twice
-                                     logical_path: 'file3.js',
                                      watch: false,
                                      roll_up: false
                                  }
