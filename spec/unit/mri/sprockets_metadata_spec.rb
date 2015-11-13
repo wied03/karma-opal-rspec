@@ -256,12 +256,45 @@ describe SprocketsMetadata do
                                        roll_up: false
                                    }
                                }) }
-
-        pending 'write this'
       end
 
       context 'dupes' do
-        pending 'write this'
+        let(:dependency_graph) do
+          [
+              SprocketsMetadata::Asset.new('/some/dir/file1.rb',
+                                           'file1.js',
+                                           [
+                                               SprocketsMetadata::Asset.new('/some/dir/file3.rb',
+                                                                            'file3.js',
+                                                                            [])
+                                           ]),
+              SprocketsMetadata::Asset.new('/some/dir/file2.rb',
+                                           'file2.js',
+                                           [
+                                               SprocketsMetadata::Asset.new('/some/dir/file3.rb',
+                                                                            'file3.js',
+                                                                            [])
+                                           ])
+          ]
+        end
+
+        it { is_expected.to eq({
+                                   '/some/dir/file3.rb' => {
+                                       logical_path: 'file3.js',
+                                       watch: false,
+                                       roll_up: false
+                                   },
+                                   '/some/dir/file1.rb' => {
+                                       logical_path: 'file1.js',
+                                       watch: false,
+                                       roll_up: false
+                                   },
+                                   '/some/dir/file2.rb' => {
+                                       logical_path: 'file2.js',
+                                       watch: false,
+                                       roll_up: false
+                                   }
+                               }) }
       end
     end
 
