@@ -44,13 +44,11 @@ describe SprocketsMetadata do
 
       let(:files) { %w{single_file} }
 
-      it { is_expected.to eq([
-                                 {
-                                     filename: absolute_path('single_file.rb'),
-                                     logical_path: 'single_file.js',
-                                     dependencies: []
-                                 }
-                             ]) }
+      it { is_expected.to eq [
+                                 SprocketsMetadata::Asset.new(absolute_path('single_file.rb'),
+                                                              'single_file.js',
+                                                              [])
+                             ] }
     end
 
     context '1 level of dependencies, 2 files' do
@@ -61,19 +59,15 @@ describe SprocketsMetadata do
 
       let(:files) { %w{single_file} }
 
-      it { is_expected.to eq([
-                                 {
-                                     filename: absolute_path('single_file.rb'),
-                                     logical_path: 'single_file.js',
-                                     dependencies: [
-                                         {
-                                             filename: absolute_path('other_file.rb'),
-                                             logical_path: 'other_file.self.js',
-                                             dependencies: []
-                                         }
-                                     ]
-                                 }
-                             ]) }
+      it { is_expected.to eq [
+                                 SprocketsMetadata::Asset.new(absolute_path('single_file.rb'),
+                                                              'single_file.js',
+                                                              [
+                                                                  SprocketsMetadata::Asset.new(absolute_path('other_file.rb'),
+                                                                                               'other_file.self.js',
+                                                                                               [])
+                                                              ])
+                             ] }
     end
 
     context 'nested dependencies' do
@@ -85,25 +79,18 @@ describe SprocketsMetadata do
 
       let(:files) { %w{single_file} }
 
-      it { is_expected.to eq([
-                                 {
-                                     filename: absolute_path('single_file.rb'),
-                                     logical_path: 'single_file.js',
-                                     dependencies: [
-                                         {
-                                             filename: absolute_path('level3.rb'),
-                                             logical_path: 'level3.self.js',
-                                             dependencies: []
-                                         },
-                                         # Sprockets doesn't do this in a nested way, but that's OK for what we need
-                                         {
-                                             filename: absolute_path('level2.rb'),
-                                             logical_path: 'level2.self.js',
-                                             dependencies: []
-                                         }
-                                     ]
-                                 }
-                             ]) }
+      it { is_expected.to eq [
+                                 SprocketsMetadata::Asset.new(absolute_path('single_file.rb'),
+                                                              'single_file.js',
+                                                              [
+                                                                  SprocketsMetadata::Asset.new(absolute_path('level3.rb'),
+                                                                                               'level3.self.js',
+                                                                                               []),
+                                                                  SprocketsMetadata::Asset.new(absolute_path('level2.rb'),
+                                                                                               'level2.self.js',
+                                                                                               [])
+                                                              ])
+                             ] }
     end
 
     context 'self-referential' do
@@ -115,19 +102,15 @@ describe SprocketsMetadata do
 
       let(:files) { %w{single_file} }
 
-      it { is_expected.to eq([
-                                 {
-                                     filename: absolute_path('single_file.rb'),
-                                     logical_path: 'single_file.js',
-                                     dependencies: [
-                                         {
-                                             filename: absolute_path('other_file.rb'),
-                                             logical_path: 'other_file.self.js',
-                                             dependencies: []
-                                         }
-                                     ]
-                                 }
-                             ]) }
+      it { is_expected.to eq [
+                                 SprocketsMetadata::Asset.new(absolute_path('single_file.rb'),
+                                                              'single_file.js',
+                                                              [
+                                                                  SprocketsMetadata::Asset.new(absolute_path('other_file.rb'),
+                                                                                               'other_file.self.js',
+                                                                                               [])
+                                                              ])
+                             ] }
     end
 
     context 'sprockets style require' do
@@ -138,19 +121,15 @@ describe SprocketsMetadata do
 
       let(:files) { %w{single_file} }
 
-      it { is_expected.to eq([
-                                 {
-                                     filename: absolute_path('single_file.js'),
-                                     logical_path: 'single_file.js',
-                                     dependencies: [
-                                         {
-                                             filename: absolute_path('other_file.rb'),
-                                             logical_path: 'other_file.self.js',
-                                             dependencies: []
-                                         }
-                                     ]
-                                 }
-                             ]) }
+      it { is_expected.to eq [
+                                 SprocketsMetadata::Asset.new(absolute_path('single_file.js'),
+                                                              'single_file.js',
+                                                              [
+                                                                  SprocketsMetadata::Asset.new(absolute_path('other_file.rb'),
+                                                                                               'other_file.self.js',
+                                                                                               [])
+                                                              ])
+                             ] }
     end
 
     context 'shared dependencies' do
@@ -162,30 +141,22 @@ describe SprocketsMetadata do
 
       let(:files) { %w{single_file third_file} }
 
-      it { is_expected.to eq([
-                                 {
-                                     filename: absolute_path('single_file.rb'),
-                                     logical_path: 'single_file.js',
-                                     dependencies: [
-                                         {
-                                             filename: absolute_path('other_file.rb'),
-                                             logical_path: 'other_file.self.js',
-                                             dependencies: []
-                                         }
-                                     ]
-                                 },
-                                 {
-                                     filename: absolute_path('third_file.rb'),
-                                     logical_path: 'third_file.js',
-                                     dependencies: [
-                                         {
-                                             filename: absolute_path('other_file.rb'),
-                                             logical_path: 'other_file.self.js',
-                                             dependencies: []
-                                         }
-                                     ]
-                                 }
-                             ]) }
+      it { is_expected.to eq [
+                                 SprocketsMetadata::Asset.new(absolute_path('single_file.rb'),
+                                                              'single_file.js',
+                                                              [
+                                                                  SprocketsMetadata::Asset.new(absolute_path('other_file.rb'),
+                                                                                               'other_file.self.js',
+                                                                                               [])
+                                                              ]),
+                                 SprocketsMetadata::Asset.new(absolute_path('third_file.rb'),
+                                                              'third_file.js',
+                                                              [
+                                                                  SprocketsMetadata::Asset.new(absolute_path('other_file.rb'),
+                                                                                               'other_file.self.js',
+                                                                                               [])
+                                                              ])
+                             ] }
     end
   end
 end
