@@ -31,7 +31,11 @@ module SprocketsMetadata
       base_asset_name = File.basename(dep.filename)
       roll_up = roll_up_list.include? base_asset_name
       if roll_up
-        dep.dependencies.each { |d| already_rolled_up[d] = true }
+        dep.dependencies.each do |d|
+          already_rolled_up[d] = true
+          # If this dependency was included separately earlier in the run, we'll remove it to reduce duplication
+          dep_hash.delete d.filename
+        end
       else
         new_dependencies = dep.dependencies - already_rolled_up.keys
         dep_hash.merge!(get_metadata(new_dependencies, roll_up_list, watch, already_rolled_up))
