@@ -15,7 +15,7 @@ Opal::RSpec::RakeTask.new(:spec_opal) do |server, task|
 end
 
 RSpec::Core::RakeTask.new(:spec_mri) do |task|
-  task.pattern = 'spec/mri/**/*_spec.rb'
+  task.pattern = 'spec/unit/mri/**/*_spec.rb'
 end
 
 task :spec => [:spec_mri, :spec_opal]
