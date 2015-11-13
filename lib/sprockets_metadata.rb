@@ -17,7 +17,8 @@ module SprocketsMetadata
     as_array = dependency_graph.map do |dep|
       [dep.filename, {
           logical_path: dep.logical_path,
-          watch: false
+          watch: false,
+          roll_up: false
       }]
     end
     Hash[as_array]
