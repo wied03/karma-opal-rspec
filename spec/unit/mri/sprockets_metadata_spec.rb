@@ -23,8 +23,15 @@ describe SprocketsMetadata do
       end
     end
 
+    def absolute_path(file)
+      File.join(@temp_dir, file)
+    end
+
     let(:sprockets_env) do
-      original_env = Opal::RSpec::SprocketsEnvironment.new
+      original_env = Opal::RSpec::SprocketsEnvironment.new pattern='**/*.rb',
+                                                           exclude_pattern=nil,
+                                                           files=nil,
+                                                           default_path=@temp_dir
       original_env.add_spec_paths_to_sprockets
       original_env.cached
     end
@@ -40,8 +47,8 @@ describe SprocketsMetadata do
 
       it { is_expected.to eq([
                                  {
-                                     filename: 'foo',
-                                     logical_path: 'bah',
+                                     filename: absolute_path('single_file.rb'),
+                                     logical_path: 'single_file.js',
                                      dependencies: []
                                  }
                              ]) }
