@@ -11,9 +11,6 @@ Feature: Source maps
     {
         "something nested": {
             "should eq 42": "PASSED"
-        },
-        "other nested": {
-            "should eq 42": "PASSED"
         }
     }
     """
