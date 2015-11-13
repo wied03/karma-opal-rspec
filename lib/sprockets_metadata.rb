@@ -14,13 +14,15 @@ module SprocketsMetadata
   end
 
   def self.get_metadata(dependency_graph, roll_up_list, watch_list)
-    as_array = dependency_graph.map do |dep|
-      [dep.filename, {
+    dep_hash = {}
+    dependency_graph.each do |dep|
+      dep_hash.merge!(get_metadata(dep.dependencies, roll_up_list, watch_list))
+      dep_hash[dep.filename] = {
           logical_path: dep.logical_path,
           watch: false,
           roll_up: false
-      }]
+      }
     end
-    Hash[as_array]
+    dep_hash
   end
 end
