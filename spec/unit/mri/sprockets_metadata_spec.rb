@@ -79,6 +79,9 @@ describe SprocketsMetadata do
 
       let(:files) { %w{single_file} }
 
+      # Unless we disable caching, sprockets will always return all of the nested deps on the 1st outer call and not allow us to fetch deps at each level
+      # therefore, no easy way to get purely nested dependencies, so we'll see these twice
+      
       it { is_expected.to eq [
                                  SprocketsMetadata::Asset.new(absolute_path('single_file.rb'),
                                                               'single_file.js',
@@ -406,10 +409,12 @@ describe SprocketsMetadata do
                                      watch: false,
                                      roll_up: false
                                  },
-                                 '/some/dir/file3.rb' => {# Unless we disable caching, no easy way to get purely nested dependencies, so we'll see these twice
-                                                          logical_path: 'file3.js',
-                                                          watch: false,
-                                                          roll_up: false
+                                 '/some/dir/file3.rb' => {
+                                     # Unless we disable caching, sprockets will always return all of the nested deps on the 1st outer call and not allow us to fetch deps at each level
+                                     # therefore, no easy way to get purely nested dependencies, so we'll see these twice
+                                     logical_path: 'file3.js',
+                                     watch: false,
+                                     roll_up: false
                                  }
                              }) }
     end
@@ -448,10 +453,12 @@ describe SprocketsMetadata do
                                      watch: false,
                                      roll_up: false
                                  },
-                                 '/some/dir/file3.rb' => {# Unless we disable caching, no easy way to get purely nested dependencies, so we'll see these twice
-                                                          logical_path: 'file3.js',
-                                                          watch: false,
-                                                          roll_up: false
+                                 '/some/dir/file3.rb' => {
+                                     # Unless we disable caching, sprockets will always return all of the nested deps on the 1st outer call and not allow us to fetch deps at each level
+                                     # therefore, no easy way to get purely nested dependencies, so we'll see these twice
+                                     logical_path: 'file3.js',
+                                     watch: false,
+                                     roll_up: false
                                  }
                              }) }
     end
