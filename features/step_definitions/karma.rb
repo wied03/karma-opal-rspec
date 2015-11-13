@@ -1,7 +1,7 @@
 require 'json'
 
 Given(/^the '(.*)' Karma config file$/) do |config_path|
-  src = File.expand_path(File.join(File.dirname(__FILE__), '../../spec/karma_configs', config_path))
+  src = File.expand_path(File.join(File.dirname(__FILE__), '../../spec/integration/karma_configs', config_path))
   dest = File.expand_path(File.join(aruba.config.working_directory, 'karma.conf.js'))
   # FileUtils cp was doing weird stuff for some reason
   `cp -f #{src} #{dest}`
@@ -25,7 +25,7 @@ Then(/^the test (passes|fails) with JSON results:$/) do |pass_fail, expected_jso
 end
 
 Given(/^the (\S+) tests$/) do |spec_path|
-  path = File.expand_path(File.join(File.dirname(__FILE__), '../../spec', spec_path))
+  path = File.expand_path(File.join(File.dirname(__FILE__), '../../spec/integration', spec_path))
   dest = File.expand_path(File.join(aruba.config.working_directory, 'spec'))
   # FileUtils cp was doing weird stuff for some reason
   `cp -R #{path} #{dest}`

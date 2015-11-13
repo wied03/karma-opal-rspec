@@ -5,7 +5,7 @@ Feature: Custom load path
 
   Scenario: Basic
     Given the add_to_load_path/spec tests
-    And I copy spec/add_to_load_path/src_dir to the working directory
+    And I copy spec/integration/add_to_load_path/src_dir to the working directory
     When I run the Karma test
     Then the test passes with JSON results:
     """
