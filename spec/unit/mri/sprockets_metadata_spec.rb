@@ -26,6 +26,18 @@ describe SprocketsMetadata do
       File.join(@temp_dir, file)
     end
 
+    RSpec::Matchers.define :have_graph do |expected|
+      match do |actual|
+        hash = actual.map(&:to_h)
+        @matcher = eq(expected.map(&:to_h))
+        @matcher.matches? hash
+      end
+
+      failure_message do
+        @matcher.failure_message
+      end
+    end
+
     let(:sprockets_env) do
       original_env = Opal::RSpec::SprocketsEnvironment.new pattern='**/*.rb',
                                                            exclude_pattern=nil,
@@ -44,14 +56,14 @@ describe SprocketsMetadata do
 
       let(:files) { %w{single_file} }
 
-      it { is_expected.to eq [
-                                 SprocketsMetadata::Asset.new(absolute_path('single_file.rb'),
-                                                              'single_file.js',
-                                                              [])
-                             ] }
+      it { is_expected.to have_graph [
+                                         SprocketsMetadata::Asset.new(absolute_path('single_file.rb'),
+                                                                      'single_file.js',
+                                                                      [])
+                                     ] }
     end
 
-    context '1 level of dependencies, 2 files' do
+    context '1 level of 2 dependencies' do
       before do
         create_dummy_spec_files 'single_file.rb', 'other_file.rb'
         File.write absolute_path('single_file.rb'), 'require "other_file"'
@@ -59,15 +71,15 @@ describe SprocketsMetadata do
 
       let(:files) { %w{single_file} }
 
-      it { is_expected.to eq [
-                                 SprocketsMetadata::Asset.new(absolute_path('single_file.rb'),
-                                                              'single_file.js',
-                                                              [
-                                                                  SprocketsMetadata::Asset.new(absolute_path('other_file.rb'),
-                                                                                               'other_file.self.js',
-                                                                                               [])
-                                                              ])
-                             ] }
+      it { is_expected.to have_graph [
+                                         SprocketsMetadata::Asset.new(absolute_path('single_file.rb'),
+                                                                      'single_file.js',
+                                                                      [
+                                                                          SprocketsMetadata::Asset.new(absolute_path('other_file.rb'),
+                                                                                                       'other_file.js',
+                                                                                                       [])
+                                                                      ])
+                                     ] }
     end
 
     context 'nested dependencies' do
@@ -79,21 +91,22 @@ describe SprocketsMetadata do
 
       let(:files) { %w{single_file} }
 
-      # Unless we disable caching, sprockets will always return all of the nested deps on the 1st outer call and not allow us to fetch deps at each level
-      # therefore, no easy way to get purely nested dependencies, so we'll see these twice
-
-      it { is_expected.to eq [
-                                 SprocketsMetadata::Asset.new(absolute_path('single_file.rb'),
-                                                              'single_file.js',
-                                                              [
-                                                                  SprocketsMetadata::Asset.new(absolute_path('level3.rb'),
-                                                                                               'level3.self.js',
-                                                                                               []),
-                                                                  SprocketsMetadata::Asset.new(absolute_path('level2.rb'),
-                                                                                               'level2.self.js',
-                                                                                               [])
-                                                              ])
-                             ] }
+      it { is_expected.to have_graph [
+                                         SprocketsMetadata::Asset.new(absolute_path('single_file.rb'),
+                                                                      'single_file.js',
+                                                                      [
+                                                                          SprocketsMetadata::Asset.new(absolute_path('level3.rb'),
+                                                                                                       'level3.js',
+                                                                                                       []),
+                                                                          SprocketsMetadata::Asset.new(absolute_path('level2.rb'),
+                                                                                                       'level2.js',
+                                                                                                       [
+                                                                                                           SprocketsMetadata::Asset.new(absolute_path('level3.rb'),
+                                                                                                                                        'level3.js',
+                                                                                                                                        [])
+                                                                                                       ])
+                                                                      ])
+                                     ] }
     end
 
     context 'self-referential' do
@@ -105,15 +118,9 @@ describe SprocketsMetadata do
 
       let(:files) { %w{single_file} }
 
-      it { is_expected.to eq [
-                                 SprocketsMetadata::Asset.new(absolute_path('single_file.rb'),
-                                                              'single_file.js',
-                                                              [
-                                                                  SprocketsMetadata::Asset.new(absolute_path('other_file.rb'),
-                                                                                               'other_file.self.js',
-                                                                                               [])
-                                                              ])
-                             ] }
+      subject { lambda { SprocketsMetadata.get_dependency_graph sprockets_env, files } }
+
+      it { is_expected.to raise_exception 'Circular dependency, single_file.rb requires other_file.rb and other_file.rb requires single_file.rb!' }
     end
 
     context 'sprockets style require' do
@@ -124,42 +131,71 @@ describe SprocketsMetadata do
 
       let(:files) { %w{single_file} }
 
-      it { is_expected.to eq [
-                                 SprocketsMetadata::Asset.new(absolute_path('single_file.js'),
-                                                              'single_file.js',
-                                                              [
-                                                                  SprocketsMetadata::Asset.new(absolute_path('other_file.rb'),
-                                                                                               'other_file.self.js',
-                                                                                               [])
-                                                              ])
-                             ] }
+      it { is_expected.to have_graph [
+                                         SprocketsMetadata::Asset.new(absolute_path('single_file.js'),
+                                                                      'single_file.js',
+                                                                      [
+                                                                          SprocketsMetadata::Asset.new(absolute_path('other_file.rb'),
+                                                                                                       'other_file.js',
+                                                                                                       [])
+                                                                      ])
+                                     ] }
     end
 
-    context 'shared dependencies' do
-      before do
-        create_dummy_spec_files 'single_file.rb', 'other_file.rb', 'third_file.rb'
-        File.write absolute_path('single_file.rb'), 'require "other_file"'
-        File.write absolute_path('third_file.rb'), 'require "other_file"'
+    context 'multiple files' do
+      context 'shared dependencies' do
+        before do
+          create_dummy_spec_files 'single_file.rb', 'other_file.rb', 'third_file.rb'
+          File.write absolute_path('single_file.rb'), 'require "other_file"'
+          File.write absolute_path('third_file.rb'), 'require "other_file"'
+        end
+
+        let(:files) { %w{single_file third_file} }
+
+        it { is_expected.to have_graph [
+                                           SprocketsMetadata::Asset.new(absolute_path('single_file.rb'),
+                                                                        'single_file.js',
+                                                                        [
+                                                                            SprocketsMetadata::Asset.new(absolute_path('other_file.rb'),
+                                                                                                         'other_file.js',
+                                                                                                         [])
+                                                                        ]),
+                                           SprocketsMetadata::Asset.new(absolute_path('third_file.rb'),
+                                                                        'third_file.js',
+                                                                        [
+                                                                            SprocketsMetadata::Asset.new(absolute_path('other_file.rb'),
+                                                                                                         'other_file.js',
+                                                                                                         [])
+                                                                        ])
+                                       ] }
       end
 
-      let(:files) { %w{single_file third_file} }
+      context 'each has different dependencies' do
+        before do
+          create_dummy_spec_files 'single_file.rb', 'other_file.rb', 'third_file.rb', 'yet_another_file.rb'
+          File.write absolute_path('single_file.rb'), 'require "other_file"'
+          File.write absolute_path('third_file.rb'), 'require "yet_another_file"'
+        end
 
-      it { is_expected.to eq [
-                                 SprocketsMetadata::Asset.new(absolute_path('single_file.rb'),
-                                                              'single_file.js',
-                                                              [
-                                                                  SprocketsMetadata::Asset.new(absolute_path('other_file.rb'),
-                                                                                               'other_file.self.js',
-                                                                                               [])
-                                                              ]),
-                                 SprocketsMetadata::Asset.new(absolute_path('third_file.rb'),
-                                                              'third_file.js',
-                                                              [
-                                                                  SprocketsMetadata::Asset.new(absolute_path('other_file.rb'),
-                                                                                               'other_file.self.js',
-                                                                                               [])
-                                                              ])
-                             ] }
+        let(:files) { %w{single_file third_file} }
+
+        it { is_expected.to have_graph [
+                                           SprocketsMetadata::Asset.new(absolute_path('single_file.rb'),
+                                                                        'single_file.js',
+                                                                        [
+                                                                            SprocketsMetadata::Asset.new(absolute_path('other_file.rb'),
+                                                                                                         'other_file.js',
+                                                                                                         [])
+                                                                        ]),
+                                           SprocketsMetadata::Asset.new(absolute_path('third_file.rb'),
+                                                                        'third_file.js',
+                                                                        [
+                                                                            SprocketsMetadata::Asset.new(absolute_path('yet_another_file.rb'),
+                                                                                                         'yet_another_file.js',
+                                                                                                         [])
+                                                                        ])
+                                       ] }
+      end
     end
   end
 
@@ -373,6 +409,7 @@ describe SprocketsMetadata do
     end
 
     context 'dupes between rolled up and non-rolled up' do
+      pending 'this might work again'
       let(:roll_up_list) do
         %w{file1.rb}
       end

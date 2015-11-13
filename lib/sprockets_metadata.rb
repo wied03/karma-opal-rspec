@@ -1,12 +1,21 @@
+require 'uri'
+
 module SprocketsMetadata
   Asset = Struct.new(:filename, :logical_path, :dependencies)
 
-  def self.get_dependency_graph(sprockets_env, files)
+  def self.get_dependency_graph(sprockets_env, files, already_processed=[])
     files.map do |file_asset|
       asset = file_asset.is_a?(Sprockets::Asset) ? file_asset : sprockets_env.find_asset(file_asset)
-      raw_deps = (asset.metadata[:included] || []).map { |a| sprockets_env.find_asset(a) }
+      raw_deps = (asset.metadata[:included] || []).map { |dep|
+        asset_uri = URI dep
+        # Fetching with path to avoid the self/pipeline that sprockets puts on here
+        sprockets_env.find_asset(asset_uri.path)
+      }
                      .reject { |a| a.filename == asset.filename } # don't want ourself in here, sprockets includes that
-      dependencies = get_dependency_graph sprockets_env, raw_deps
+      if already_processed.include? file_asset
+        raise 'foo'
+      end
+      dependencies = get_dependency_graph sprockets_env, raw_deps, (already_processed + [file_asset])
       Asset.new(asset.filename,
                 asset.logical_path,
                 dependencies)
