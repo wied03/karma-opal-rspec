@@ -9,6 +9,7 @@ end
 Opal::RSpec::RakeTask.new(:spec) do |server, task|
   task.pattern = 'spec/unit/**/*_spec.rb'
   server.append_path 'lib'
+  task.runner = :node
 end
 
 task :js_hint do

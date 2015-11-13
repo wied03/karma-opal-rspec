@@ -1,10 +1,9 @@
-require 'moduleStub'
 require 'opalSourceMapTranslator'
 require 'native'
 
 describe 'opalSourceMapTranslator' do
   subject {
-    func = `window.module.exports`
+    func = `require(process.cwd()+'/lib/opalSourceMapTranslator')`
     native_source_map = existing_source_map.to_n
     result = `#{func}(#{native_source_map}, #{request_url})`
     Hash.new(result)
