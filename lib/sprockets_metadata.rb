@@ -19,7 +19,7 @@ module SprocketsMetadata
       dep_hash.merge!(get_metadata(dep.dependencies, roll_up_list, watch_list))
       dep_hash[dep.filename] = {
           logical_path: dep.logical_path,
-          watch: false,
+          watch: watch_list.include?(File.basename(dep.filename)),
           roll_up: false
       }
     end
