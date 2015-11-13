@@ -81,7 +81,7 @@ describe SprocketsMetadata do
 
       # Unless we disable caching, sprockets will always return all of the nested deps on the 1st outer call and not allow us to fetch deps at each level
       # therefore, no easy way to get purely nested dependencies, so we'll see these twice
-      
+
       it { is_expected.to eq [
                                  SprocketsMetadata::Asset.new(absolute_path('single_file.rb'),
                                                               'single_file.js',
@@ -165,8 +165,8 @@ describe SprocketsMetadata do
 
   describe '::get_metadata' do
     let(:roll_up_list) { [] }
-    let(:watch_list) { [] }
-    subject { SprocketsMetadata.get_metadata dependency_graph, roll_up_list, watch_list }
+    let(:watch) { false }
+    subject { SprocketsMetadata.get_metadata dependency_graph, roll_up_list, watch }
 
     context 'no dependencies' do
       context 'no dupes' do
@@ -302,9 +302,7 @@ describe SprocketsMetadata do
     end
 
     context 'watches enabled' do
-      let(:watch_list) do
-        %w(file2.rb file3.rb)
-      end
+      let(:watch) { true }
 
       let(:dependency_graph) do
         [
@@ -329,7 +327,7 @@ describe SprocketsMetadata do
                                  },
                                  '/some/dir/file1.rb' => {
                                      logical_path: 'file1.js',
-                                     watch: false,
+                                     watch: true,
                                      roll_up: false
                                  },
                                  '/some/dir/file2.rb' => {

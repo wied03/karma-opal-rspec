@@ -1,32 +1,15 @@
 <%=
 require 'opal/rspec'
 require 'json'
+require_relative 'sprockets_metadata'
 
-map_assets = lambda do |assets, watch, roll_up=false|
-  assets.inject({}) do |result, asset|
-    main_asset = environment.find_asset(asset)
-    assets = [main_asset]
-    dependencies = main_asset.included.map { |dep| environment.find_asset(dep) }
-    assets += dependencies unless roll_up
-    as_array = assets.uniq.map do |dep_asset|
-      [
-          dep_asset.filename,
-          {
-              logical_path: dep_asset.logical_path,
-              watch: watch
-          }
-      ]
-    end
-    result.merge! Hash[as_array]
-  end
-end
+non_watch_dep_graph = SprocketsMetadata.get_dependency_graph environment, %w{opal opal-rspec karma_formatter}
+roll_up_list = %w{opal.rb opal-rspec.rb opal/rspec.rb}
+non_watch_metadata = SprocketsMetadata.get_metadata non_watch_dep_graph, roll_up_list, watch=false
+tests_dep_graph = SprocketsMetadata.get_dependency_graph environment, environment.get_opal_spec_requires
+test_metadata = SprocketsMetadata.get_metadata tests_dep_graph, roll_up_list, watch=true
 
-get_full_paths = %w{opal opal-rspec}
-internal_paths = %w{karma_formatter}
-opal_rspec_paths = map_assets[get_full_paths, watch=false, roll_up=true]
-internal_paths = map_assets[internal_paths, watch=false]
-tests = map_assets[environment.get_opal_spec_requires, watch=true]
-result = opal_rspec_paths.merge(internal_paths).merge(tests)
+result = non_watch_metadata.merge(test_metadata)
 
 result.to_json
 %>
