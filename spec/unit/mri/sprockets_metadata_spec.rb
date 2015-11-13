@@ -405,6 +405,11 @@ describe SprocketsMetadata do
                                      logical_path: 'file2.js',
                                      watch: false,
                                      roll_up: false
+                                 },
+                                 '/some/dir/file3.rb' => {# Unless we disable caching, no easy way to get purely nested dependencies, so we'll see these twice
+                                                          logical_path: 'file3.js',
+                                                          watch: false,
+                                                          roll_up: false
                                  }
                              }) }
     end
@@ -442,6 +447,11 @@ describe SprocketsMetadata do
                                      logical_path: 'file2.js',
                                      watch: false,
                                      roll_up: false
+                                 },
+                                 '/some/dir/file3.rb' => {# Unless we disable caching, no easy way to get purely nested dependencies, so we'll see these twice
+                                                          logical_path: 'file3.js',
+                                                          watch: false,
+                                                          roll_up: false
                                  }
                              }) }
     end
