@@ -32,6 +32,13 @@ module SprocketsMetadata
     end
     result
   end
+  
+  def self.default_roll_up_list
+    # use find all to catch pre-release
+    opal_spec = Gem::Specification.find_all_by_name('opal').first
+    gems_dir = File.expand_path('..', opal_spec.gem_dir)
+    [Regexp.new(Regexp.escape(gems_dir))]
+  end
 
   def self.get_metadata(dependency_graph, roll_up_list, watch, already_rolled_up={})
     dep_hash = {}

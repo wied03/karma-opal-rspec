@@ -470,4 +470,22 @@ describe SprocketsMetadata do
                              }) }
     end
   end
+  
+  describe '::default_roll_up_list' do
+    subject { SprocketsMetadata.default_roll_up_list }
+    
+    context 'mocked' do
+      before do
+        stuff = double
+        allow(Gem::Specification).to receive(:find_all_by_name).with('opal').and_return([stuff])
+        allow(stuff).to receive(:gem_dir).and_return('/some/path/to/gems/opal')
+      end
+    
+      it { is_expected.to eq [/\/some\/path\/to\/gems/]}
+    end
+    
+    context 'real' do
+      it { is_expected.to include(be_a(Regexp))}
+    end    
+  end
 end
