@@ -5,6 +5,7 @@ gem 'opal', '0.9.0.beta1'
 gem 'aruba'
 gem 'rake'
 gem 'rspec'
+gem 'rack-test'
 
 # Rails case testing
 gem 'rails'

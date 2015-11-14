@@ -4,27 +4,7 @@ require 'opal/rspec/rake_task'
 
 describe SprocketsMetadata do
   describe '::get_dependency_graph' do
-    before do
-      @temp_dir = Dir.mktmpdir
-      @current_dir = Dir.pwd
-      Dir.chdir @temp_dir
-    end
-
-    after do
-      Dir.chdir @current_dir
-      FileUtils.rm_rf @temp_dir
-    end
-
-    def create_dummy_spec_files(*files)
-      files.each do |file|
-        FileUtils.mkdir_p File.dirname(file)
-        FileUtils.touch file
-      end
-    end
-
-    def absolute_path(file)
-      File.join(@temp_dir, file)
-    end
+    include_context :temp_dir
 
     RSpec::Matchers.define :have_graph do |expected|
       match do |actual|
@@ -367,12 +347,12 @@ describe SprocketsMetadata do
                                  }
                              }) }
     end
-    
+
     context 'roll up by regex' do
       let(:roll_up_list) do
         [/something/]
       end
-      
+
       let(:dependency_graph) do
         {
             file_mapping: {
@@ -470,22 +450,22 @@ describe SprocketsMetadata do
                              }) }
     end
   end
-  
+
   describe '::default_roll_up_list' do
     subject { SprocketsMetadata.default_roll_up_list }
-    
+
     context 'mocked' do
       before do
         stuff = double
         allow(Gem::Specification).to receive(:find_all_by_name).with('opal').and_return([stuff])
         allow(stuff).to receive(:gem_dir).and_return('/some/path/to/gems/opal')
       end
-    
+
       it { is_expected.to eq [/\/some\/path\/to\/gems/]}
     end
-    
+
     context 'real' do
       it { is_expected.to include(be_a(Regexp))}
-    end    
+    end
   end
 end
