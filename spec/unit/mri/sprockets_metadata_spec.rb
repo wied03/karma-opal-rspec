@@ -123,9 +123,16 @@ describe SprocketsMetadata do
 
       let(:files) { %w{single_file} }
 
-      subject { lambda { SprocketsMetadata.get_dependency_graph sprockets_env, files } }
-
-      it { is_expected.to raise_exception 'Circular dependency, one of ["single_file.js", "other_file.js"] refers to single_file.js and single_file.js refers to one of those files.' }
+      it { is_expected.to have_graph({
+                                         file_mapping: {
+                                             'other_file.js' => absolute_path('other_file.rb'),
+                                             'single_file.js' => absolute_path('single_file.rb')
+                                         },
+                                         dependencies: {
+                                             'single_file.js' => %w{other_file.js},
+                                             'other_file.js' => %w{single_file.js},
+                                         }
+                                     }) }
     end
 
     context 'back reference' do
@@ -350,6 +357,40 @@ describe SprocketsMetadata do
       it { is_expected.to eq({
                                  '/some/dir/file1.rb' => {
                                      logical_path: 'file1.js',
+                                     watch: false,
+                                     roll_up: true
+                                 },
+                                 '/some/dir/file2.rb' => {
+                                     logical_path: 'file2.js',
+                                     watch: false,
+                                     roll_up: false
+                                 }
+                             }) }
+    end
+    
+    context 'roll up by regex' do
+      let(:roll_up_list) do
+        [/something/]
+      end
+      
+      let(:dependency_graph) do
+        {
+            file_mapping: {
+                'file3.js' => '/some/dir/file3.rb',
+                'something/file1.js' => '/some/dir/something/file1.rb',
+                'file2.js' => '/some/dir/file2.rb'
+            },
+            dependencies: {
+                'something/file1.js' => ['file3.js'],
+                'file2.js' => [],
+                'file3.js' => []
+            }
+        }
+      end
+
+      it { is_expected.to eq({
+                                 '/some/dir/something/file1.rb' => {
+                                     logical_path: 'something/file1.js',
                                      watch: false,
                                      roll_up: true
                                  },

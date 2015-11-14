@@ -37,8 +37,14 @@ module SprocketsMetadata
     dep_hash = {}
     file_mapping = dependency_graph[:file_mapping]
     file_mapping.each do |logical_path, filename|
-      base_asset_name = File.basename(filename)
-      roll_up = roll_up_list.include? base_asset_name
+      roll_up = roll_up_list.any? do |r|
+        if r.is_a?(Regexp)
+          r.match filename
+        else
+          base_asset_name = File.basename(filename)
+          base_asset_name == r
+        end
+      end
       if roll_up
         dependency_graph[:dependencies][logical_path].each do |dep|
           dep_hash.delete file_mapping[dep]
