@@ -1,5 +1,6 @@
 require 'json'
 require 'retryable'
+require 'open-uri'
 
 Given(/^the '(.*)' Karma config file$/) do |config_path|
   src = File.expand_path(File.join(File.dirname(__FILE__), '../../spec/integration/karma_configs', config_path))
@@ -67,10 +68,26 @@ end
 
 
 And(/^the following source maps exist:$/) do |expected_maps|
-  # TODO: do HTTP fetches and make assertions about what we get
-  table.hashes.each do |expected|
-
+  base = 'http://localhost:9876'
+  expected_maps.hashes.each do |expected|
+    expected_source_map_path = expected[:'Map URL']
+    js_url = URI.join(base, expected[:File])
+    open(js_url) do |js_file|
+      expect(js_file.read).to include "//# sourceMappingURL=#{expected_source_map_path}"
+    end
+    source_map_full_path = File.expand_path("../#{expected_source_map_path}", js_url.path)
+    source_map_contents = nil
+    open(URI.join(base, source_map_full_path)) do |source_map|
+      source_map_contents = source_map.read
+    end
+    source_map_contents = JSON.parse source_map_contents
+    expect(source_map_contents['file']).to eq expected[:'Original File']
+    expected_sources = expected[:Sources].split ','
+    expect(source_map_contents['sources']).to eq expected_sources
+    expected_sources.each do |source|
+      open(URI.join(base, source)) do |original_source|
+        expect(original_source.read).to_not be_empty
+      end
+    end
   end
-  # table is a table.hashes.keys # => [:File, :Map URL, :Original File, :Sources]
-  pending
 end
