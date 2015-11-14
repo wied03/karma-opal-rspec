@@ -6,6 +6,7 @@ gem 'aruba'
 gem 'rake'
 gem 'rspec'
 gem 'rack-test'
+gem 'retryable'
 
 # Rails case testing
 gem 'rails'
