@@ -1,4 +1,5 @@
 require 'opal/rspec'
+require 'opal_processor_patch'
 
 patterns = ENV['PATTERN'].split(',')
 load_paths = ENV['OPAL_LOAD_PATH'].split(',')
