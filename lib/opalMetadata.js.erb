@@ -3,11 +3,21 @@ require 'opal/rspec'
 require 'json'
 require_relative 'sprockets_metadata'
 
+roll_up = ENV['OPAL_ROLL_UP'].split(',')
+roll_up = if roll_up.any?
+  roll_up.map do |r|
+    # convert JS supplied regexps back into Ruby regexps if necessary
+    regexp_match = /^\/(.*)\/$/.match(r)
+    regexp_match ? Regexp.new(regexp_match.captures[0]) : r
+  end
+  else
+    SprocketsMetadata.default_roll_up_list
+end
+
 non_watch_dep_graph = SprocketsMetadata.get_dependency_graph environment, %w{opal opal-rspec karma_formatter}
-roll_up_list = %w{opal.rb opal-rspec.rb opal/rspec.rb}
-non_watch_metadata = SprocketsMetadata.get_metadata non_watch_dep_graph, roll_up_list, watch=false
+non_watch_metadata = SprocketsMetadata.get_metadata non_watch_dep_graph, roll_up, watch=false
 tests_dep_graph = SprocketsMetadata.get_dependency_graph environment, environment.get_opal_spec_requires
-test_metadata = SprocketsMetadata.get_metadata tests_dep_graph, roll_up_list, watch=true
+test_metadata = SprocketsMetadata.get_metadata tests_dep_graph, roll_up, watch=true
 
 result = non_watch_metadata.merge(test_metadata)
 

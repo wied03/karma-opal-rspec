@@ -11,14 +11,14 @@ module.exports = function (config) {
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
         frameworks: ['opal'],
 
-        opal: {
-            loadPaths: ['src_dir']
-        },
-
         // list of files / patterns to load in the browser
         files: [
             'spec/**/*_spec.rb'
         ],
+
+        opal: {
+            rollUp: [/foo/]
+        },
 
         // list of files to exclude
         exclude: [],

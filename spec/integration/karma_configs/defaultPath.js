@@ -16,7 +16,9 @@ module.exports = function (config) {
             'spec/foobar/**/*_spec.rb'
         ],
 
-        opalDefaultPath: 'spec/foobar',
+        opal: {
+            defaultPath: 'spec/foobar'
+        },
 
         // list of files to exclude
         exclude: [],
