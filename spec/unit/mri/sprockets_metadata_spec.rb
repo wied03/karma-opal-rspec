@@ -128,6 +128,29 @@ describe SprocketsMetadata do
       it { is_expected.to raise_exception 'Circular dependency, one of ["single_file.js", "other_file.js"] refers to single_file.js and single_file.js refers to one of those files.' }
     end
 
+    context 'back reference' do
+      before do
+        create_dummy_spec_files 'single_file.rb', 'other_file.rb', 'third_file.rb'
+        File.write absolute_path('single_file.rb'), 'require "other_file"'
+        File.write absolute_path('third_file.rb'), 'require "single_file"'
+      end
+
+      let(:files) { %w{single_file third_file} }
+
+      it { is_expected.to have_graph({
+                                         file_mapping: {
+                                             'other_file.js' => absolute_path('other_file.rb'),
+                                             'single_file.js' => absolute_path('single_file.rb'),
+                                             'third_file.js' => absolute_path('third_file.rb')
+                                         },
+                                         dependencies: {
+                                             'single_file.js' => %w{other_file.js},
+                                             'other_file.js' => [],
+                                             'third_file.js' => %w{other_file.js single_file.js}
+                                         }
+                                     }) }
+    end
+
     context 'sprockets style require' do
       before do
         create_dummy_spec_files 'single_file.js', 'other_file.rb'

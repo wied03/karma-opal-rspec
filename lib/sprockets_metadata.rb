@@ -25,7 +25,7 @@ module SprocketsMetadata
         # Fetching with path to avoid the self/pipeline that sprockets puts on here
         sprockets_env.find_asset(asset_uri.path)
       }.reject { |a| a.filename == asset.filename }
-      dependency_assets.each { |d| our_dependency_results << d.logical_path }
+      dependency_assets.each { |d| our_dependency_results << d.logical_path unless our_dependency_results.include?(d.logical_path) }
       get_dependency_graph sprockets_env, dependency_assets, result, dependency_chain
       file_mapping[our_logical_path] = asset.filename
     end
