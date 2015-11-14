@@ -34,22 +34,18 @@ module SprocketsMetadata
 
   def self.get_metadata(dependency_graph, roll_up_list, watch, already_rolled_up={})
     dep_hash = {}
-    dependency_graph.each do |dep|
-      next if already_rolled_up.include? dep
-      base_asset_name = File.basename(dep.filename)
+    file_mapping = dependency_graph[:file_mapping]
+    file_mapping.each do |logical_path, filename|
+      base_asset_name = File.basename(filename)
       roll_up = roll_up_list.include? base_asset_name
       if roll_up
-        dep.dependencies.each do |d|
-          already_rolled_up[d] = true
-          # If this dependency was included separately earlier in the run, we'll remove it to reduce duplication
-          dep_hash.delete d.filename
+        dependency_graph[:dependencies][logical_path].each do |dep|
+          dep_hash.delete file_mapping[dep]
         end
       else
-        new_dependencies = dep.dependencies - already_rolled_up.keys
-        dep_hash.merge!(get_metadata(new_dependencies, roll_up_list, watch, already_rolled_up))
       end
-      dep_hash[dep.filename] = {
-          logical_path: dep.logical_path,
+      dep_hash[filename] = {
+          logical_path: logical_path,
           watch: watch,
           roll_up: roll_up
       }

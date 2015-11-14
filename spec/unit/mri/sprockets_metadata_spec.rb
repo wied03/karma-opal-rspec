@@ -205,154 +205,84 @@ describe SprocketsMetadata do
     subject { SprocketsMetadata.get_metadata dependency_graph, roll_up_list, watch }
 
     context 'no dependencies' do
-      context 'no dupes' do
-        let(:dependency_graph) do
-          [
-              SprocketsMetadata::Asset.new('/some/dir/file1.rb',
-                                           'file1.js',
-                                           []),
-              SprocketsMetadata::Asset.new('/some/dir/file2.rb',
-                                           'file2.js',
-                                           [])
-          ]
-        end
-
-        it { is_expected.to eq({
-                                   '/some/dir/file1.rb' => {
-                                       logical_path: 'file1.js',
-                                       watch: false,
-                                       roll_up: false
-                                   },
-                                   '/some/dir/file2.rb' => {
-                                       logical_path: 'file2.js',
-                                       watch: false,
-                                       roll_up: false
-                                   }
-                               }) }
+      let(:dependency_graph) do
+        {
+            file_mapping: {
+                'file1.js' => '/some/dir/file1.rb',
+                'file2.js' => '/some/dir/file2.rb'
+            },
+            dependencies: {
+                'file1.js' => [],
+                'file2.js' => []
+            }
+        }
       end
 
-      context 'dupes' do
-        let(:dependency_graph) do
-          [
-              SprocketsMetadata::Asset.new('/some/dir/file1.rb',
-                                           'file1.js',
-                                           []),
-              SprocketsMetadata::Asset.new('/some/dir/file2.rb',
-                                           'file2.js',
-                                           []),
-              SprocketsMetadata::Asset.new('/some/dir/file1.rb',
-                                           'file1.js',
-                                           [])
-          ]
-        end
-
-        it { is_expected.to eq({
-                                   '/some/dir/file1.rb' => {
-                                       logical_path: 'file1.js',
-                                       watch: false,
-                                       roll_up: false
-                                   },
-                                   '/some/dir/file2.rb' => {
-                                       logical_path: 'file2.js',
-                                       watch: false,
-                                       roll_up: false
-                                   }
-                               }) }
-      end
+      it { is_expected.to eq({
+                                 '/some/dir/file1.rb' => {
+                                     logical_path: 'file1.js',
+                                     watch: false,
+                                     roll_up: false
+                                 },
+                                 '/some/dir/file2.rb' => {
+                                     logical_path: 'file2.js',
+                                     watch: false,
+                                     roll_up: false
+                                 }
+                             }) }
     end
 
     context 'dependencies' do
-      context 'no dupes' do
-        let(:dependency_graph) do
-          [
-              SprocketsMetadata::Asset.new('/some/dir/file1.rb',
-                                           'file1.js',
-                                           [
-                                               SprocketsMetadata::Asset.new('/some/dir/file3.rb',
-                                                                            'file3.js',
-                                                                            [])
-                                           ]),
-              SprocketsMetadata::Asset.new('/some/dir/file2.rb',
-                                           'file2.js',
-                                           [])
-          ]
-        end
-
-        it { is_expected.to eq({
-                                   '/some/dir/file3.rb' => {
-                                       logical_path: 'file3.js',
-                                       watch: false,
-                                       roll_up: false
-                                   },
-                                   '/some/dir/file1.rb' => {
-                                       logical_path: 'file1.js',
-                                       watch: false,
-                                       roll_up: false
-                                   },
-                                   '/some/dir/file2.rb' => {
-                                       logical_path: 'file2.js',
-                                       watch: false,
-                                       roll_up: false
-                                   }
-                               }) }
+      let(:dependency_graph) do
+        {
+            file_mapping: {
+                'file3.js' => '/some/dir/file3.rb',
+                'file1.js' => '/some/dir/file1.rb',
+                'file2.js' => '/some/dir/file2.rb'
+            },
+            dependencies: {
+                'file1.js' => ['file3.js'],
+                'file2.js' => [],
+                'file3.js' => []
+            }
+        }
       end
 
-      context 'dupes' do
-        let(:dependency_graph) do
-          [
-              SprocketsMetadata::Asset.new('/some/dir/file1.rb',
-                                           'file1.js',
-                                           [
-                                               SprocketsMetadata::Asset.new('/some/dir/file3.rb',
-                                                                            'file3.js',
-                                                                            [])
-                                           ]),
-              SprocketsMetadata::Asset.new('/some/dir/file2.rb',
-                                           'file2.js',
-                                           [
-                                               SprocketsMetadata::Asset.new('/some/dir/file3.rb',
-                                                                            'file3.js',
-                                                                            [])
-                                           ])
-          ]
-        end
-
-        it { is_expected.to eq({
-                                   '/some/dir/file3.rb' => {
-                                       logical_path: 'file3.js',
-                                       watch: false,
-                                       roll_up: false
-                                   },
-                                   '/some/dir/file1.rb' => {
-                                       logical_path: 'file1.js',
-                                       watch: false,
-                                       roll_up: false
-                                   },
-                                   '/some/dir/file2.rb' => {
-                                       logical_path: 'file2.js',
-                                       watch: false,
-                                       roll_up: false
-                                   }
-                               }) }
-      end
+      it { is_expected.to eq({
+                                 '/some/dir/file3.rb' => {
+                                     logical_path: 'file3.js',
+                                     watch: false,
+                                     roll_up: false
+                                 },
+                                 '/some/dir/file1.rb' => {
+                                     logical_path: 'file1.js',
+                                     watch: false,
+                                     roll_up: false
+                                 },
+                                 '/some/dir/file2.rb' => {
+                                     logical_path: 'file2.js',
+                                     watch: false,
+                                     roll_up: false
+                                 }
+                             }) }
     end
 
     context 'watches enabled' do
       let(:watch) { true }
 
       let(:dependency_graph) do
-        [
-            SprocketsMetadata::Asset.new('/some/dir/file1.rb',
-                                         'file1.js',
-                                         [
-                                             SprocketsMetadata::Asset.new('/some/dir/file3.rb',
-                                                                          'file3.js',
-                                                                          [])
-                                         ]),
-            SprocketsMetadata::Asset.new('/some/dir/file2.rb',
-                                         'file2.js',
-                                         [])
-        ]
+        {
+            file_mapping: {
+                'file3.js' => '/some/dir/file3.rb',
+                'file1.js' => '/some/dir/file1.rb',
+                'file2.js' => '/some/dir/file2.rb'
+            },
+            dependencies: {
+                'file1.js' => ['file3.js'],
+                'file2.js' => [],
+                'file3.js' => []
+            }
+        }
       end
 
       it { is_expected.to eq({
@@ -380,57 +310,19 @@ describe SprocketsMetadata do
       end
 
       let(:dependency_graph) do
-        [
-            SprocketsMetadata::Asset.new('/some/dir/file1.rb',
-                                         'file1.js',
-                                         [
-                                             SprocketsMetadata::Asset.new('/some/dir/file3.rb',
-                                                                          'file3.js',
-                                                                          [])
-                                         ]),
-            SprocketsMetadata::Asset.new('/some/dir/file2.rb',
-                                         'file2.js',
-                                         [])
-        ]
+        {
+            file_mapping: {
+                'file3.js' => '/some/dir/file3.rb',
+                'file1.js' => '/some/dir/file1.rb',
+                'file2.js' => '/some/dir/file2.rb'
+            },
+            dependencies: {
+                'file1.js' => ['file3.js'],
+                'file2.js' => [],
+                'file3.js' => []
+            }
+        }
       end
-
-      it { is_expected.to eq({
-                                 '/some/dir/file1.rb' => {
-                                     logical_path: 'file1.js',
-                                     watch: false,
-                                     roll_up: true
-                                 },
-                                 '/some/dir/file2.rb' => {
-                                     logical_path: 'file2.js',
-                                     watch: false,
-                                     roll_up: false
-                                 }
-                             }) }
-    end
-
-    context 'dupes between rolled up and non-rolled up' do
-      let(:roll_up_list) do
-        %w{file1.rb}
-      end
-
-      let(:dependency_graph) do
-        [
-            SprocketsMetadata::Asset.new('/some/dir/file1.rb',
-                                         'file1.js',
-                                         [
-                                             SprocketsMetadata::Asset.new('/some/dir/file3.rb',
-                                                                          'file3.js',
-                                                                          [])
-                                         ]),
-            SprocketsMetadata::Asset.new('/some/dir/file2.rb',
-                                         'file2.js',
-                                         []),
-            SprocketsMetadata::Asset.new('/some/dir/file3.rb',
-                                         'file3.js',
-                                         [])
-        ]
-      end
-
 
       it { is_expected.to eq({
                                  '/some/dir/file1.rb' => {
@@ -452,24 +344,19 @@ describe SprocketsMetadata do
       end
 
       let(:dependency_graph) do
-        [
-            SprocketsMetadata::Asset.new('/some/dir/file1.rb',
-                                         'file1.js',
-                                         [
-                                             SprocketsMetadata::Asset.new('/some/dir/file3.rb',
-                                                                          'file3.js',
-                                                                          [])
-                                         ]),
-            SprocketsMetadata::Asset.new('/some/dir/file2.rb',
-                                         'file2.js',
-                                         [
-                                             SprocketsMetadata::Asset.new('/some/dir/file3.rb',
-                                                                          'file3.js',
-                                                                          [])
-                                         ])
-        ]
+        {
+            file_mapping: {
+                'file3.js' => '/some/dir/file3.rb',
+                'file1.js' => '/some/dir/file1.rb',
+                'file2.js' => '/some/dir/file2.rb'
+            },
+            dependencies: {
+                'file1.js' => ['file3.js'],
+                'file2.js' => ['file3.js'],
+                'file3.js' => []
+            }
+        }
       end
-
 
       it { is_expected.to eq({
                                  '/some/dir/file1.rb' => {
@@ -491,21 +378,18 @@ describe SprocketsMetadata do
       end
 
       let(:dependency_graph) do
-        [
-            SprocketsMetadata::Asset.new('/some/dir/file2.rb',
-                                         'file2.js',
-                                         []),
-            SprocketsMetadata::Asset.new('/some/dir/file3.rb',
-                                         'file3.js',
-                                         []),
-            SprocketsMetadata::Asset.new('/some/dir/file1.rb',
-                                         'file1.js',
-                                         [
-                                             SprocketsMetadata::Asset.new('/some/dir/file3.rb',
-                                                                          'file3.js',
-                                                                          [])
-                                         ]),
-        ]
+        {
+            file_mapping: {
+                'file2.js' => '/some/dir/file2.rb',
+                'file3.js' => '/some/dir/file3.rb',
+                'file1.js' => '/some/dir/file1.rb',
+            },
+            dependencies: {
+                'file1.js' => ['file3.js'],
+                'file2.js' => [],
+                'file3.js' => []
+            }
+        }
       end
 
       it { is_expected.to eq({
