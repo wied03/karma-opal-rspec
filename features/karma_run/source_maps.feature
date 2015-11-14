@@ -15,8 +15,8 @@ Feature: Source maps
     }
     """
     And the following source maps exist:
-      | File         | Map URL       | Original File                                               | Sources                                                     |
-      | main_spec.rb | main_spec.map | /base/spec/javascripts/components/base/masked_input_spec.js | /base/spec/javascripts/components/base/masked_input_spec.rb |
+      | File                    | Map URL       | Original File                                               | Sources                                                     |
+      | /base/spec/main_spec.rb | main_spec.map | /base/spec/javascripts/components/base/masked_input_spec.js | /base/spec/javascripts/components/base/masked_input_spec.rb |
 
   Scenario: Some JS files with no source maps
     Given the sprockets_require tests

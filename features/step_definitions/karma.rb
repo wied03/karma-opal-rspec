@@ -64,3 +64,13 @@ Given(/^I copy (\S+) to the working directory$/) do |path|
   # FileUtils cp was doing weird stuff for some reason
   `cp -R #{path} #{dest}`
 end
+
+
+And(/^the following source maps exist:$/) do |expected_maps|
+  # TODO: do HTTP fetches and make assertions about what we get
+  table.hashes.each do |expected|
+
+  end
+  # table is a table.hashes.keys # => [:File, :Map URL, :Original File, :Sources]
+  pending
+end
