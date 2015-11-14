@@ -28,15 +28,20 @@ describe SprocketsMetadata do
 
     RSpec::Matchers.define :have_graph do |expected|
       match do |actual|
-        hash = actual.map(&:to_h)
-        @matcher = eq(expected.map(&:to_h))
-        @matcher.matches? hash
+        actual_keys = actual[:file_mapping].keys
+        expected_keys = expected[:file_mapping].keys
+        @matcher = eq(expected_keys)
+        # Test hash order
+        next nil unless @matcher.matches? actual_keys
+        @matcher = eq(expected)
+        @matcher.matches? actual
       end
 
       failure_message do
         @matcher.failure_message
       end
     end
+
 
     let(:sprockets_env) do
       original_env = Opal::RSpec::SprocketsEnvironment.new pattern='**/*.rb',
@@ -56,11 +61,14 @@ describe SprocketsMetadata do
 
       let(:files) { %w{single_file} }
 
-      it { is_expected.to have_graph [
-                                         SprocketsMetadata::Asset.new(absolute_path('single_file.rb'),
-                                                                      'single_file.js',
-                                                                      [])
-                                     ] }
+      it { is_expected.to have_graph({
+                                         file_mapping: {
+                                             'single_file.js' => absolute_path('single_file.rb')
+                                         },
+                                         dependencies: {
+                                             'single_file.js' => []
+                                         }
+                                     }) }
     end
 
     context '1 level of 2 dependencies' do
@@ -71,15 +79,16 @@ describe SprocketsMetadata do
 
       let(:files) { %w{single_file} }
 
-      it { is_expected.to have_graph [
-                                         SprocketsMetadata::Asset.new(absolute_path('single_file.rb'),
-                                                                      'single_file.js',
-                                                                      [
-                                                                          SprocketsMetadata::Asset.new(absolute_path('other_file.rb'),
-                                                                                                       'other_file.js',
-                                                                                                       [])
-                                                                      ])
-                                     ] }
+      it { is_expected.to have_graph({
+                                         file_mapping: {
+                                             'other_file.js' => absolute_path('other_file.rb'),
+                                             'single_file.js' => absolute_path('single_file.rb')
+                                         },
+                                         dependencies: {
+                                             'single_file.js' => %w{other_file.js},
+                                             'other_file.js' => []
+                                         }
+                                     }) }
     end
 
     context 'nested dependencies' do
@@ -91,22 +100,18 @@ describe SprocketsMetadata do
 
       let(:files) { %w{single_file} }
 
-      it { is_expected.to have_graph [
-                                         SprocketsMetadata::Asset.new(absolute_path('single_file.rb'),
-                                                                      'single_file.js',
-                                                                      [
-                                                                          SprocketsMetadata::Asset.new(absolute_path('level3.rb'),
-                                                                                                       'level3.js',
-                                                                                                       []),
-                                                                          SprocketsMetadata::Asset.new(absolute_path('level2.rb'),
-                                                                                                       'level2.js',
-                                                                                                       [
-                                                                                                           SprocketsMetadata::Asset.new(absolute_path('level3.rb'),
-                                                                                                                                        'level3.js',
-                                                                                                                                        [])
-                                                                                                       ])
-                                                                      ])
-                                     ] }
+      it { is_expected.to have_graph({
+                                         file_mapping: {
+                                             'level3.js' => absolute_path('level3.rb'),
+                                             'level2.js' => absolute_path('level2.rb'),
+                                             'single_file.js' => absolute_path('single_file.rb')
+                                         },
+                                         dependencies: {
+                                             'single_file.js' => %w{level3.js level2.js},
+                                             'level3.js' => [],
+                                             'level2.js' => %w{level3.js}
+                                         }
+                                     }) }
     end
 
     context 'self-referential' do
