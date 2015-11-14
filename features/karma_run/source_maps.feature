@@ -29,4 +29,13 @@ Feature: Source maps
         }
     }
     """
-    And we test the source map
+    And the following source maps exist:
+      | File                    | Map URL          | Original File           | Sources                 |
+      | /base/spec/main_spec.js | main_spec.js.map | /base/spec/main_spec.js | /base/spec/main_spec.rb |
+    And the following files do not have source maps:
+      | File                          |
+      | /base/spec/sprockets_style.js |
+      | /base/spec/via_sprockets.js   |
+
+  Scenario: Non opal file with a source map entry
+    Given a comlete scenario

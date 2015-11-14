@@ -66,18 +66,18 @@ Given(/^I copy (\S+) to the working directory$/) do |path|
   `cp -R #{path} #{dest}`
 end
 
+BASE_URL = 'http://localhost:9876'
 
 And(/^the following source maps exist:$/) do |expected_maps|
-  base = 'http://localhost:9876'
   expected_maps.hashes.each do |expected|
     expected_source_map_path = expected[:'Map URL']
-    js_url = URI.join(base, expected[:File])
+    js_url = URI.join(BASE_URL, expected[:File])
     open(js_url) do |js_file|
       expect(js_file.read).to include "//# sourceMappingURL=#{expected_source_map_path}"
     end
     source_map_full_path = File.expand_path("../#{expected_source_map_path}", js_url.path)
     source_map_contents = nil
-    open(URI.join(base, source_map_full_path)) do |source_map|
+    open(URI.join(BASE_URL, source_map_full_path)) do |source_map|
       source_map_contents = source_map.read
     end
     source_map_contents = JSON.parse source_map_contents
@@ -85,9 +85,18 @@ And(/^the following source maps exist:$/) do |expected_maps|
     expected_sources = expected[:Sources].split ','
     expect(source_map_contents['sources']).to eq expected_sources
     expected_sources.each do |source|
-      open(URI.join(base, source)) do |original_source|
+      open(URI.join(BASE_URL, source)) do |original_source|
         expect(original_source.read).to_not be_empty
       end
+    end
+  end
+end
+
+And(/^the following files do not have source maps:$/) do |table|
+  # table is a table.hashes.keys # => [:File]
+  table.hashes.each do |file|
+    open(URI.join(BASE_URL, file[:File])) do |js_file|
+      expect(js_file.read).to_not include 'sourceMappingURL'
     end
   end
 end
