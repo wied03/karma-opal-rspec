@@ -26,7 +26,8 @@ module SprocketsMetadata
         sprockets_env.find_asset(asset_uri.path)
       }.reject { |a| a.filename == asset.filename }
       dependency_assets.each { |d| our_dependency_results << d.logical_path unless our_dependency_results.include?(d.logical_path) }
-      get_dependency_graph sprockets_env, dependency_assets, result, dependency_chain
+      new_deps = dependency_assets.reject { |d| dependencies.include?(d.logical_path) }
+      get_dependency_graph sprockets_env, new_deps, result, dependency_chain
       file_mapping[our_logical_path] = asset.filename
     end
     result
