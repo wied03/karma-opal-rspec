@@ -2,14 +2,18 @@
 
 [![Build Status](http://img.shields.io/travis/wied03/karma-opal-rspec/master.svg?style=flat)](http://travis-ci.org/wied03/karma-opal-rspec)
 
-Allow Karma to run opal-rspec tests (and pull dependencies from Sprockets). Once you have installed the plugin, upon running Karma, it will:
+Allow Karma to run opal-rspec tests (and pull dependencies from Sprockets). Overview:
 
-1. Fetch all of the tests according to the Karma configured pattern (in config.tests) from Sprockets
-2. Fetch all of the dependencies (according to require/sprockets directives)
-3. Load that file list into Karma so it can watch for changes
-4. Configures a sprockets file cache under 'tmp' to make repetitive test runs faster. It also rolls up opal and opal-rspec into 1 file each for the browser to avoid bogging it down.
-5. Report opal-rspec results through Karma
-6. Present opal source maps to the browser in the same "tree structure" as the files.
+- Reports opal-rspec test results into Karma
+- Rolls up certain assets to reduce how many requests the browser makes during testing (speed)
+- Matches up source maps to the location in the tree next to the original source
+- Works with any Karma browser/launcher
+
+Other items of note:
+- Uses the sprockets file cache to persist dependencies/etc. between test runs
+- Loads your Sprockets asset list into Karma so Karma can watch it for changes
+- Usually, you will not be debugging opal or opal-rspec code. Therefore the plugin, by default, will roll up any opal asset that's located in your Rubygems directory (e.g.` ~/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems`) into 1 file per dependency. Any file in your base path (your tests and your project implementation) will be broken out separately. See below for more info.
+- If any of your source files (or other library source files) `require 'opal'` or `opal/mini`, opal will not be duplicated in the rolled up dependency.
 
 ## Usage
 
@@ -62,11 +66,60 @@ If you have a lot of tests, Karma might time out waiting for opal-rspec to run a
 To ensure the Rails environment starts up and Rails asset paths are available, simply set the `RAILS_ENV` environment variable to the appropriate environment (e.g. test) and the tool will pick up the Rails asset paths.
 
 ### Other paths
-If you have additional paths you'd like added to the Opal load path, then add `opalLoadPaths: ['src_dir']` to your Karma config, where 'src_dir' is a directory you want to add.
+If you have additional paths you'd like added to the Opal load path, then add `opal: {loadPaths: ['src_dir']}` to your Karma config, where 'src_dir' is a directory you want to add.
+
+```js
+module.exports = function(config) {
+  config.set({
+    ...
+    opal: {
+      loadPaths: ['src_dir']
+    }
+    ...
+}
+```
+
+### Different spec patterns
+If you set Karma's files directive to something besides 'spec/**/*_spec.rb' and you want the other directory added to your Opal load path, you should set `opal: {defaultPath: 'spec/javascripts'}`.
+
+```js
+module.exports = function(config) {
+  config.set({
+    ...
+    files: [
+      'spec/javascripts/**/*_spec.rb'
+    ],
+    opal: {
+      defaultPath: 'spec/javascripts'
+    }
+    ...
+}
+```
+
+### Rolling up assets
+As mentioned above, the plugin will roll up any opal asset that's located in your Rubygems directory (e.g.` ~/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems`) into 1 file per dependency. If you wish to customize this, set `opal: {rollUp: [/stuff/]}`
+
+```js
+module.exports = function(config) {
+  config.set({
+    ...
+    opal: {
+      // this should be an array of regex's or an array of strings. Any match on the Regex will roll up
+      // that file. If a string is supplied, it must be an exact match for the base asset name 
+      // (e.g. roll up string of 'opal.rb' will match /stuff/dir/opal.rb)
+      rollUp: [/foo/]
+    }
+    ...
+}
+```
 
 ## Limitations
+- Source maps
+  - Does not work for rolled up files (any asset coming from a GEM by default). It's hard to do this in Opal right now unless each file is broken out
+  - Non opal assets (e.g. jquery.min) SMs do not work either - [open issue](https://github.com/wied03/karma-opal-rspec/issues/14)
+- If multiple files are being rolled up and they use similar requires that are not part of opal core (e.g. stdlib), the dependency will be duplicated in the rolled up file. This is because the plugin does not interfere with sprockets' self/pipeline process
 - Have not published the package to NPM yet
-- Some package efficiency stuff (see https://github.com/wied03/karma-opal-rspec/issues/11)
+- Some package efficiency stuff (see [issue](https://github.com/wied03/karma-opal-rspec/issues/11))
 
 ## License
 
