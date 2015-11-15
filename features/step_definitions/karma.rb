@@ -112,6 +112,6 @@ And(/^the following files have unresolvable source maps:$/) do |table|
       source_map_path = match.captures[0]
     end
     source_map_full_path = File.expand_path("../#{source_map_path}", js_url.path)
-    expect { open(URI.join(BASE_URL, source_map_full_path)) {|f|} }.to raise_exception 'bah!'
+    expect { open(URI.join(BASE_URL, source_map_full_path)) {|f|} }.to raise_exception OpenURI::HTTPError, '404 Not Found'
   end
 end
