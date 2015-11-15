@@ -1,8 +1,12 @@
 require 'opal/rspec'
+require 'opal_processor_patch'
 
 patterns = ENV['PATTERN'].split(',')
 load_paths = ENV['OPAL_LOAD_PATH'].split(',')
 in_rails = (rails_env = ENV['RAILS_ENV']) && !rails_env.empty?
+default_path = ENV['OPAL_DEFAULT_PATH']
+# undefined as sent as empty string across env from JS
+default_path = nil if default_path.empty?
 
 if in_rails
   require File.expand_path('config/environment')
@@ -14,7 +18,10 @@ relative_patterns = patterns.map do |p|
 end
 
 puts "Launching Rack server with pattern #{relative_patterns}"
-sprockets_env = Opal::RSpec::SprocketsEnvironment.new(spec_pattern=relative_patterns)
+sprockets_env = Opal::RSpec::SprocketsEnvironment.new(spec_pattern=relative_patterns,
+                                                      spec_exclude_pattern=nil,
+                                                      spec_files=nil,
+                                                      default_path=default_path)
 # dependencies like opal and opal-rspec won't change much from 1 Karma run to the next, so using a persistent cache store
 sprockets_env.cache = Sprockets::Cache::FileStore.new('./tmp/cache/karma_opal_rspec')
 run Opal::Server.new(sprockets: sprockets_env) { |s|
