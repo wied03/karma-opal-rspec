@@ -38,4 +38,20 @@ Feature: Source maps
       | /base/spec/via_sprockets.js   |
 
   Scenario: Non opal file with a source map entry
-    Given a comlete scenario
+    Given the non_opal_sourcemap tests
+    When I run the Karma test and keep Karma running
+    Then the test passes with JSON results:
+    """
+    {
+        "something nested": {
+            "should eq 42": "PASSED"
+        }
+    }
+    """
+    # Putting this step 1st to ensure we can still get source maps after this
+    And the following files have unresolvable source maps:
+      | File                     |
+      | /base/spec/jquery.min.js |
+    And the following source maps exist:
+      | File                    | Map URL          | Original File           | Sources                 |
+      | /base/spec/main_spec.js | main_spec.js.map | /base/spec/main_spec.js | /base/spec/main_spec.rb |

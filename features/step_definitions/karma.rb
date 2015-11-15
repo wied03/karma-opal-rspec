@@ -100,3 +100,18 @@ And(/^the following files do not have source maps:$/) do |table|
     end
   end
 end
+
+And(/^the following files have unresolvable source maps:$/) do |table|
+  # table is a table.hashes.keys # => [:File]
+  table.hashes.each do |file|
+    source_map_path = nil
+    js_url = URI.join(BASE_URL, file[:File])
+    open(js_url) do |js_file|
+      match = /\/\/# sourceMappingURL=(.*)/.match(js_file.read)
+      expect(match).to_not be_nil
+      source_map_path = match.captures[0]
+    end
+    source_map_full_path = File.expand_path("../#{source_map_path}", js_url.path)
+    expect { open(URI.join(BASE_URL, source_map_full_path)) {|f|} }.to raise_exception 'bah!'
+  end
+end
