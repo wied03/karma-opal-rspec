@@ -12,6 +12,7 @@ describe 'rack server' do
     ENV['PATTERN'] = karma_pattern
     ENV['OPAL_LOAD_PATH'] = ''
     ENV['OPAL_DEFAULT_PATH'] = @temp_dir
+    ENV['RAILS_ENV'] = nil # in case travis or local env has something here
     Rack::Builder.new_from_string(File.read(config_path))
   end
 

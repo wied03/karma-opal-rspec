@@ -1,6 +1,6 @@
 {
   "name": "karma-opal-rspec",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Run opal-rspec tests under Karma",
   "main": "lib/index.js",
   "scripts": {
