@@ -2,6 +2,7 @@ Feature: Default pattern
 
   Background:
     Given the 'singlePattern.js' Karma config file
+    And I set the environment variable "RAILS_ENV" to ""
 
   Scenario: No requires, passing
     Given the simple tests

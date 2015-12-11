@@ -2,6 +2,7 @@ Feature: Custom load path
 
   Background:
     Given the 'customLoadPath.js' Karma config file
+    And I set the environment variable "RAILS_ENV" to ""
 
   Scenario: Basic
     Given the add_to_load_path/spec tests
