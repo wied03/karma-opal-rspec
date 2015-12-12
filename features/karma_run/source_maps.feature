@@ -2,7 +2,6 @@ Feature: Source maps
 
   Background:
     Given the 'sourceMaps.js' Karma config file
-    And I set the environment variable "RAILS_ENV" to ""
 
   Scenario: Pure Opal
     Given the simple tests

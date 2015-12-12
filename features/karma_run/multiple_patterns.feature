@@ -2,7 +2,6 @@ Feature: Multiple patterns
 
   Background:
     Given the 'multiplePatterns.js' Karma config file
-    And I set the environment variable "RAILS_ENV" to ""
 
   Scenario: Basic
     Given the mult_patterns tests

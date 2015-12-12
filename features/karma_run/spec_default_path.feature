@@ -2,7 +2,6 @@ Feature: Spec default paths
 
   Background:
     Given the 'defaultPath.js' Karma config file
-    And I set the environment variable "RAILS_ENV" to ""
 
   Scenario: Basic
     Given the default_path tests
