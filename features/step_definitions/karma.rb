@@ -29,6 +29,10 @@ When(/^I run the Karma test and keep Karma running$/) do
   end
 end
 
+Before do
+  ENV['RAILS_ENV'] = nil # in case travis or local env has something here
+end
+
 After do
   if @karma_still_running
     group = -1 * @karma_still_running
@@ -112,6 +116,6 @@ And(/^the following files have unresolvable source maps:$/) do |table|
       source_map_path = match.captures[0]
     end
     source_map_full_path = File.expand_path("../#{source_map_path}", js_url.path)
-    expect { open(URI.join(BASE_URL, source_map_full_path)) {|f|} }.to raise_exception OpenURI::HTTPError, '404 Not Found'
+    expect { open(URI.join(BASE_URL, source_map_full_path)) { |f|} }.to raise_exception OpenURI::HTTPError, '404 Not Found'
   end
 end
