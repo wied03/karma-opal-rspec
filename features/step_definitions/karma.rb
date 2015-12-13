@@ -20,8 +20,10 @@ When(/^I run the Karma test and keep Karma running$/) do
   @karma_still_running = Process.spawn('./node_modules/karma/bin/karma start --no-colors',
                                        chdir: aruba.config.working_directory,
                                        pgroup: true)
+  puts "Started Karma with new process group at PID #{@karma_still_running}"
   # karma/node start another process, so we want to be able to keep track of these
   @karma_still_running = Process.getpgid @karma_still_running
+  puts "Started Karma with new process group ID #{@karma_still_running}"
   Retryable.retryable(tries: 15,
                       sleep: 5,
                       on: FileNotFoundError) do
@@ -36,8 +38,11 @@ end
 After do
   if @karma_still_running
     group = -1 * @karma_still_running
+    puts "Sending SIGINT to process group ID #{group}"
     Process.kill 'SIGINT', group
     Process.waitall
+    ps_output = `ps ux`
+    puts "Current processes after wait are #{ps_output}"
   end
 end
 
@@ -82,7 +87,7 @@ And(/^the following source maps exist:$/) do |expected_maps|
     source_map_full_path = File.expand_path("../#{expected_source_map_path}", js_url.path)
     source_map_contents = nil
     open(URI.join(BASE_URL, source_map_full_path)) do |source_map|
-      source_map_contents = source_map.readlines.join "\n"
+      source_map_contents = source_map.read
     end
     source_map_contents = JSON.parse source_map_contents
     expect(source_map_contents['file']).to eq expected[:'Original File']
