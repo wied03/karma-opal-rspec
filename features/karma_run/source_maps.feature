@@ -3,7 +3,7 @@ Feature: Source maps
   Background:
     Given the 'sourceMaps.js' Karma config file
 
-  Scenario: Failed test
+  Scenario: Failed test, no source map results
     Given the failure tests
     When I run the Karma test
     Then the test fails with JSON results:
@@ -14,6 +14,20 @@ Feature: Source maps
           }
       }
       """
+    And the output should not contain "/tmp/aruba/spec/main_spec.js:17 <- /base/spec/main_spec.rb:5:21"
+
+  Scenario: Failed test, source map results
+    Given the 'sourceMapsResults.js' Karma config file
+    And the failure tests
+    When I run the Karma test
+    Then the test fails with JSON results:
+        """
+        {
+            "something failure": {
+                "should eq 43": "FAILED"
+            }
+        }
+        """
     And the output should contain "/tmp/aruba/spec/main_spec.js:17 <- /base/spec/main_spec.rb:5:21"
 
   Scenario: Pure Opal
