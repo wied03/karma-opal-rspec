@@ -28,18 +28,11 @@ gem 'opal', '0.9.0.beta1'
 npm install karma karma-chrome-launcher --save-dev
 ```
 
-2a) Karma patch
-Until this [PR](https://github.com/karma-runner/karma/pull/1701) is merged, Karma won't preprocess files that come from directories that start with a dot, which means any GEM based opal dependency (including opal and opal-rspec)
-
-```
-cp -fv preprocessor.modified.js node_modules/karma/lib/preprocessor.js
-```
-
-4) Install karma-opal-rspec
+3) Install karma-opal-rspec
 
 Until I publish an NPM package, you'll need to `npm pack` this repo and then run `npm install karma-opal-rspec-1.0.0.tgz` in your project
 
-5) Configure Karma
+4) Configure Karma
 
 Follow Karma steps to create a karma.conf.js file for your project. You can see a full sample [here](https://github.com/wied03/karma-opal-rspec/blob/master/spec/integration/karma_configs/singlePattern.js), but the key changes are:
 
