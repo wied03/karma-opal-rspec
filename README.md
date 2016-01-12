@@ -19,8 +19,8 @@ Other items of note:
 
 1) Ensure your Gemfile has at least the following:
 ```
-gem 'opal-rspec', '0.5.0.beta3'
-gem 'opal', '0.9.0.beta1'
+gem 'opal-rspec', '~> 0.5'
+gem 'opal', '~> 0.9'
 ```
 
 2) Install Karma (assuming you already have a basic package.json setup for your project)
@@ -30,7 +30,7 @@ npm install karma karma-chrome-launcher --save-dev
 
 3) Install karma-opal-rspec
 
-Until I publish an NPM package, you'll need to `npm pack` this repo and then run `npm install karma-opal-rspec-1.0.0.tgz` in your project
+Until I publish an NPM package (still trying to fix some Travis issues), you'll need to `npm pack` this repo and then run `npm install karma-opal-rspec-1.0.0.tgz` in your project
 
 4) Configure Karma
 
@@ -118,7 +118,7 @@ module.exports = function(config) {
 
 Authors: Brady Wied
 
-Copyright (c) 2015, BSW Technology Consulting LLC
+Copyright (c) 2016, BSW Technology Consulting LLC
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
