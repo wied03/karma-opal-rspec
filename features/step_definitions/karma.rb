@@ -86,7 +86,10 @@ And(/^the following source maps exist:$/) do |expected_maps|
     source_map_full_path = File.expand_path("../#{expected_source_map_path}", js_url.path)
     source_map_contents = nil
     open(URI.join(BASE_URL, source_map_full_path)) do |source_map|
-      source_map_contents = source_map.read
+      map = []
+      source_map.each_line { |l| map << l }
+      source_map_contents = map.join "\n"
+      puts "Source map result is '#{source_map_contents}'"
     end
     source_map_contents = JSON.parse source_map_contents
     expect(source_map_contents['file']).to eq expected[:'Original File']
@@ -120,6 +123,6 @@ And(/^the following files have unresolvable source maps:$/) do |table|
       source_map_path = match.captures[0]
     end
     source_map_full_path = File.expand_path("../#{source_map_path}", js_url.path)
-    expect { open(URI.join(BASE_URL, source_map_full_path)) { |f|} }.to raise_exception OpenURI::HTTPError, '404 Not Found'
+    expect { open(URI.join(BASE_URL, source_map_full_path)) { |f| } }.to raise_exception OpenURI::HTTPError, '404 Not Found'
   end
 end
