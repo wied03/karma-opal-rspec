@@ -1,12 +1,14 @@
 {
   "name": "karma-opal-rspec",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Run opal-rspec tests under Karma",
   "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "files": ["lib"],
+  "files": [
+    "lib"
+  ],
   "author": "wied03",
   "license": "ISC",
   "devDependencies": {
