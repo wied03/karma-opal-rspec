@@ -2,6 +2,14 @@
   "name": "karma-opal-rspec",
   "version": "1.0.8",
   "description": "Run opal-rspec tests under Karma",
+  "homepage": "https://github.com/wied03/karma-opal-rspec",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/wied03/karma-opal-rspec.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wied03/karma-opal-rspec/issues"
+  },
   "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
