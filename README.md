@@ -19,13 +19,13 @@ How does it speed up test runs?
 ## Usage
 
 1) Ensure your Gemfile has at least the following:
-```
+```ruby
 gem 'opal-rspec', '~> 0.5'
 gem 'opal', '~> 0.9'
 ```
 
 2) Install (assuming you already have a basic package.json setup for your project)
-```
+```bash
 npm install karma karma-opal-rspec karma-chrome-launcher --save-dev
 ```
 
