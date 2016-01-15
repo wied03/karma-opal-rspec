@@ -85,11 +85,11 @@ And(/^the following source maps exist:$/) do |expected_maps|
     end
     source_map_full_path = File.expand_path("../#{expected_source_map_path}", js_url.path)
     source_map_contents = nil
+    puts '---curl output--'
+    puts `curl #{URI.join(BASE_URL, source_map_full_path)}`
+    puts '---end curl output--'
     open(URI.join(BASE_URL, source_map_full_path)) do |source_map|
-      map = []
-      source_map.each_line { |l| map << l }
-      source_map_contents = map.join "\n"
-      puts "Source map result is '#{source_map_contents}'"
+      source_map_contents = source_map.read
     end
     source_map_contents = JSON.parse source_map_contents
     expect(source_map_contents['file']).to eq expected[:'Original File']
