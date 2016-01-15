@@ -1,6 +1,6 @@
 {
   "name": "karma-opal-rspec",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Run opal-rspec tests under Karma",
   "homepage": "https://github.com/wied03/karma-opal-rspec",
   "repository": {
