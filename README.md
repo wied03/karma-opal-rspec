@@ -2,17 +2,18 @@
 
 [![Build Status](http://img.shields.io/travis/wied03/karma-opal-rspec/master.svg?style=flat)](http://travis-ci.org/wied03/karma-opal-rspec)
 
-Allow Karma to run opal-rspec tests (and pull dependencies from Sprockets). Overview:
+Allow Karma to run opal-rspec tests (and pull the dependency graph from Sprockets) and speed the workflow of typical opal-rspec testing in applications
 
+What does it do?
 - Reports opal-rspec test results into Karma
+- Loads your Sprockets asset dependency graph into Karma so Karma can watch it for changes
 - Rolls up certain assets to reduce how many requests the browser makes during testing (speed)
 - Matches up source maps to the location in the tree next to the original source
 - Works with any Karma browser/launcher
 
-Other items of note:
-- Uses the sprockets file cache to persist dependencies/etc. between test runs
-- Loads your Sprockets asset list into Karma so Karma can watch it for changes
-- Usually, you will not be debugging opal or opal-rspec code. Therefore the plugin, by default, will roll up any opal asset that's located in your Rubygems directory (e.g.` ~/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems`) into 1 file per dependency. Any file in your base path (your tests and your project implementation) will be broken out separately. See below for more info.
+How does it speed up test runs?
+- Uses the sprockets file cache to persist dependencies/etc. between test runs (this is also easy to do with the opal-rspec rake task)
+- Usually, you will not be debugging opal or opal-rspec's internal code. Therefore the plugin, by default, will roll up any opal asset that's located in your Rubygems directory (e.g.` ~/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems`) into 1 file per dependency. Any file in your base path (your tests and your project implementation) will be broken out separately. See below for more info.
 - If any of your source files (or other library source files) `require 'opal'` or `opal/mini`, opal will not be duplicated in the rolled up dependency.
 
 ## Usage
