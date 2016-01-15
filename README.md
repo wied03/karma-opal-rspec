@@ -112,7 +112,6 @@ module.exports = function(config) {
   - Non opal assets (e.g. jquery.min) SMs do not work either - [open issue](https://github.com/wied03/karma-opal-rspec/issues/14)
 - If multiple files are being rolled up and they use similar requires that are not part of opal core (e.g. stdlib), the dependency will be duplicated in the rolled up file. This is because the plugin does not interfere with sprockets' self/pipeline process
 - Have not published the package to NPM yet
-- Some package efficiency stuff (see [issue](https://github.com/wied03/karma-opal-rspec/issues/11))
 
 ## License
 
