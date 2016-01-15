@@ -85,9 +85,6 @@ And(/^the following source maps exist:$/) do |expected_maps|
     end
     source_map_full_path = File.expand_path("../#{expected_source_map_path}", js_url.path)
     source_map_contents = nil
-    puts '---curl output for source map--'
-    puts `curl -v #{URI.join(BASE_URL, source_map_full_path)}`
-    puts '---end curl output for source map--'
     open(URI.join(BASE_URL, source_map_full_path)) do |source_map|
       source_map_contents = source_map.read
     end
@@ -96,10 +93,6 @@ And(/^the following source maps exist:$/) do |expected_maps|
     expected_sources = expected[:Sources].split ','
     expect(source_map_contents['sources']).to eq expected_sources
     expected_sources.each do |source|
-      puts '---curl output for source--'
-      puts `curl -v #{URI.join(BASE_URL, source)}`
-      puts '---end curl output for source--'
-
       open(URI.join(BASE_URL, source)) do |original_source|
         expect(original_source.read).to_not be_empty
       end

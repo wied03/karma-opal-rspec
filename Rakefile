@@ -4,7 +4,7 @@ require 'rspec/core/rake_task'
 
 desc 'Runs Cucumber/integration tests'
 Cucumber::Rake::Task.new(:cucumber) do |t|
-  t.cucumber_opts = 'features --format pretty -n "Pure Opal"'
+  t.cucumber_opts = 'features --format pretty'
 end
 
 Opal::RSpec::RakeTask.new(:spec_opal) do |server, task|
@@ -24,4 +24,4 @@ task :js_hint do
   sh 'node_modules/jshint/bin/jshint lib/*.js'
 end
 
-task :default => [:cucumber]
+task :default => [:js_hint, :spec, :cucumber]
