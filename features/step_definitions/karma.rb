@@ -23,7 +23,6 @@ When(/^I run the Karma test and keep Karma running$/) do
   puts "Started Karma with new process group at PID #{@karma_still_running}"
   # karma/node start another process, so we want to be able to keep track of these
   @karma_still_running = Process.getpgid @karma_still_running
-  puts "Started Karma with new process group ID #{@karma_still_running}"
   Retryable.retryable(tries: 15,
                       sleep: 5,
                       on: FileNotFoundError) do
