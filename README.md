@@ -23,16 +23,12 @@ gem 'opal-rspec', '~> 0.5'
 gem 'opal', '~> 0.9'
 ```
 
-2) Install Karma (assuming you already have a basic package.json setup for your project)
+2) Install (assuming you already have a basic package.json setup for your project)
 ```
-npm install karma karma-chrome-launcher --save-dev
+npm install karma-opal-rspec karma-chrome-launcher --save-dev
 ```
 
-3) Install karma-opal-rspec
-
-Until I publish an NPM package (still trying to fix some Travis issues), you'll need to `npm pack` this repo and then run `npm install karma-opal-rspec-1.0.0.tgz` in your project
-
-4) Configure Karma
+3) Configure Karma
 
 Follow Karma steps to create a karma.conf.js file for your project. You can see a full sample [here](https://github.com/wied03/karma-opal-rspec/blob/master/spec/integration/karma_configs/singlePattern.js), but the key changes are:
 
