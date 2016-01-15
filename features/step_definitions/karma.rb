@@ -17,7 +17,7 @@ class FileNotFoundError < StandardError
 end
 
 When(/^I run the Karma test and keep Karma running$/) do
-  @karma_still_running = Process.spawn('./node_modules/karma/bin/karma start --no-colors',
+  @karma_still_running = Process.spawn('./node_modules/karma/bin/karma start --no-colors --log-level debug',
                                        chdir: aruba.config.working_directory,
                                        pgroup: true)
   puts "Started Karma with new process group at PID #{@karma_still_running}"
