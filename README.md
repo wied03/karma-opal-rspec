@@ -116,7 +116,7 @@ module.exports = function(config) {
   - Does not work for rolled up files (any asset coming from a GEM by default). It's hard to do this in Opal right now unless each file is broken out
   - Non opal assets (e.g. jquery.min) SMs do not work either - [open issue](https://github.com/wied03/karma-opal-rspec/issues/14)
 - If multiple files are being rolled up and they use similar requires that are not part of opal core (e.g. stdlib), the dependency will be duplicated in the rolled up file. This is because the plugin does not interfere with sprockets' self/pipeline process
-- Have not published the package to NPM yet
+- This is arguably a strength, but this plugin assumes Sprockets is in charge of your assets (not webpack, browserify, etc.). If it makes sense, a future version might allow excluding sprockets and instead just focus on preprocessing and opal-rspec.
 
 ## License
 
