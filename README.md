@@ -49,6 +49,14 @@ That's it!
 
 If you have a lot of tests, Karma might time out waiting for opal-rspec to run all of your tests. If you find Karma is giving you a `Disconnected (1 times), because no message in` error followed by a `No captured browser` error, add a `browserNoActivityTimeout` setting to karma.conf.js that is greater than the default of 10,000ms.
 
+## FAQ
+
+### Why Karma?
+Karma has already done a decent job of dealing with browser startup/shutdown, test reporting, and file reloading. Rather than reinvent the wheel, it made sense to see how to build on what Karma has already done.
+
+### Why is this an NPM package and not a GEM?
+Since Karma and its dependencies are all NPM packages, then it made more sense for this to be an NPM package.
+
 ## Other options
 
 ### Rails
