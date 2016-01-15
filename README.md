@@ -25,7 +25,7 @@ gem 'opal', '~> 0.9'
 
 2) Install (assuming you already have a basic package.json setup for your project)
 ```
-npm install karma-opal-rspec karma-chrome-launcher --save-dev
+npm install karma karma-opal-rspec karma-chrome-launcher --save-dev
 ```
 
 3) Configure Karma
