@@ -3,9 +3,6 @@ Rails.application.configure do
   Opal.append_path 'app/view_models'
 
   app = Rails.application
-  Opal.paths.each do |path|
-    app.assets.append_path path
-  end
 
   conf = config
   app.routes.prepend do
@@ -17,5 +14,11 @@ Rails.application.configure do
 
       mount maps_app => maps_prefix
     end
+  end
+end
+
+Rails.application.config.assets.configure do |env|
+  Opal.paths.each do |path|
+    env.append_path path
   end
 end
