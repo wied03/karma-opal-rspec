@@ -1,6 +1,8 @@
 # karma-opal-rspec
 
 [![Build Status](http://img.shields.io/travis/wied03/karma-opal-rspec/master.svg?style=flat)](http://travis-ci.org/wied03/karma-opal-rspec)
+[![Quality](http://img.shields.io/codeclimate/github/wied03/karma-opal-rspec.svg?style=flat-square)](https://codeclimate.com/github/wied03/karma-opal-rspec)
+[![Version](https://img.shields.io/npm/v/karma-opal-rspec.svg?style=flat-square)](https://www.npmjs.com/package/karma-opal-rspec)
 
 Allow Karma to run opal-rspec tests (and pull the dependency graph from Sprockets) and speed the workflow of typical opal-rspec testing in applications
 
