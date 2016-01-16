@@ -18,7 +18,7 @@
     "lib"
   ],
   "author": "wied03",
-  "license": "ISC",
+  "license": "BSD-2-Clause",
   "devDependencies": {
     "jshint": "^2.8.0",
     "karma": "^0.13.16",
