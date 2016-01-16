@@ -11,7 +11,5 @@ Before do
 end
 
 After do |scenario|
-  if scenario.failed?
-    all_commands.each { |cmd| puts cmd.output }
-  end
+  all_commands.each { |cmd| puts cmd.output } if scenario.failed?
 end

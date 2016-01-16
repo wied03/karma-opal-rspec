@@ -1,4 +1,4 @@
-$: << File.expand_path('../../../../lib', __FILE__)
+$LOAD_PATH << File.expand_path('../../../../lib', __FILE__)
 
 RSpec.shared_context :temp_dir do
   before do

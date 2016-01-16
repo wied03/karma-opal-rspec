@@ -26,7 +26,7 @@ When(/^I run the Karma test and keep Karma running$/) do
   Retryable.retryable(tries: 15,
                       sleep: 5,
                       on: FileNotFoundError) do
-    raise FileNotFoundError unless File.exist?(File.join(aruba.config.working_directory, 'test_run.json'))
+    fail FileNotFoundError unless File.exist?(File.join(aruba.config.working_directory, 'test_run.json'))
   end
 end
 
@@ -74,7 +74,7 @@ Given(/^I copy (\S+) to the working directory$/) do |path|
   `cp -R #{path} #{dest}`
 end
 
-BASE_URL = 'http://localhost:9876'
+BASE_URL = 'http://localhost:9876'.freeze
 
 And(/^the following source maps exist:$/) do |expected_maps|
   expected_maps.hashes.each do |expected|

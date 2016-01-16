@@ -51,7 +51,7 @@ class Opal::RSpec::KarmaFormatter
 
   def report_example_done(notification, skipped, success)
     example = notification.example
-    suite = example.example_group.parent_groups.reverse.map { |grp| grp.description }
+    suite = example.example_group.parent_groups.reverse.map(&:description)
     log = if success
             []
           else

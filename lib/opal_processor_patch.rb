@@ -1,7 +1,7 @@
 require 'opal'
 
 class Opal::Processor
-  FILTER = %w{opal opal/base}
+  FILTER = %w(opal opal/base).freeze
 
   def allowed_context_path
     @allowed_path ||= Pathname.new(File.join(Gem::Specification.find_all_by_name('opal').first.gem_dir, 'opal'))

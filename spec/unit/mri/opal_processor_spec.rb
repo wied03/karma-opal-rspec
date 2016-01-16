@@ -12,19 +12,19 @@ describe Opal::Processor do
                            cache: nil,
                            :[] => nil,
                            resolve: pathname.expand_path.to_s,
-                           engines: double(keys: %w[.rb .js .opal]))
+                           engines: double(keys: %w(.rb .js .opal)))
       double(Sprockets::Context,
              logical_path: asset_name,
              environment: environment,
              pathname: pathname,
              filename: filename,
              root_path: @temp_dir,
-             is_a?: true,
-      )
+             is_a?: true
+            )
     end
 
     let(:processor) do
-      Opal::Processor.new { |t| ruby_contents }
+      Opal::Processor.new { |_t| ruby_contents }
     end
 
     subject { processor.render(get_context(asset_name)) }
@@ -42,11 +42,11 @@ describe Opal::Processor do
         allow(opal_gem_dir).to receive(:gem_dir).and_return('/the/gems_dir/opal-0.9')
         allow(Gem::Specification).to receive(:find_all_by_name).with('opal').and_return([opal_gem_dir])
         @opal_context = get_context('/the/gems_dir/opal-0.9/opal/opal.rb')
-        @opal_processor = Opal::Processor.new { |t| "require 'opal/base'" }
+        @opal_processor = Opal::Processor.new { |_t| "require 'opal/base'" }
         @opal_base_context = get_context('/the/gems_dir/opal-0.9/opal/opal/opal/base.rb')
-        @opal_base_processor = Opal::Processor.new { |t| 'RUBY_LIB=1' }
+        @opal_base_processor = Opal::Processor.new { |_t| 'RUBY_LIB=1' }
         @foo_context = get_context('foo.rb')
-        @foo_processor = Opal::Processor.new { |t| "require 'opal'\nFOO=123" }
+        @foo_processor = Opal::Processor.new { |_t| "require 'opal'\nFOO=123" }
       end
 
       it 'renders the file without Opal' do

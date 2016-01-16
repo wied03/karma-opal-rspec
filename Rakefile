@@ -21,7 +21,7 @@ RSpec::Core::RakeTask.new(:spec_mri) do |task|
   task.pattern = 'spec/unit/mri/**/*_spec.rb'
 end
 
-task :spec => [:spec_mri, :spec_opal]
+task spec: [:spec_mri, :spec_opal]
 
 desc 'JS Hint on JScode'
 task :js_hint do
@@ -38,4 +38,4 @@ RuboCop::RakeTask.new do |task|
   task.options = %w(-D -S)
 end
 
-task :default => [:js_hint, :es_lint, :rubocop, :spec, :cucumber]
+task default: [:js_hint, :es_lint, :rubocop, :spec, :cucumber]
