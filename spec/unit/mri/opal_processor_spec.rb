@@ -33,7 +33,7 @@ describe Opal::Processor do
       let(:asset_name) { 'foo.rb' }
       let(:ruby_contents) { "puts 'Hello, World!'\n" }
 
-      it { is_expected.to match /"Hello, World!"/ }
+      it { is_expected.to match(/"Hello, World!"/) }
     end
 
     context 'rolled up file with Opal dependency' do
@@ -52,8 +52,8 @@ describe Opal::Processor do
       it 'renders the file without Opal' do
         expect(@foo_context).to_not receive(:require_asset).with('opal')
         rendered = @foo_processor.render(@foo_context)
-        expect(rendered).to_not match /OPAL_LIB/
-        expect(rendered).to match /FOO/
+        expect(rendered).to_not match(/OPAL_LIB/)
+        expect(rendered).to match(/FOO/)
       end
 
       it 'opal to pass through' do

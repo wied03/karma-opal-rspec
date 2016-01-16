@@ -14,23 +14,30 @@ module SprocketsMetadata
     files.each do |file_asset|
       asset = file_asset.is_a?(Sprockets::Asset) ? file_asset : sprockets_env.find_asset(file_asset)
       our_logical_path = asset.logical_path
-      if current_dependency_chain.any? { |d| d.logical_path == our_logical_path }
-        referring_paths = current_dependency_chain.map(&:logical_path)
-        fail "Circular dependency, one of #{referring_paths} refers to #{our_logical_path} and #{our_logical_path} refers to one of those files."
-      end
-      dependency_chain = current_dependency_chain.clone << asset
+      dependency_assets = get_dependent_assets(asset, current_dependency_chain, sprockets_env)
       our_dependency_results = dependencies[our_logical_path] ||= []
-      dependency_assets = (asset.metadata[:included] || []).map do |dep|
-        asset_uri = URI dep
-        # Fetching with path to avoid the self/pipeline that sprockets puts on here
-        sprockets_env.find_asset(asset_uri.path)
-      end.reject { |a| a.filename == asset.filename }
       dependency_assets.each { |d| our_dependency_results << d.logical_path unless our_dependency_results.include?(d.logical_path) }
       new_deps = dependency_assets.reject { |d| dependencies.include?(d.logical_path) }
+      dependency_chain = current_dependency_chain.clone << asset
       get_dependency_graph sprockets_env, new_deps, result, dependency_chain
       file_mapping[our_logical_path] = asset.filename
     end
     result
+  end
+
+  def self.get_dependent_assets(asset, dependency_chain, sprockets_env)
+    our_logical_path = asset.logical_path
+    if dependency_chain.any? { |d| d.logical_path == our_logical_path }
+      referring_paths = dependency_chain.map(&:logical_path)
+      fail "Circular dependency, one of #{referring_paths} refers to #{our_logical_path} and #{our_logical_path} refers to one of those files."
+    end
+    all_assets = (asset.metadata[:included] || []).map do |dep|
+      asset_uri = URI dep
+      # Fetching with path to avoid the self/pipeline that sprockets puts on here
+      sprockets_env.find_asset(asset_uri.path)
+    end
+    # Don't want to include ourselves
+    all_assets.reject { |a| a.filename == asset.filename }
   end
 
   def self.default_roll_up_list

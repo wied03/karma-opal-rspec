@@ -115,7 +115,7 @@ And(/^the following files have unresolvable source maps:$/) do |table|
     source_map_path = nil
     js_url = URI.join(BASE_URL, file[:File])
     open(js_url) do |js_file|
-      match = /\/\/# sourceMappingURL=(.*)/.match(js_file.read)
+      match = %r{//# sourceMappingURL=(.*)}.match(js_file.read)
       expect(match).to_not be_nil
       source_map_path = match.captures[0]
     end

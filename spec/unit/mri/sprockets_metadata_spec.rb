@@ -23,10 +23,10 @@ describe SprocketsMetadata do
     end
 
     let(:sprockets_env) do
-      original_env = Opal::RSpec::SprocketsEnvironment.new pattern = '**/*.rb',
-                                                           exclude_pattern = nil,
-                                                           files = nil,
-                                                           default_path = @temp_dir
+      original_env = Opal::RSpec::SprocketsEnvironment.new '**/*.rb',
+                                                           nil,
+                                                           nil,
+                                                           @temp_dir
       original_env.add_spec_paths_to_sprockets
       original_env.cached
     end
@@ -460,7 +460,7 @@ describe SprocketsMetadata do
         allow(stuff).to receive(:gem_dir).and_return('/some/path/to/gems/opal')
       end
 
-      it { is_expected.to eq [/\/some\/path\/to\/gems/] }
+      it { is_expected.to eq [%r{/some/path/to/gems}] }
     end
 
     context 'real' do

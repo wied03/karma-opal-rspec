@@ -26,9 +26,9 @@ describe 'rack server' do
 
     it 'fetches an asset properly' do
       get '/assets/other_file.js?body=1'
-      expect(last_response.body).to match /'FOO', 456/
+      expect(last_response.body).to match(/'FOO', 456/)
       get '/assets/other_file.js?body=1'
-      expect(last_response.body).to match /'FOO', 456/
+      expect(last_response.body).to match(/'FOO', 456/)
     end
   end
 end
