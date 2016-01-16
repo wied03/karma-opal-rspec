@@ -10,3 +10,5 @@ gem 'retryable'
 # Rails case testing
 gem 'rails'
 gem 'sqlite3'
+
+gem 'rubocop', require: false

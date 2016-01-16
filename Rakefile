@@ -1,6 +1,7 @@
 require 'cucumber/rake/task'
 require 'opal/rspec/rake_task'
 require 'rspec/core/rake_task'
+require 'rubocop/rake_task'
 
 desc 'Runs Cucumber/integration tests'
 Cucumber::Rake::Task.new(:cucumber) do |t|
@@ -32,4 +33,9 @@ task :es_lint do
   sh 'node node_modules/eslint/bin/eslint.js lib'
 end
 
-task :default => [:js_hint, :es_lint, :spec, :cucumber]
+desc 'Runs Rubocop'
+RuboCop::RakeTask.new do |task|
+  task.options = %w(-D -S)
+end
+
+task :default => [:js_hint, :es_lint, :rubocop, :spec, :cucumber]

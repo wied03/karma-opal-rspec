@@ -4,8 +4,8 @@ module SprocketsMetadata
   def self.get_dependency_graph(sprockets_env, files, result=nil, current_dependency_chain=[])
     unless result
       result = {
-          file_mapping: {},
-          dependencies: {}
+        file_mapping: {},
+        dependencies: {}
       }
     end
     file_mapping = result[:file_mapping]
@@ -59,9 +59,9 @@ module SprocketsMetadata
       else
       end
       dep_hash[filename] = {
-          logical_path: logical_path,
-          watch: watch,
-          roll_up: roll_up
+        logical_path: logical_path,
+        watch: watch,
+        roll_up: roll_up
       }
     end
     dep_hash

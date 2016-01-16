@@ -24,7 +24,7 @@ class Opal::RSpec::KarmaFormatter
 
   def start(notification)
     contents = {
-        total: notification.count
+      total: notification.count
     }
     `#{@karma}.info(#{contents.to_n})`
   end
@@ -58,13 +58,13 @@ class Opal::RSpec::KarmaFormatter
             [notification.exception.message] + notification.formatted_backtrace
           end
     result = {
-        description: example.description,
-        id: @id += 1,
-        log: log,
-        skipped: skipped,
-        success: success,
-        suite: suite,
-        time: skipped ? 0 : `new Date().getTime() - #{@start_time}`
+      description: example.description,
+      id: @id += 1,
+      log: log,
+      skipped: skipped,
+      success: success,
+      suite: suite,
+      time: skipped ? 0 : `new Date().getTime() - #{@start_time}`
     }
     `#{@karma}.result(#{result.to_n})`
   end
