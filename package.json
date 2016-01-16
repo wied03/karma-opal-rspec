@@ -20,6 +20,7 @@
   "author": "wied03",
   "license": "BSD-2-Clause",
   "devDependencies": {
+    "eslint": "^1.10.3",
     "jshint": "^2.8.0",
     "karma": "^0.13.16",
     "karma-chrome-launcher": "^0.2.1",

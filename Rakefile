@@ -24,4 +24,8 @@ task :js_hint do
   sh 'node_modules/jshint/bin/jshint lib/*.js'
 end
 
-task :default => [:js_hint, :spec, :cucumber]
+task :es_lint do
+  sh 'node_modules/eslint/bin/eslint.js lib'
+end
+
+task :default => [:js_hint, :es_lint, :spec, :cucumber]
