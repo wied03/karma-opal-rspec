@@ -12,3 +12,4 @@ gem 'rails'
 gem 'sqlite3'
 
 gem 'rubocop', require: false
+gem 'reek', '~> 3.0'
