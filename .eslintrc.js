@@ -21,5 +21,9 @@ module.exports = {
         "es6": true,
         "node": true
     },
+    "globals": {
+        "window": true,
+        "Opal": true
+    },
     "extends": "eslint:recommended"
 };
