@@ -24,12 +24,12 @@ task :spec => [:spec_mri, :spec_opal]
 
 desc 'JS Hint on JScode'
 task :js_hint do
-  sh 'node_modules/.bin/jshint lib/*.js'
+  sh 'node_modules/jshint/bin/jshint lib/*.js'
 end
 
 desc 'ESLint on JS code'
 task :es_lint do
-  sh 'node_modules/.bin/eslint lib'
+  sh 'node node_modules/eslint/bin/eslint.js lib'
 end
 
 task :default => [:js_hint, :es_lint, :spec, :cucumber]
