@@ -43,6 +43,7 @@ Reek::Rake::Task.new do |task|
   # rake task overrides all config.reek exclusions, which is annoying and it won't let us set a FileList directly
   files = FileList['**/*.rb']
           .exclude('node_modules/**/*')
+          .exclude('vendor/**/*') # Travis stuff
   task.instance_variable_set :@source_files, files
 end
 
