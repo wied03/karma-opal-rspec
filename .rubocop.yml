@@ -2,6 +2,7 @@ AllCops:
   Exclude:
     - 'Gemfile'
     - 'node_modules/**/*'
+    - 'vendor/**/*'
 
 # Not that big of a problem
 Metrics/LineLength:
