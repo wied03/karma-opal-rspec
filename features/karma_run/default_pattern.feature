@@ -15,6 +15,18 @@ Feature: Default pattern
     }
     """
 
+  Scenario: Additional requires
+    Given the additional_requires tests
+    When I run the Karma test
+    Then the test passes with JSON results:
+    """
+    {
+        "something nested": {
+            "should eq 42": "PASSED"
+        }
+    }
+    """
+
   Scenario: Sprockets require
     Given the sprockets_require tests
     When I run the Karma test
