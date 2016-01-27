@@ -3,6 +3,7 @@ require 'opal_processor_patch'
 
 patterns = ENV['PATTERN'].split(',')
 load_paths = ENV['OPAL_LOAD_PATH'].split(',')
+mri_requires = ENV['MRI_REQUIRES'].split(',')
 in_rails = (rails_env = ENV['RAILS_ENV']) && !rails_env.empty?
 default_path = ENV['OPAL_DEFAULT_PATH']
 # undefined as sent as empty string across env from JS
@@ -11,6 +12,8 @@ default_path = nil if default_path.empty?
 if in_rails
   require File.expand_path('config/environment')
 end
+
+mri_requires.each { |file| require file }
 
 # Karma explodes the paths
 relative_patterns = patterns.map do |p|
