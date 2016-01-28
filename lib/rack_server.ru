@@ -1,8 +1,6 @@
 require 'opal/rspec'
 require 'opal_processor_patch'
 
-Bundler.require
-
 patterns = ENV['PATTERN'].split(',')
 load_paths = ENV['OPAL_LOAD_PATH'].split(',')
 mri_requires = ENV['MRI_REQUIRES'].split(',')
@@ -13,6 +11,8 @@ default_path = nil if default_path.empty?
 
 if in_rails
   require File.expand_path('config/environment')
+else
+  Bundler.require
 end
 
 mri_requires.each { |file| require file }

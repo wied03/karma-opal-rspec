@@ -98,7 +98,9 @@ module.exports = function(config) {
 
 ### Additional requires
 
-As of version 1.0.10, karma-opal-rspec issues a `Bundler.require` call when it retrieves assets from Sprockets. That means most opal GEMs will have their load paths correctly set for your tests automatically. That said, if you need to add additional requires that Bundler's "auto require" feature does not cover, you can specify additional requires (on the MRI/server side, not within opal .rb files) that need to be added to your Opal load path like so:
+As of version 1.0.10, karma-opal-rspec issues a `Bundler.require` call when it retrieves assets from Sprockets. That means most opal GEMs will have their load paths correctly set for your tests automatically. Karma-opal-rspec does not do this if you're using Rails since Rails will take care of that with the proper Bundler groups, etc.
+
+That said, if you need to add additional requires that Bundler's "auto require" feature does not cover, you can specify additional requires (on the MRI/server side, not within opal .rb files) that need to be added to your Opal load path like so:
 
 ```js
 module.exports = function(config) {

@@ -23,3 +23,8 @@ RSpec.shared_context :temp_dir do
     File.join(@temp_dir, file)
   end
 end
+
+RSpec.configure do |config|
+  config.filter_run_including focus: true
+  config.run_all_when_everything_filtered = true
+end
