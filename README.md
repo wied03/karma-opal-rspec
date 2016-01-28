@@ -96,6 +96,20 @@ module.exports = function(config) {
 }
 ```
 
+### Additional requires
+If you have additional requires (on the MRI/server side, not within opal .rb files) that need to be added to your Opal load path, you can do this:
+
+```js
+module.exports = function(config) {
+  config.set({
+    ...
+    opal: {
+      mriRequires: ['opal-browser']
+    }
+    ...
+}
+```
+
 ### Rolling up assets
 As mentioned above, the plugin will roll up any opal asset that's located in your Rubygems directory (e.g.` ~/.rbenv/versions/2.2.3/lib/ruby/gems/2.2.0/gems`) into 1 file per dependency. If you wish to customize this, set `opal: {rollUp: [/stuff/]}`
 

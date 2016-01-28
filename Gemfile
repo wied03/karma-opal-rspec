@@ -6,6 +6,7 @@ gem 'rake'
 gem 'rspec'
 gem 'rack-test'
 gem 'retryable'
+gem 'opal-browser', require: false
 
 # Rails case testing
 gem 'rails'
