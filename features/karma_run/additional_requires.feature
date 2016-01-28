@@ -7,8 +7,8 @@ Feature: Additional requires
     Then the test passes with JSON results:
     """
     {
-        "something nested": {
-            "should eq 42": "PASSED"
+        "document": {
+            "should respond to #body": "PASSED"
         }
     }
     """

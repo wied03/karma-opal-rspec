@@ -18,7 +18,7 @@ module.exports = function (config) {
 
         opal: {
             defaultPath: 'spec/foobar',
-            mri_requires: ['opal-browser']
+            mriRequires: ['opal-browser']
         },
 
         // list of files to exclude
