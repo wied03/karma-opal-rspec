@@ -1,6 +1,8 @@
 require 'opal/rspec'
 require 'opal_processor_patch'
 
+Bundler.require
+
 patterns = ENV['PATTERN'].split(',')
 load_paths = ENV['OPAL_LOAD_PATH'].split(',')
 mri_requires = ENV['MRI_REQUIRES'].split(',')

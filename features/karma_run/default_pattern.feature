@@ -15,6 +15,18 @@ Feature: Default pattern
     }
     """
 
+  Scenario: Bundler require is done
+    Given the bundler_require tests
+    When I run the Karma test
+    Then the test passes with JSON results:
+    """
+    {
+        "FactoryGirl": {
+            "should respond to #build": "PASSED"
+        }
+    }
+    """
+
   Scenario: Sprockets require
     Given the sprockets_require tests
     When I run the Karma test

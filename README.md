@@ -80,7 +80,7 @@ module.exports = function(config) {
 ```
 
 ### Different spec patterns
-If you set Karma's files directive to something besides 'spec/**/*_spec.rb' and you want the other directory added to your Opal load path, you should set `opal: {defaultPath: 'spec/javascripts'}`.
+If you set Karma's files directive to something besides 'spec/**/*_spec.rb' and you want the other directory added toyour Opal load path, you should set `opal: {defaultPath: 'spec/javascripts'}`.
 
 ```js
 module.exports = function(config) {
@@ -97,7 +97,8 @@ module.exports = function(config) {
 ```
 
 ### Additional requires
-If you have additional requires (on the MRI/server side, not within opal .rb files) that need to be added to your Opal load path, you can do this:
+
+As of version 1.0.10, karma-opal-rspec issues a `Bundler.require` call when it retrieves assets from Sprockets. That means most opal GEMs will have their load paths correctly set for your tests automatically. That said, if you need to add additional requires that Bundler's "auto require" feature does not cover, you can specify additional requires (on the MRI/server side, not within opal .rb files) that need to be added to your Opal load path like so:
 
 ```js
 module.exports = function(config) {

@@ -46,5 +46,17 @@ describe 'rack server' do
       it { is_expected.to_not include 'Sprockets::FileNotFound' }
       it { is_expected.to include 'require("browser");' }
     end
+
+    context 'Bundler requires' do
+      before do
+        File.write absolute_path('single_file.rb'), "require 'opal-factory_girl'"
+        get '/assets/single_file.js?body=1'
+      end
+
+      subject { last_response.body }
+
+      it { is_expected.to_not include 'Sprockets::FileNotFound' }
+      it { is_expected.to include 'require("opal-factory_girl")' }
+    end
   end
 end
