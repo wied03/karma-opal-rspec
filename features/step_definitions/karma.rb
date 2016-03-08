@@ -26,7 +26,7 @@ When(/^I run the Karma test and keep Karma running$/) do
   Retryable.retryable(tries: 15,
                       sleep: 5,
                       on: FileNotFoundError) do
-    fail FileNotFoundError unless File.exist?(File.join(aruba.config.working_directory, 'test_run.json'))
+    raise FileNotFoundError unless File.exist?(File.join(aruba.config.working_directory, 'test_run.json'))
   end
 end
 

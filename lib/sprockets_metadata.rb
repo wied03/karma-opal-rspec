@@ -29,7 +29,7 @@ module SprocketsMetadata
     our_logical_path = asset.logical_path
     if original_dependency_chain.any? { |dependency| dependency.logical_path == our_logical_path }
       referring_paths = original_dependency_chain.map(&:logical_path)
-      fail "Circular dependency, one of #{referring_paths} refers to #{our_logical_path} and #{our_logical_path} refers to one of those files."
+      raise "Circular dependency, one of #{referring_paths} refers to #{our_logical_path} and #{our_logical_path} refers to one of those files."
     end
     all_assets = (asset.metadata[:included] || []).map do |dep|
       asset_uri = URI dep
