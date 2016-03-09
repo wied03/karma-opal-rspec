@@ -14,7 +14,7 @@ Feature: Source maps
           }
       }
       """
-    And the output should contain "/tmp/aruba/spec/main_spec.js:17 <- /base/spec/main_spec.rb:5:21"
+    And the output should contain "tmp/aruba/spec/main_spec.rb:5 in `(undefined)'"
 
   Scenario: Pure Opal
     Given the simple tests

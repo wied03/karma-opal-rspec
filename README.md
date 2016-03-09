@@ -132,7 +132,9 @@ module.exports = function(config) {
 
 ## Limitations
 - Source maps
-  - Are provided by [stacktrace-jS](https://www.stacktracejs.com/#!). They work best in Chrome because Firefox/Safari aren't including stack traces in expectation failures and PhantomJS does not include method names in its stack traces.
+  - Are provided by [stacktrace-jS](https://www.stacktracejs.com/#!).
+  - They work best in Chrome because Firefox/Safari aren't including stack traces in expectation failures
+  - PhantomJS stack traces work best with PhantomJS >= 2.0. 1.9.8 does not work.
   - Do not work for rolled up files (any asset coming from a GEM by default). It's hard to do this in Opal right now unless each file is broken out
   - Non opal assets (e.g. jquery.min) SMs do not work either - [open issue](https://github.com/wied03/karma-opal-rspec/issues/14)
 - If multiple files are being rolled up and they use similar requires that are not part of opal core (e.g. stdlib), the dependency will be duplicated in the rolled up file. This is because the plugin does not interfere with sprockets' self/pipeline process
