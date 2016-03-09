@@ -5,6 +5,8 @@ module Karma
   module Opal
     module RSpec
       class KarmaFormatter
+        FILTER_STACKTRACE = %w(opal.js opal-rspec.js karma-opal-rspec/lib/runner.js karma.js context.html)
+
         ::RSpec::Core::Formatters.register self, :start,
                                            :example_started,
                                            :example_passed,
@@ -76,7 +78,7 @@ module Karma
           end
           filter = lambda do |frame|
             # for now, just assume opal and opal-rspec are being rolled up
-            !%w(opal.js opal-rspec.js).any? { |pattern| frame.JS[:fileName].include?(pattern) }
+            !FILTER_STACKTRACE.any? { |pattern| frame.JS[:fileName].include?(pattern) }
           end
           `StackTrace.fromError(#{exception}, {filter: #{filter}}).then(#{success_handle}, #{fail_handle})`
           promise
