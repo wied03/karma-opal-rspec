@@ -36,6 +36,8 @@ module Karma
         end
 
         def dump_summary(*)
+          # Nothing to report here since we report our progress after each example
+          # If we have failures, then we'll have asynchronous things to wait on first before we declare victory
           Promise.when(*@promises).then { @karma.JS.complete }
         end
 
