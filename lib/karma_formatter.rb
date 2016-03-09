@@ -32,13 +32,11 @@ module Karma
           contents = {
             total: notification.count
           }
-          `#{@karma}.info(#{contents.to_n})`
+          @karma.JS.info contents.to_n
         end
 
         def dump_summary(*)
-          Promise.when(*@promises).then do
-            `#{@karma}.complete()`
-          end
+          Promise.when(*@promises).then { @karma.JS.complete }
         end
 
         def example_passed(notification)
@@ -95,7 +93,7 @@ module Karma
                           get_stack_trace(notification)
                         end
           @promises << log_promise.then do |log|
-            result = {
+            results = {
               description: example.description,
               id: @id += 1,
               log: log,
@@ -104,8 +102,9 @@ module Karma
               suite: suite,
               time: time
             }
-            `#{@karma}.result(#{result.to_n})`
+            @karma.JS.result results.to_n
           end
+          # no inadvertent returns
           nil
         end
       end
