@@ -30,6 +30,7 @@
     "require-self": "^0.1.0"
   },
   "dependencies": {
+    "stacktrace-js": "^1.0.4",
     "tmp": "0.0.28",
     "urllib-sync": "^1.1.2"
   },
