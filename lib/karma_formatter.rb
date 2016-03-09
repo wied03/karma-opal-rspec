@@ -78,7 +78,6 @@ module Karma
             # TODO: Still hard code this or pass in the roll up list somehow??
             !filename.include?('opal.js') && !filename.include?('opal-rspec.js')
           end
-          # TODO: Use StackTrace.JS opal syntax
           `StackTrace.fromError(#{notification.exception}, {filter: #{filter}}).then(#{success_handle}, #{fail_handle})`
           promise
         end
