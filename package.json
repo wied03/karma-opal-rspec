@@ -2,7 +2,9 @@
   "name": "karma-opal-rspec",
   "version": "1.1.0-beta1",
   "description": "Run opal-rspec tests under Karma",
-  "keywords": ["karma-plugin"],
+  "keywords": [
+    "karma-plugin"
+  ],
   "homepage": "https://github.com/wied03/karma-opal-rspec",
   "repository": {
     "type": "git",
@@ -30,6 +32,7 @@
     "require-self": "^0.1.0"
   },
   "dependencies": {
+    "lodash": "^4.6.1",
     "stacktrace-js": "^1.0.4",
     "tmp": "0.0.28",
     "urllib-sync": "^1.1.2"
