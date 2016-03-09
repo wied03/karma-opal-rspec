@@ -2,7 +2,8 @@ source 'https://rubygems.org'
 
 gem 'opal-rspec', '~> 0.5'
 gem 'aruba'
-gem 'rake'
+# RSpec not compatble with Rake 11 until https://github.com/rspec/rspec-core/commit/8e723fc805e901ac4fa5483837138b175d411d6e
+gem 'rake', '~> 10'
 gem 'rspec'
 gem 'rack-test'
 gem 'retryable'
