@@ -67,6 +67,10 @@ module Karma
 
         def get_stack_trace(exception)
           results = [exception.message]
+          if exception.backtrace.reject(&:empty?).empty?
+            results << 'No stack trace provided by browser'
+            return Promise.value(results)
+          end
           promise = Promise.new
           success_handle = lambda do |frames|
             results += frames.map { |frame| format_stack_frame frame }
