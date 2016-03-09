@@ -76,7 +76,7 @@ module Karma
             promise.resolve result
           end
           filter = lambda do |frame|
-            # TODO: Still hard code this or pass in the roll up list somehow??
+            # for now, just assume opal and opal-rspec are being rolled up
             !%w(opal.js opal-rspec.js).any? { |pattern| frame.JS[:fileName].include?(pattern) }
           end
           `StackTrace.fromError(#{notification.exception}, {filter: #{filter}}).then(#{success_handle}, #{fail_handle})`
