@@ -18,7 +18,7 @@ module Opal
     def process_requires(requires, context)
       requires.each do |required|
         required = required.to_s.sub(sprockets_extnames_regexp, '')
-        # If other rolled up assets do a "require 'opal'", we don't want to end up bundling a 2nd rolled up opal instance
+        # If other rolled up assets (besides opal code itself) do a "require 'opal'", we don't want to end up bundling a 2nd rolled up opal instance
         if opal_originating_asset?(context) || !FILTER.include?(required)
           context.require_asset required unless stubbed_files.include? required
         end
