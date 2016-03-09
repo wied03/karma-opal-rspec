@@ -5,6 +5,7 @@ module Karma
   module Opal
     module RSpec
       class KarmaReporter
+        # In the future, might want to make this configurable
         FILTER_STACKTRACE = %w(opal.js opal-rspec.js karma-opal-rspec/lib/runner.js karma.js context.html)
 
         ::RSpec::Core::Formatters.register self, :start,
@@ -14,12 +15,12 @@ module Karma
                                            :example_pending,
                                            :dump_summary
 
-        def initialize(*args)
-          super
+        def initialize(*)
           @karma = self.class.karma_instance
           @id = 0
         end
 
+        # When Karma runs, it calls this, thus not dependending on a global variable
         def self.karma_started(karma)
           @karma = karma
         end
@@ -81,7 +82,6 @@ module Karma
             promise.resolve results
           end
           filter = lambda do |frame|
-            # for now, just assume opal and opal-rspec are being rolled up
             !FILTER_STACKTRACE.any? { |pattern| frame.JS[:fileName].include?(pattern) }
           end
           `StackTrace.fromError(#{exception}, {filter: #{filter}}).then(#{success_handle}, #{fail_handle})`
