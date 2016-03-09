@@ -76,9 +76,8 @@ module Karma
             promise.resolve result
           end
           filter = lambda do |frame|
-            filename = frame.JS[:fileName]
             # TODO: Still hard code this or pass in the roll up list somehow??
-            !filename.include?('opal.js') && !filename.include?('opal-rspec.js')
+            !%w(opal.js opal-rspec.js).any? { |pattern| frame.JS[:fileName].include?(pattern) }
           end
           `StackTrace.fromError(#{notification.exception}, {filter: #{filter}}).then(#{success_handle}, #{fail_handle})`
           promise
