@@ -82,7 +82,8 @@ Feature: Default pattern
     """
     {
         "something": {
-            "should eq 42": "PASSED"
+            "should eq 42": "PASSED",
+            "is a string": "SKIPPED"
         }
     }
     """
@@ -110,6 +111,9 @@ Feature: Default pattern
     {
         "something": {
             "should eq 42": "PASSED"
+        },
+        "else": {
+          "example at http://localhost:9876": "SKIPPED"
         }
     }
     """
