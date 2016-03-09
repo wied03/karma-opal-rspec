@@ -26,6 +26,7 @@ module Karma
         end
 
         def start(notification)
+          @timers = {}
           contents = {
             total: notification.count
           }
@@ -48,8 +49,9 @@ module Karma
           report_example_done notification, true, true
         end
 
-        def example_started(*)
-          @start_time = `new Date().getTime()`
+        def example_started(notification)
+          @timers[notification.example] = `new Date().getTime()`
+          nil
         end
 
         def report_example_done(notification, skipped, success)
@@ -60,6 +62,7 @@ module Karma
                 else
                   [notification.exception.message] + notification.formatted_backtrace
                 end
+          time = skipped ? 0 : `new Date().getTime() - #{@timers[example]}`
           result = {
             description: example.description,
             id: @id += 1,
@@ -67,7 +70,7 @@ module Karma
             skipped: skipped,
             success: success,
             suite: suite,
-            time: skipped ? 0 : `new Date().getTime() - #{@start_time}`
+            time: time
           }
           `#{@karma}.result(#{result.to_n})`
         end
