@@ -4,11 +4,13 @@ require 'js'
 module Karma
   module Opal
     module RSpec
+      # :reek:TooManyInstanceVariables: { max_instance_variables: 5 }
       class KarmaReporter
         # In the future, might want to make this configurable
         FILTER_STACKTRACE = %w(opal.js opal-rspec.js karma-opal-rspec/lib/runner.js karma.js context.html)
-        FailedExampleNotify = ::RSpec::Core::Notifications::FailedExampleNotification
-        ExampleNotify = ::RSpec::Core::Notifications::ExampleNotification
+        # avoid lots of nested constant resolution
+        FAILED_EXAMPLE_NOTIFY = ::RSpec::Core::Notifications::FailedExampleNotification
+        EXAMPLE_NOTIFY = ::RSpec::Core::Notifications::ExampleNotification
 
         ::RSpec::Core::Formatters.register self,
                                            :start,
@@ -35,7 +37,8 @@ module Karma
         def filtered_examples
           # Tap into groups pure, unfiltered examples
           world = ::RSpec.world
-          all_examples = world.filtered_examples.keys.map { |group| group.examples }.flatten.uniq
+          all_groups = world.filtered_examples.keys
+          all_examples = all_groups.map(&:examples).flatten
           active_examples = world.filtered_examples.values.flatten
           all_examples - active_examples
         end
@@ -54,13 +57,13 @@ module Karma
 
         def log_filtered_examples
           @filtered_examples.each do |example|
-            notification = ExampleNotify.new example
+            notification = EXAMPLE_NOTIFY.new example
             report_example_done notification, true
           end
         end
 
         def dump_summary(*)
-          # Nothing to report here since we report our progress after each example
+          # Most progress has already been reported after each example
           # If we have failures, then we'll have asynchronous things to wait on first before we declare victory
           Promise.when(*@promises).then do
             log_filtered_examples
@@ -117,7 +120,7 @@ module Karma
           suite = example.example_group.parent_groups.reverse.map(&:description)
           time = skipped ? 0 : `new Date().getTime() - #{@timers[example]}`
           # Karma considers skip a success
-          success = skipped || !notification.is_a?(FailedExampleNotify)
+          success = skipped || !notification.is_a?(FAILED_EXAMPLE_NOTIFY)
           log_promise = if success
                           Promise.value([])
                         else
