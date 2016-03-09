@@ -63,18 +63,16 @@ module Karma
           "#{frame.JS[:fileName]}:#{frame.JS[:lineNumber]} in `(#{method ? method : 'unknown method'})'"
         end
 
-        def get_stack_trace(notification)
-          exception = notification.exception
-          message = [exception.message]
+        def get_stack_trace(exception)
+          results = [exception.message]
           promise = Promise.new
-          # TODO: Extract some of these blocks into methods?
           success_handle = lambda do |frames|
-            result = message + frames.map { |frame| format_stack_frame frame }
-            promise.resolve result
+            results += frames.map { |frame| format_stack_frame frame }
+            promise.resolve results
           end
           fail_handle = lambda do |error|
-            result = message + ["Unable to parse stack frames for example #{notification.example.description} because #{error}"]
-            promise.resolve result
+            results << "Unable to parse pretty stack frames because #{error}"
+            promise.resolve results
           end
           filter = lambda do |frame|
             # for now, just assume opal and opal-rspec are being rolled up
@@ -91,7 +89,7 @@ module Karma
           log_promise = if success
                           Promise.value([])
                         else
-                          get_stack_trace(notification)
+                          get_stack_trace(notification.exception)
                         end
           @promises << log_promise.then do |log|
             results = {
