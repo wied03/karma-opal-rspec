@@ -4,7 +4,7 @@ require 'js'
 module Karma
   module Opal
     module RSpec
-      class KarmaFormatter
+      class KarmaReporter
         FILTER_STACKTRACE = %w(opal.js opal-rspec.js karma-opal-rspec/lib/runner.js karma.js context.html)
 
         ::RSpec::Core::Formatters.register self, :start,
@@ -118,5 +118,5 @@ module Karma
 end
 
 RSpec.configure do |config|
-  config.default_formatter = Karma::Opal::RSpec::KarmaFormatter
+  config.default_formatter = Karma::Opal::RSpec::KarmaReporter
 end
