@@ -7,8 +7,11 @@ module Karma
       class KarmaReporter
         # In the future, might want to make this configurable
         FILTER_STACKTRACE = %w(opal.js opal-rspec.js karma-opal-rspec/lib/runner.js karma.js context.html)
+        FailedExampleNotify = ::RSpec::Core::Notifications::FailedExampleNotification
+        ExampleNotify = ::RSpec::Core::Notifications::ExampleNotification
 
-        ::RSpec::Core::Formatters.register self, :start,
+        ::RSpec::Core::Formatters.register self,
+                                           :start,
                                            :example_started,
                                            :example_passed,
                                            :example_failed,
@@ -20,7 +23,7 @@ module Karma
           @id = 0
         end
 
-        # When Karma runs, it calls this, thus not dependending on a global variable
+        # When Karma runs, it calls this, thus not depending on a global variable
         def self.karma_started(karma)
           @karma = karma
         end
@@ -29,31 +32,52 @@ module Karma
           @karma
         end
 
+        def filtered_examples
+          # Tap into groups pure, unfiltered examples
+          world = ::RSpec.world
+          all_examples = world.filtered_examples.keys.map { |group| group.examples }.flatten.uniq
+          active_examples = world.filtered_examples.values.flatten
+          all_examples - active_examples
+        end
+
         def start(notification)
           @timers = {}
           @promises = []
+          # RSpec doesn't usually include examples that are filtered out with focus, etc. but given usage of that
+          # technique in the Karma world, we want to do that
+          @filtered_examples = filtered_examples
           contents = {
-            total: notification.count
+            total: notification.count + @filtered_examples.length
           }
           @karma.JS.info contents.to_n
+        end
+
+        def log_filtered_examples
+          @filtered_examples.each do |example|
+            notification = ExampleNotify.new example
+            report_example_done notification, true
+          end
         end
 
         def dump_summary(*)
           # Nothing to report here since we report our progress after each example
           # If we have failures, then we'll have asynchronous things to wait on first before we declare victory
-          Promise.when(*@promises).then { @karma.JS.complete }
+          Promise.when(*@promises).then do
+            log_filtered_examples
+            @karma.JS.complete
+          end
         end
 
         def example_passed(notification)
-          report_example_done notification, false, true
+          report_example_done notification, false
         end
 
         def example_failed(notification)
-          report_example_done notification, false, false
+          report_example_done notification, false
         end
 
         def example_pending(notification)
-          report_example_done notification, true, true
+          report_example_done notification, true
         end
 
         def example_started(notification)
@@ -88,10 +112,12 @@ module Karma
           promise
         end
 
-        def report_example_done(notification, skipped, success)
+        def report_example_done(notification, skipped)
           example = notification.example
           suite = example.example_group.parent_groups.reverse.map(&:description)
           time = skipped ? 0 : `new Date().getTime() - #{@timers[example]}`
+          # Karma considers skip a success
+          success = skipped || !notification.is_a?(FailedExampleNotify)
           log_promise = if success
                           Promise.value([])
                         else
