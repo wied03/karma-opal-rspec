@@ -64,7 +64,8 @@ module Karma
         end
 
         def get_stack_trace(notification)
-          message = [notification.exception.message]
+          exception = notification.exception
+          message = [exception.message]
           promise = Promise.new
           # TODO: Extract some of these blocks into methods?
           success_handle = lambda do |frames|
@@ -72,14 +73,14 @@ module Karma
             promise.resolve result
           end
           fail_handle = lambda do |error|
-            result = message + ["Unable to parse stack frames for example #{notification.example.description} due to error #{error}"]
+            result = message + ["Unable to parse stack frames for example #{notification.example.description} because #{error}"]
             promise.resolve result
           end
           filter = lambda do |frame|
             # for now, just assume opal and opal-rspec are being rolled up
             !%w(opal.js opal-rspec.js).any? { |pattern| frame.JS[:fileName].include?(pattern) }
           end
-          `StackTrace.fromError(#{notification.exception}, {filter: #{filter}}).then(#{success_handle}, #{fail_handle})`
+          `StackTrace.fromError(#{exception}, {filter: #{filter}}).then(#{success_handle}, #{fail_handle})`
           promise
         end
 
