@@ -32,3 +32,7 @@ Style/Documentation:
 # if this is really high, fine but 5 is too small
 Metrics/ParameterLists:
   Max: 8
+
+# can't freeze in Opal
+Style/MutableConstant:
+  Enabled: false

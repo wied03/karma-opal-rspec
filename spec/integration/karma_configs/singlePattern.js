@@ -28,7 +28,7 @@ module.exports = function (config) {
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['progress', 'specjson'],
+        reporters: ['progress', 'orspec-modified-json'],
 
         specjsonReporter: {
             outputFile: 'test_run.json'
@@ -53,7 +53,7 @@ module.exports = function (config) {
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['PhantomJS'],
+        browsers: ['PhantomJS2'],
 
 
         // Continuous Integration mode

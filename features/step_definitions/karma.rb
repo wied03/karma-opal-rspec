@@ -123,3 +123,7 @@ And(/^the following files have unresolvable source maps:$/) do |table|
     expect { open(URI.join(BASE_URL, source_map_full_path)) { |f| } }.to raise_exception OpenURI::HTTPError, '404 Not Found'
   end
 end
+
+Then(/^the test fails$/) do
+  step 'the exit status should not be 0'
+end

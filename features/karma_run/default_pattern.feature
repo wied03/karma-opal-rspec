@@ -75,6 +75,19 @@ Feature: Default pattern
     }
     """
 
+  Scenario: Pending examples
+    Given the pending tests
+    When I run the Karma test
+    Then the test passes with JSON results:
+    """
+    {
+        "something": {
+            "should eq 42": "PASSED",
+            "is a string": "SKIPPED"
+        }
+    }
+    """
+
   Scenario: Focus on example groups
     Given the example_grp_focus tests
     When I run the Karma test
@@ -83,6 +96,9 @@ Feature: Default pattern
     {
         "something": {
             "should eq 42": "PASSED"
+        },
+        "else": {
+          "example at http://localhost:9876": "SKIPPED"
         }
     }
     """
@@ -95,6 +111,9 @@ Feature: Default pattern
     {
         "something": {
             "should eq 42": "PASSED"
+        },
+        "else": {
+          "example at http://localhost:9876": "SKIPPED"
         }
     }
     """
