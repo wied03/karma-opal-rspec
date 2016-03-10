@@ -12,4 +12,4 @@ Feature: error handling
     And the simple tests
     When I run the Karma test
     Then the test fails
-    And the output should contain "SprocketsAssetException: Connection to Rack server refused, tried 20 times but hit max limit of 20."
+    And the output should contain "SprocketsAssetException: Connection to Rack server refused, tried 50 times but hit max limit of 50."
