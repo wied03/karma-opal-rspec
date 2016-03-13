@@ -22,6 +22,15 @@ relative_patterns = patterns.map do |p|
   Pathname.new(p).relative_path_from(Pathname.new(Dir.pwd)).to_s
 end
 
+
+# TODO: Remove the upfront metadata check. Instead, spin up a small web server
+# that will respond to 1 asset at a time and reply with the the dependencies/metadata for that asset only
+# then use the emitter dependency (injected by Karma into the preprocessor) to add files if need be
+# TODO: Convert the application to a simple Rack app (or sinatra app)
+# This will mean no opal rspec sprockets environment, instead it will be a regular sprockets environment
+# and the rack side will not know about test patterns anymore, just default path, any additional opal
+# load paths, and the roll up list
+
 puts "Launching Rack server with pattern #{relative_patterns}"
 sprockets_env = Opal::RSpec::SprocketsEnvironment.new(spec_pattern=relative_patterns,
                                                       spec_exclude_pattern=nil,
