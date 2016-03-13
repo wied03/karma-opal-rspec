@@ -1,3 +1,8 @@
+require 'rack'
+require 'json'
+require 'opal_processor_patch'
+require 'sprockets_metadata'
+
 module Karma
   module Opal
     class MetadataServer

@@ -36,54 +36,6 @@ describe 'rack server' do
       pending 'write this, should give 404'
     end
 
-    # TODO: Move this to its own unit test class
-    describe 'metadata' do
-      before do
-        contents = {
-          files: [*requested_files],
-          watch: watch,
-          exclude_self: exclude_self
-        }
-        post '/metadata', contents.to_json
-      end
-
-      subject { JSON.parse(last_response.body) }
-
-      let(:watch) { false }
-      let(:exclude_self) { false }
-
-      describe 'single_file' do
-        let(:requested_files) { absolute_path('single_file.rb') }
-
-        context 'watch on' do
-          let(:watch) { true }
-
-          it { is_expected.to eq(requested_files => { 'logical_path' => 'single_file.js', 'watch' => true, 'roll_up' => false }) }
-        end
-
-        context 'exclude self' do
-          let(:exclude_self) { true }
-          let(:requested_files) { absolute_path('dependent_file.rb') }
-
-          it { is_expected.to eq(requested_files => { 'logical_path' => 'single_file.js', 'watch' => false, 'roll_up' => false }) }
-        end
-      end
-
-      context 'roll up' do
-        pending 'write this'
-      end
-
-      describe 'other_file' do
-        let(:requested_files) { absolute_path('other_file.rb') }
-
-        it { is_expected.to eq(requested_files => { 'logical_path' => 'other_file.js', 'watch' => false, 'roll_up' => false }) }
-      end
-
-      context 'multiple files' do
-        pending 'write this'
-      end
-    end
-
     it 'fetches an asset properly multiple times' do
       fetch_asset 'other_file'
       expect(last_response.body).to match(/'FOO', 456/)

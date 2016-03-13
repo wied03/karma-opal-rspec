@@ -1,7 +1,4 @@
 require 'rack'
-require 'opal_processor_patch'
-require 'sprockets_metadata'
-require 'json'
 require 'metadata_server'
 
 module Karma
