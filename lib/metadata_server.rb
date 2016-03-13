@@ -28,7 +28,7 @@ module Karma
         dependency_graph = SprocketsMetadata.get_dependency_graph @sprockets_env, files
         metadata = SprocketsMetadata.get_metadata dependency_graph, @roll_up_list, watch
         # Karma will handle the tests themselves, we're just concerned about dependencies
-        metadata = SprocketsMetadata.filter_out_logical_paths(metadata, files) if exclude_self
+        metadata = metadata.reject { |key, _| files.include?(key) } if exclude_self
         [200, {}, metadata.to_json]
       end
     end

@@ -208,45 +208,6 @@ describe SprocketsMetadata do
     end
   end
 
-  describe '::filter_out_logical_paths' do
-    let(:paths) { %w(file1.js) }
-
-    let(:metadata) do
-      {
-        '/some/dir/file1.rb' => {
-          logical_path: 'file1.js',
-          watch: false,
-          roll_up: false
-        },
-        '/some/dir/file2.rb' => {
-          logical_path: 'file2.js',
-          watch: false,
-          roll_up: false
-        },
-        '/some/dir/file3.rb' => {
-          logical_path: 'file3.js',
-          watch: false,
-          roll_up: false
-        }
-      }
-    end
-
-    subject { SprocketsMetadata.filter_out_logical_paths metadata, paths }
-
-    it do
-      is_expected.to eq('/some/dir/file2.rb' => {
-        logical_path: 'file2.js',
-        watch: false,
-        roll_up: false
-      },
-                        '/some/dir/file3.rb' => {
-                          logical_path: 'file3.js',
-                          watch: false,
-                          roll_up: false
-                        })
-    end
-  end
-
   describe '::get_metadata' do
     let(:roll_up_list) { [] }
     let(:watch) { false }

@@ -41,17 +41,35 @@ describe Karma::Opal::MetadataServer do
   context 'single_file' do
     let(:requested_files) { absolute_path('single_file.rb') }
 
+    context 'watch off' do
+      it { is_expected.to eq(requested_files => { 'logical_path' => 'single_file.js', 'watch' => false, 'roll_up' => false }) }
+    end
+
     context 'watch on' do
       let(:watch) { true }
 
       it { is_expected.to eq(requested_files => { 'logical_path' => 'single_file.js', 'watch' => true, 'roll_up' => false }) }
     end
 
-    context 'exclude self' do
-      let(:exclude_self) { true }
+    context 'with dependencies' do
       let(:requested_files) { absolute_path('dependent_file.rb') }
 
-      it { is_expected.to eq(requested_files => { 'logical_path' => 'single_file.js', 'watch' => false, 'roll_up' => false }) }
+      it do
+        is_expected.to eq({
+                            absolute_path('single_file.rb') => { 'logical_path' => 'single_file.js', 'watch' => false, 'roll_up' => false },
+                            absolute_path('dependent_file.rb') => { 'logical_path' => 'dependent_file.js', 'watch' => false, 'roll_up' => false }
+                          })
+      end
+
+      context 'exclude self' do
+        let(:exclude_self) { true }
+
+        it do
+          is_expected.to eq({
+                              absolute_path('single_file.rb') => { 'logical_path' => 'single_file.js', 'watch' => false, 'roll_up' => false }
+                            })
+        end
+      end
     end
   end
 
