@@ -33,7 +33,11 @@ describe 'rack server' do
     end
 
     describe 'root directory' do
-      pending 'write this, should give 404'
+      before { get '/' }
+
+      subject { last_response }
+
+      it { is_expected.to have_attributes status: 404 }
     end
 
     it 'fetches an asset properly multiple times' do
