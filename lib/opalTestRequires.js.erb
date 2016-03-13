@@ -1,5 +1,8 @@
 Opal.require('opal/rspec');
 <%=
+# TODO: Make this another Rack app that's tied in with the metadata service, maybe it can
+# take in the test files from Karma as a POSTED json list and then output the require
+# statements
   environment.get_opal_spec_requires.map do |req|
     logical_path = environment.find_asset(req).logical_path
     no_ext = logical_path.sub(File.extname(logical_path), '')
