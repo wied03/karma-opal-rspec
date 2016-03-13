@@ -2,21 +2,10 @@ require 'rack'
 require 'opal_processor_patch'
 require 'sprockets_metadata'
 require 'json'
+require 'metadata_server'
 
 module Karma
   module Opal
-    class MetadataServer
-      def initialize(sprockets_env, roll_up_list)
-        @sprockets_env = sprockets_env
-        @roll_up_list = roll_up_list
-      end
-
-      def call(env)
-        request = Rack::Request.new env
-        raise "got env call for metadata! #{request.params}"
-      end
-    end
-
     class AssetServer
       SOURCE_MAPS_PREFIX_PATH = '/__OPAL_SOURCE_MAPS__'
 
