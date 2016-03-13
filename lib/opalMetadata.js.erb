@@ -16,10 +16,13 @@ end
 
 non_watch_dep_graph = SprocketsMetadata.get_dependency_graph environment, %w{opal opal-rspec karma_reporter}
 non_watch_metadata = SprocketsMetadata.get_metadata non_watch_dep_graph, roll_up, watch=false
-tests_dep_graph = SprocketsMetadata.get_dependency_graph environment, environment.get_opal_spec_requires
+test_requires = environment.get_opal_spec_requires
+tests_dep_graph = SprocketsMetadata.get_dependency_graph environment, test_requires
 test_metadata = SprocketsMetadata.get_metadata tests_dep_graph, roll_up, watch=true
+# Karma will handle the tests themselves, we're just concerned about dependencies
+without_tests = SprocketsMetadata.filter_out_logical_paths test_metadata, test_requires
 
-result = non_watch_metadata.merge(test_metadata)
+result = non_watch_metadata.merge(without_tests)
 
 result.to_json
 %>
