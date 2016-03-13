@@ -18,6 +18,7 @@ class KarmaRack
 
   def sprockets_env(in_rails, default_path, load_paths)
     sprockets_env = Sprockets::Environment.new
+    Opal.paths.each { |p| sprockets_env.append_path(p) }
     sprockets_env.logger.level ||= Logger::DEBUG
     # dependencies like opal and opal-rspec won't change much from 1 Karma run to the next, so using a persistent cache store
     sprockets_env.cache = Sprockets::Cache::FileStore.new('./tmp/cache/karma_opal_rspec')
