@@ -47,6 +47,12 @@ module SprocketsMetadata
     [Regexp.new(Regexp.escape(gems_dir))]
   end
 
+  def self.filter_out_logical_paths(metadata, paths)
+    metadata.reject do |_, values|
+      paths.include? values[:logical_path]
+    end
+  end
+
   def self.get_metadata(dependency_graph, roll_up_list, watch)
     dep_hash = {}
     file_mapping = dependency_graph[:file_mapping]
