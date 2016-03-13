@@ -8,15 +8,7 @@ module Karma
     class MetadataServer
       def initialize(sprockets_env, roll_up_list)
         @sprockets_env = sprockets_env
-        @roll_up_list = if roll_up_list.any?
-                          roll_up_list.map do |r|
-                            # convert JS supplied regexps back into Ruby regexps if necessary
-                            regexp_match = /^\/(.*)\/$/.match(r)
-                            regexp_match ? Regexp.new(regexp_match.captures[0]) : r
-                          end
-                        else
-                          SprocketsMetadata.default_roll_up_list
-                        end
+        @roll_up_list = roll_up_list.any? ? roll_up_list : SprocketsMetadata.default_roll_up_list
       end
 
       def call(env)

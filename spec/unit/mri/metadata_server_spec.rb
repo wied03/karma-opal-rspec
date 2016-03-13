@@ -74,7 +74,10 @@ describe Karma::Opal::MetadataServer do
   end
 
   context 'roll up' do
-    pending 'write this'
+    let(:requested_files) { absolute_path('dependent_file.rb') }
+    let(:roll_up_list) { [/dependent/] }
+
+    it { is_expected.to eq(absolute_path('dependent_file.rb') => { 'logical_path' => 'dependent_file.js', 'watch' => false, 'roll_up' => true }) }
   end
 
   context 'multiple files' do
