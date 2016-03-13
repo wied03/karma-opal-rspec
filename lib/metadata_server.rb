@@ -16,16 +16,15 @@ module Karma
 
       def call(env)
         request = Rack::Request.new env
-        file = request.params['file']
-        non_watch_dep_graph = SprocketsMetadata.get_dependency_graph @sprockets_env, %w{opal opal-rspec karma_reporter}
-        non_watch_metadata = SprocketsMetadata.get_metadata non_watch_dep_graph, @roll_up_list, watch=false
-        test_requires = [file]
-        tests_dep_graph = SprocketsMetadata.get_dependency_graph @sprockets_env, test_requires
-        test_metadata = SprocketsMetadata.get_metadata tests_dep_graph, @roll_up_list, watch=true
+        request_info = JSON.parse request.body.string
+        files = request_info['files']
+        watch = request_info['watch']
+        exclude_self = request_info['exclude_self']
+        dependency_graph = SprocketsMetadata.get_dependency_graph @sprockets_env, files
+        metadata = SprocketsMetadata.get_metadata dependency_graph, @roll_up_list, watch
         # Karma will handle the tests themselves, we're just concerned about dependencies
-        without_tests = SprocketsMetadata.filter_out_logical_paths test_metadata, test_requires
-        result = non_watch_metadata.merge(without_tests)
-        [200, {}, result.to_json]
+        metadata = SprocketsMetadata.filter_out_logical_paths(metadata, files) if exclude_self
+        [200, {}, metadata.to_json]
       end
     end
   end
