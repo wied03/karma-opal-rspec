@@ -31,6 +31,10 @@ describe 'rack server' do
       File.write absolute_path('opal.rb'), 'HOWDY = 123'
     end
 
+    describe 'root directory' do
+      pending 'write this, should give 404'
+    end
+
     describe 'metadata' do
       before { get "/metadata?file=#{requested_file}" }
 
