@@ -12,8 +12,6 @@ describe 'rack server' do
 
   let(:app) do
     config_path = File.expand_path('../../../../lib/rack_server.ru', __FILE__)
-    karma_pattern = File.expand_path('**/*.rb')
-    ENV['PATTERN'] = karma_pattern
     ENV['OPAL_LOAD_PATH'] = ''
     ENV['OPAL_DEFAULT_PATH'] = @temp_dir
     ENV['MRI_REQUIRES'] = mri_requires
@@ -31,6 +29,26 @@ describe 'rack server' do
       File.write absolute_path('single_file.rb'), 'require "opal"'
       File.write absolute_path('other_file.rb'), "require 'opal'\nFOO=456"
       File.write absolute_path('opal.rb'), 'HOWDY = 123'
+    end
+
+    describe 'metadata' do
+      before { get "/metadata?file=#{requested_file}" }
+
+      subject { JSON.parse(last_response.body) }
+
+      describe 'single_file' do
+        let(:requested_file) { absolute_path('single_file.rb') }
+
+        it { is_expected.to eq({ foo: :bar }) }
+        pending 'write this'
+      end
+
+      describe 'other_file' do
+        let(:requested_file) { absolute_path('other_file.rb') }
+
+        it { is_expected.to eq({ foo: :bar }) }
+        pending 'write this'
+      end
     end
 
     it 'fetches an asset properly multiple times' do
