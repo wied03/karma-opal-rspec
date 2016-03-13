@@ -1,9 +1,11 @@
+require 'rack'
+
 class KarmaRack
   SOURCE_MAPS_PREFIX_PATH = '/__OPAL_SOURCE_MAPS__'
 
   def initialize(load_paths, in_rails, default_path)
-    @sprockets_env = sprockets_env in_rails, default_path, load_paths
-    @app = create_app
+    sprockets_env = sprockets_env in_rails, default_path, load_paths
+    @app = create_app sprockets_env
   end
 
   def sprockets_env(in_rails, default_path, load_paths)
@@ -19,10 +21,10 @@ class KarmaRack
     sprockets_env
   end
 
-  def create_app
+  def create_app(sprockets_env)
     Opal::Processor.source_map_enabled = true
     maps_prefix = SOURCE_MAPS_PREFIX_PATH
-    maps_app = SourceMapServer.new(@sprockets_env, maps_prefix)
+    maps_app = Opal::SourceMapServer.new(sprockets_env, maps_prefix)
     ::Opal::Sprockets::SourceMapHeaderPatch.inject!(maps_prefix)
     Rack::Builder.app do
       not_found = lambda { |env| [404, {}, []] }
@@ -33,8 +35,8 @@ class KarmaRack
         use Rack::ETag
         run maps_app
       end
-      map('/assets') { run @sprockets_env }
-      run Rack::Static.new(not_found, root: server.public_root, urls: server.public_urls)
+      map('/assets') { run sprockets_env }
+      run Rack::Static.new(not_found, root: nil, urls: ['/'])
     end
   end
 
