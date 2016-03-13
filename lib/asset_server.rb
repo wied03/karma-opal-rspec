@@ -5,10 +5,22 @@ require 'json'
 
 module Karma
   module Opal
+    class MetadataServer
+      def initialize(sprockets_env, roll_up_list)
+        @sprockets_env = sprockets_env
+        @roll_up_list = roll_up_list
+      end
+
+      def call(env)
+        request = Rack::Request.new env
+        raise "got env call for metadata! #{request.params}"
+      end
+    end
+
     class AssetServer
       SOURCE_MAPS_PREFIX_PATH = '/__OPAL_SOURCE_MAPS__'
 
-      def initialize(load_paths, in_rails, default_path, mri_requires)
+      def initialize(load_paths, in_rails, default_path, mri_requires, roll_up_list)
         if in_rails
           require File.expand_path('config/environment')
         else
@@ -17,7 +29,7 @@ module Karma
 
         mri_requires.each { |file| require file }
         sprockets_env = sprockets_env in_rails, default_path, load_paths
-        @app = create_app sprockets_env
+        @app = create_app sprockets_env, roll_up_list
       end
 
       def sprockets_env(in_rails, default_path, load_paths)
@@ -34,11 +46,12 @@ module Karma
         sprockets_env
       end
 
-      def create_app(sprockets_env)
+      def create_app(sprockets_env, roll_up_list)
         ::Opal::Processor.source_map_enabled = true
         maps_prefix = SOURCE_MAPS_PREFIX_PATH
         maps_app = ::Opal::SourceMapServer.new(sprockets_env, maps_prefix)
         ::Opal::Sprockets::SourceMapHeaderPatch.inject!(maps_prefix)
+        metadata_server = MetadataServer.new(sprockets_env, roll_up_list)
         Rack::Builder.app do
           not_found = lambda { |env| [404, {}, []] }
           use Rack::Deflater
@@ -49,7 +62,7 @@ module Karma
             run maps_app
           end
           map('/assets') { run sprockets_env }
-          map('/metadata') {}
+          map('/metadata') { run metadata_server }
           run Rack::Static.new(not_found, root: nil, urls: ['/'])
         end
       end
