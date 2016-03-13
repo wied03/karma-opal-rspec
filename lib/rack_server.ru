@@ -1,4 +1,4 @@
-require 'karma_rack'
+require 'asset_server'
 
 load_paths = ENV['OPAL_LOAD_PATH'].split(',')
 mri_requires = ENV['MRI_REQUIRES'].split(',')
@@ -15,4 +15,4 @@ default_path = 'spec' if default_path.empty?
 # and the rack side will not know about test patterns anymore, just default path, any additional opal
 # load paths, and the roll up list
 
-run KarmaRack.new(load_paths, in_rails, default_path, mri_requires)
+run Karma::Opal::AssetServer.new(load_paths, in_rails, default_path, mri_requires)
