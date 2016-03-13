@@ -19,10 +19,12 @@ describe Karma::Opal::MetadataServer do
     sprockets = Sprockets::Environment.new
     ::Opal.paths.each { |p| sprockets.append_path(p) }
     sprockets.append_path @temp_dir
+    allow(SprocketsMetadata).to receive(:default_roll_up_list).and_return default_roll_up_list
     Karma::Opal::MetadataServer.new(sprockets, roll_up_list)
   end
 
   let(:roll_up_list) { [] }
+  let(:default_roll_up_list) { [] }
 
   before do
     contents = {
@@ -75,12 +77,28 @@ describe Karma::Opal::MetadataServer do
 
   context 'roll up' do
     let(:requested_files) { absolute_path('dependent_file.rb') }
-    let(:roll_up_list) { [/dependent/] }
 
-    it { is_expected.to eq(absolute_path('dependent_file.rb') => { 'logical_path' => 'dependent_file.js', 'watch' => false, 'roll_up' => true }) }
+    context 'custom' do
+      let(:roll_up_list) { [/dependent/] }
+
+      it { is_expected.to eq(absolute_path('dependent_file.rb') => { 'logical_path' => 'dependent_file.js', 'watch' => false, 'roll_up' => true }) }
+    end
+
+    context 'default' do
+      let(:default_roll_up_list) { [/dependent/] }
+
+      it { is_expected.to eq(absolute_path('dependent_file.rb') => { 'logical_path' => 'dependent_file.js', 'watch' => false, 'roll_up' => true }) }
+    end
   end
 
   context 'multiple files' do
-    pending 'write this'
+    let(:requested_files) { [absolute_path('single_file.rb'), absolute_path('other_file.rb')] }
+
+    it do
+      is_expected.to eq({
+                          absolute_path('single_file.rb') => { 'logical_path' => 'single_file.js', 'watch' => false, 'roll_up' => false },
+                          absolute_path('other_file.rb') => { 'logical_path' => 'other_file.js', 'watch' => false, 'roll_up' => false }
+                        })
+    end
   end
 end
