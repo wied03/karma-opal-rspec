@@ -1,9 +1,17 @@
 require 'rack'
+require 'opal_processor_patch'
 
 class KarmaRack
   SOURCE_MAPS_PREFIX_PATH = '/__OPAL_SOURCE_MAPS__'
 
-  def initialize(load_paths, in_rails, default_path)
+  def initialize(load_paths, in_rails, default_path, mri_requires)
+    if in_rails
+      require File.expand_path('config/environment')
+    else
+      Bundler.require
+    end
+
+    mri_requires.each { |file| require file }
     sprockets_env = sprockets_env in_rails, default_path, load_paths
     @app = create_app sprockets_env
   end
