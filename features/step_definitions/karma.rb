@@ -127,3 +127,18 @@ end
 Then(/^the test fails$/) do
   step 'the exit status should not be 0'
 end
+
+When(/^I add a new spec file$/) do
+  dest = File.expand_path(File.join(aruba.config.working_directory, 'spec', 'a_new_spec.rb'))
+  puts "Writing new test file to #{dest}"
+  File.open dest, 'w' do |file|
+    text = <<-SPEC
+describe 'else' do
+  subject { 43 }
+
+  it { is_expected.to eq 43 }
+end
+    SPEC
+    file << text
+  end
+end
