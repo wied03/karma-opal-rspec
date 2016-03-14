@@ -13,7 +13,9 @@ module Karma
 
       def call(env)
         request = Rack::Request.new env
-        request_info = JSON.parse request.body.string
+        # Rack Lint InputWrapper
+        request_body = request.body.read
+        request_info = JSON.parse request_body
         files = request_info['files']
         watch = request_info['watch']
         exclude_self = request_info['exclude_self']
@@ -21,7 +23,7 @@ module Karma
         metadata = SprocketsMetadata.get_metadata dependency_graph, @roll_up_list, watch
         # Karma will handle the tests themselves, we're just concerned about dependencies
         metadata = metadata.reject { |key, _| files.include?(key) } if exclude_self
-        [200, {}, metadata.to_json]
+        [200, {}, [metadata.to_json]]
       end
     end
   end

@@ -40,14 +40,6 @@ describe 'rack server' do
       it { is_expected.to have_attributes status: 404 }
     end
 
-    describe 'server alive' do
-      before { get '/alive' }
-
-      subject { last_response.body }
-
-      it { is_expected.to eq 'yes we are alive' }
-    end
-
     it 'fetches an asset properly multiple times' do
       fetch_asset 'other_file'
       expect(last_response.body).to match(/'FOO', 456/)

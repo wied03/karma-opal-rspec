@@ -49,12 +49,6 @@ module Karma
           end
           map('/assets') { run sprockets_env }
           map('/metadata') { run metadata_server }
-          alive = Class.new do
-            def self.call(*)
-              [200, {}, ['yes we are alive']]
-            end
-          end
-          map('/alive') { run alive }
           run Rack::Static.new(not_found, root: nil, urls: ['/'])
         end
       end
