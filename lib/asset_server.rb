@@ -51,7 +51,7 @@ module Karma
           map('/metadata') { run metadata_server }
           alive = Class.new do
             def self.call(*)
-              [200, {}, 'yes we are alive']
+              [200, {}, ['yes we are alive']]
             end
           end
           map('/alive') { run alive }
