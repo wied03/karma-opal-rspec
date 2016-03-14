@@ -34,8 +34,7 @@
   "dependencies": {
     "lodash": "^4.6.1",
     "stacktrace-js": "^1.0.4",
-    "tmp": "0.0.28",
-    "urllib-sync": "^1.1.2"
+    "tmp": "0.0.28"
   },
   "engines": {
     "node": ">= 4.1"
