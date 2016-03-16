@@ -47,7 +47,7 @@ module SprocketsMetadata
     [Regexp.new(Regexp.escape(gems_dir))]
   end
 
-  def self.get_metadata(dependency_graph, roll_up_list, watch)
+  def self.get_metadata(dependency_graph, roll_up_list)
     dep_hash = {}
     file_mapping = dependency_graph[:file_mapping]
     file_mapping.each do |logical_path, filename|
@@ -66,7 +66,6 @@ module SprocketsMetadata
       end
       dep_hash[filename] = {
         logical_path: logical_path,
-        watch: watch,
         roll_up: roll_up
       }
     end

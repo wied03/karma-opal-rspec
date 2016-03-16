@@ -210,8 +210,7 @@ describe SprocketsMetadata do
 
   describe '::get_metadata' do
     let(:roll_up_list) { [] }
-    let(:watch) { false }
-    subject { SprocketsMetadata.get_metadata dependency_graph, roll_up_list, watch }
+    subject { SprocketsMetadata.get_metadata dependency_graph, roll_up_list }
 
     context 'no dependencies' do
       let(:dependency_graph) do
@@ -230,12 +229,10 @@ describe SprocketsMetadata do
       it do
         is_expected.to eq('/some/dir/file1.rb' => {
           logical_path: 'file1.js',
-          watch: false,
           roll_up: false
         },
                           '/some/dir/file2.rb' => {
                             logical_path: 'file2.js',
-                            watch: false,
                             roll_up: false
                           })
       end
@@ -260,54 +257,14 @@ describe SprocketsMetadata do
       it do
         is_expected.to eq('/some/dir/file3.rb' => {
           logical_path: 'file3.js',
-          watch: false,
           roll_up: false
         },
                           '/some/dir/file1.rb' => {
                             logical_path: 'file1.js',
-                            watch: false,
                             roll_up: false
                           },
                           '/some/dir/file2.rb' => {
                             logical_path: 'file2.js',
-                            watch: false,
-                            roll_up: false
-                          })
-      end
-    end
-
-    context 'watches enabled' do
-      let(:watch) { true }
-
-      let(:dependency_graph) do
-        {
-          file_mapping: {
-            'file3.js' => '/some/dir/file3.rb',
-            'file1.js' => '/some/dir/file1.rb',
-            'file2.js' => '/some/dir/file2.rb'
-          },
-          dependencies: {
-            'file1.js' => ['file3.js'],
-            'file2.js' => [],
-            'file3.js' => []
-          }
-        }
-      end
-
-      it do
-        is_expected.to eq('/some/dir/file3.rb' => {
-          logical_path: 'file3.js',
-          watch: true,
-          roll_up: false
-        },
-                          '/some/dir/file1.rb' => {
-                            logical_path: 'file1.js',
-                            watch: true,
-                            roll_up: false
-                          },
-                          '/some/dir/file2.rb' => {
-                            logical_path: 'file2.js',
-                            watch: true,
                             roll_up: false
                           })
       end
@@ -336,12 +293,10 @@ describe SprocketsMetadata do
       it do
         is_expected.to eq('/some/dir/file1.rb' => {
           logical_path: 'file1.js',
-          watch: false,
           roll_up: true
         },
                           '/some/dir/file2.rb' => {
                             logical_path: 'file2.js',
-                            watch: false,
                             roll_up: false
                           })
       end
@@ -370,12 +325,10 @@ describe SprocketsMetadata do
       it do
         is_expected.to eq('/some/dir/something/file1.rb' => {
           logical_path: 'something/file1.js',
-          watch: false,
           roll_up: true
         },
                           '/some/dir/file2.rb' => {
                             logical_path: 'file2.js',
-                            watch: false,
                             roll_up: false
                           })
       end
@@ -404,12 +357,10 @@ describe SprocketsMetadata do
       it do
         is_expected.to eq('/some/dir/file1.rb' => {
           logical_path: 'file1.js',
-          watch: false,
           roll_up: true
         },
                           '/some/dir/file2.rb' => {
                             logical_path: 'file2.js',
-                            watch: false,
                             roll_up: false
                           })
       end
@@ -438,12 +389,10 @@ describe SprocketsMetadata do
       it do
         is_expected.to eq('/some/dir/file1.rb' => {
           logical_path: 'file1.js',
-          watch: false,
           roll_up: true
         },
                           '/some/dir/file2.rb' => {
                             logical_path: 'file2.js',
-                            watch: false,
                             roll_up: false
                           })
       end
