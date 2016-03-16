@@ -13,12 +13,4 @@ roll_up_list = roll_up_list.map do |r|
   regexp_match ? Regexp.new(regexp_match.captures[0]) : r
 end
 
-# TODO: Remove the upfront metadata check. Instead, spin up a small web server
-# that will respond to 1 asset at a time and reply with the the dependencies/metadata for that asset only
-# then use the emitter dependency (injected by Karma into the preprocessor) to add files if need be
-# TODO: Convert the application to a simple Rack app (or sinatra app)
-# This will mean no opal rspec sprockets environment, instead it will be a regular sprockets environment
-# and the rack side will not know about test patterns anymore, just default path, any additional opal
-# load paths, and the roll up list
-
 run Karma::Opal::AssetServer.new(load_paths, in_rails, default_path, mri_requires, roll_up_list)
