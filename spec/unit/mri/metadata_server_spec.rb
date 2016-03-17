@@ -30,8 +30,7 @@ describe Karma::Opal::MetadataServer do
     # TODO: Remove exclude_self, derive watch from whether it's a GEM
     contents = {
       files: [*requested_files],
-      watch: watch,
-      exclude_self: exclude_self
+      watch: watch
     }
     post '/metadata', contents.to_json
   end
@@ -39,7 +38,6 @@ describe Karma::Opal::MetadataServer do
   subject { JSON.parse(last_response.body) }
 
   let(:watch) { false }
-  let(:exclude_self) { false }
 
   context 'single_file' do
     let(:requested_files) { absolute_path('single_file.rb') }
@@ -54,16 +52,6 @@ describe Karma::Opal::MetadataServer do
                             absolute_path('single_file.rb') => { 'logical_path' => 'single_file.js', 'roll_up' => false },
                             absolute_path('dependent_file.rb') => { 'logical_path' => 'dependent_file.js', 'roll_up' => false }
                           })
-      end
-
-      context 'exclude self' do
-        let(:exclude_self) { true }
-
-        it do
-          is_expected.to eq({
-                              absolute_path('single_file.rb') => { 'logical_path' => 'single_file.js', 'roll_up' => false }
-                            })
-        end
       end
     end
   end

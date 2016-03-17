@@ -17,11 +17,8 @@ module Karma
         request_body = request.body.read
         request_info = JSON.parse request_body
         files = request_info['files']
-        exclude_self = request_info['exclude_self']
         dependency_graph = SprocketsMetadata.get_dependency_graph @sprockets_env, files
         metadata = SprocketsMetadata.get_metadata dependency_graph, @roll_up_list
-        # Karma will handle the tests themselves, we're just concerned about dependencies
-        metadata = metadata.reject { |key, _| files.include?(key) } if exclude_self
         [200, {}, [metadata.to_json]]
       end
     end
