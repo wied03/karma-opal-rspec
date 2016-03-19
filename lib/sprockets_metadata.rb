@@ -13,10 +13,10 @@ module SprocketsMetadata
     files.each do |file_asset|
       asset = begin
         file_asset.is_a?(Sprockets::Asset) ? file_asset : sprockets_env.find_asset(file_asset)
-      rescue Sprockets::FileNotFound => e
+      rescue Sprockets::FileNotFound => exception
         uri, = sprockets_env.resolve(file_asset, compat: false)
         filename, = Sprockets::URIUtils.parse_asset_uri(uri)
-        result[:errors][filename] = "#{e.class} - #{e.message}"
+        result[:errors][filename] = "#{exception.class} - #{exception.message}"
         next
       end
       our_logical_path = asset.logical_path

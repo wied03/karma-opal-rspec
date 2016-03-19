@@ -1,36 +1,32 @@
 require 'rack'
 require 'metadata_server'
+require 'rails_detector'
+require 'environment'
 
 module Karma
   module Opal
     class AssetServer
+      include RailsDetector
+
       SOURCE_MAPS_PREFIX_PATH = '/__OPAL_SOURCE_MAPS__'
 
-      def initialize(load_paths, in_rails, default_path, mri_requires, roll_up_list)
-        if in_rails
+      def initialize(load_paths, default_path, mri_requires, roll_up_list)
+        if in_rails?
           require File.expand_path('config/environment')
         else
           Bundler.require
         end
 
         mri_requires.each { |file| require file }
-        sprockets_env = sprockets_env in_rails, default_path, load_paths
+        sprockets_env = Environment.new load_paths, default_path
         @app = create_app sprockets_env, roll_up_list
       end
 
-      def sprockets_env(in_rails, default_path, load_paths)
-        sprockets_env = Sprockets::Environment.new
-        ::Opal.paths.each { |p| sprockets_env.append_path(p) }
-        sprockets_env.logger.level ||= Logger::DEBUG
-        # dependencies like opal and opal-rspec won't change much from 1 Karma run to the next, so using a persistent cache store
-        sprockets_env.cache = Sprockets::Cache::FileStore.new('./tmp/cache/karma_opal_rspec')
-        sprockets_env.append_path default_path
-        # formatter, etc.
-        sprockets_env.append_path File.dirname(__FILE__)
-        load_paths.each { |p| sprockets_env.append_path p }
-        Rails.application.assets.paths.each { |p| sprockets_env.append_path p } if in_rails
-        sprockets_env
+      def call(env)
+        @app.call env
       end
+
+      private
 
       def create_app(sprockets_env, roll_up_list)
         ::Opal::Processor.source_map_enabled = true
@@ -51,10 +47,6 @@ module Karma
           map('/metadata') { run metadata_server }
           run Rack::Static.new(not_found, root: nil, urls: ['/'])
         end
-      end
-
-      def call(env)
-        @app.call env
       end
     end
   end
