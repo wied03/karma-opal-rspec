@@ -15,6 +15,18 @@ Feature: Default pattern
     }
     """
 
+  Scenario: Specs in subdirectory
+    Given the subdirectory tests
+    When I run the Karma test
+    Then the test passes with JSON results:
+    """
+    {
+        "something nested": {
+            "should eq 42": "PASSED"
+        }
+    }
+    """
+
   Scenario: Bundler require is done
     Given the bundler_require tests
     When I run the Karma test
