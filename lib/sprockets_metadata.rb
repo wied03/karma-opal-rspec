@@ -2,17 +2,23 @@ require 'uri'
 
 module SprocketsMetadata
   def self.get_dependency_graph(sprockets_env, files, result = nil, current_dependency_chain = [])
-    unless result
-      result = {
-        file_mapping: {},
-        dependencies: Hash.new([])
-      }
-    end
+    result ||= {
+      file_mapping: {},
+      dependencies: Hash.new([]),
+      errors: {}
+    }
     file_mapping = result[:file_mapping]
     dependencies = result[:dependencies]
 
     files.each do |file_asset|
-      asset = file_asset.is_a?(Sprockets::Asset) ? file_asset : sprockets_env.find_asset(file_asset)
+      asset = begin
+        file_asset.is_a?(Sprockets::Asset) ? file_asset : sprockets_env.find_asset(file_asset)
+      rescue Sprockets::FileNotFound => e
+        uri, _ = sprockets_env.resolve(file_asset, compat: false)
+        filename, _ = Sprockets::URIUtils.parse_asset_uri(uri)
+        result[:errors][filename] = "#{e.class} - #{e.message}"
+        next
+      end
       our_logical_path = asset.logical_path
       dependency_assets = get_dependent_assets(asset, current_dependency_chain, sprockets_env)
       dependent_logical_paths = dependency_assets.map(&:logical_path)
@@ -67,6 +73,11 @@ module SprocketsMetadata
       dep_hash[filename] = {
         logical_path: logical_path,
         roll_up: roll_up
+      }
+    end
+    dependency_graph[:errors].each do |error_filename, error_message|
+      dep_hash[error_filename] = {
+        error: error_message
       }
     end
     dep_hash

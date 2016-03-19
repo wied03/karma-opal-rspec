@@ -13,7 +13,8 @@ describe SprocketsMetadata do
         @matcher = eq(expected_keys)
         # Test hash order
         next nil unless @matcher.matches? actual_keys
-        @matcher = eq(expected)
+        expected_wo_errors = expected.merge(errors: {})
+        @matcher = eq(expected_wo_errors)
         @matcher.matches? actual
       end
 
@@ -67,6 +68,25 @@ describe SprocketsMetadata do
                                     'single_file.js' => %w(other_file.js),
                                     'other_file.js' => []
                                   })
+      end
+    end
+
+    context 'missing dependency' do
+      before do
+        create_dummy_spec_files 'single_file.rb'
+        File.write absolute_path('single_file.rb'), 'require "other_file"'
+      end
+
+      let(:files) { %w(single_file) }
+
+      it do
+        is_expected.to eq({
+                            file_mapping: {},
+                            dependencies: {},
+                            errors: {
+                              absolute_path('single_file.rb') => "Sprockets::FileNotFound - couldn't find file 'other_file' with type 'application/javascript'"
+                            }
+                          })
       end
     end
 
@@ -235,6 +255,24 @@ describe SprocketsMetadata do
                             logical_path: 'file2.js',
                             roll_up: false
                           })
+      end
+    end
+
+    context 'missing dependency' do
+      let(:dependency_graph) do
+        {
+          file_mapping: {},
+          dependencies: {},
+          errors: {
+            '/single_file.rb' => "Sprockets::FileNotFound - couldn't find file 'other_file' with type 'application/javascript'"
+          }
+        }
+      end
+
+      it do
+        is_expected.to eq('/single_file.rb' => {
+          error: "Sprockets::FileNotFound - couldn't find file 'other_file' with type 'application/javascript'"
+        })
       end
     end
 
