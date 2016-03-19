@@ -14,7 +14,7 @@ module.exports = {
         ],
         "semi": [
             2,
-            "always"
+            "never"
         ]
     },
     "env": {
