@@ -242,7 +242,8 @@ describe SprocketsMetadata do
           dependencies: {
             'file1.js' => [],
             'file2.js' => []
-          }
+          },
+          errors: {}
         }
       end
 
@@ -288,7 +289,8 @@ describe SprocketsMetadata do
             'file1.js' => ['file3.js'],
             'file2.js' => [],
             'file3.js' => []
-          }
+          },
+          errors: {}
         }
       end
 
@@ -324,7 +326,8 @@ describe SprocketsMetadata do
             'file1.js' => ['file3.js'],
             'file2.js' => [],
             'file3.js' => []
-          }
+          },
+          errors: {}
         }
       end
 
@@ -356,7 +359,8 @@ describe SprocketsMetadata do
             'something/file1.js' => ['file3.js'],
             'file2.js' => [],
             'file3.js' => []
-          }
+          },
+          errors: {}
         }
       end
 
@@ -388,7 +392,8 @@ describe SprocketsMetadata do
             'file1.js' => ['file3.js'],
             'file2.js' => ['file3.js'],
             'file3.js' => []
-          }
+          },
+          errors: { }
         }
       end
 
@@ -420,7 +425,8 @@ describe SprocketsMetadata do
             'file1.js' => ['file3.js'],
             'file2.js' => [],
             'file3.js' => []
-          }
+          },
+          errors: {}
         }
       end
 
