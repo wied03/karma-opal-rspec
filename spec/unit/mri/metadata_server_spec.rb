@@ -48,10 +48,8 @@ describe Karma::Opal::MetadataServer do
       let(:requested_files) { absolute_path('dependent_file.rb') }
 
       it do
-        is_expected.to eq({
-                            absolute_path('single_file.rb') => { 'logical_path' => 'single_file.js', 'roll_up' => false },
-                            absolute_path('dependent_file.rb') => { 'logical_path' => 'dependent_file.js', 'roll_up' => false }
-                          })
+        is_expected.to eq(absolute_path('single_file.rb') => { 'logical_path' => 'single_file.js', 'roll_up' => false },
+                          absolute_path('dependent_file.rb') => { 'logical_path' => 'dependent_file.js', 'roll_up' => false })
       end
     end
   end
@@ -76,10 +74,8 @@ describe Karma::Opal::MetadataServer do
     let(:requested_files) { [absolute_path('single_file.rb'), absolute_path('other_file.rb')] }
 
     it do
-      is_expected.to eq({
-                          absolute_path('single_file.rb') => { 'logical_path' => 'single_file.js', 'roll_up' => false },
-                          absolute_path('other_file.rb') => { 'logical_path' => 'other_file.js', 'roll_up' => false }
-                        })
+      is_expected.to eq(absolute_path('single_file.rb') => { 'logical_path' => 'single_file.js', 'roll_up' => false },
+                        absolute_path('other_file.rb') => { 'logical_path' => 'other_file.js', 'roll_up' => false })
     end
   end
 end

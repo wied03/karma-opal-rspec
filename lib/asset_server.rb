@@ -39,7 +39,7 @@ module Karma
         ::Opal::Sprockets::SourceMapHeaderPatch.inject!(maps_prefix)
         metadata_server = MetadataServer.new(sprockets_env, roll_up_list)
         Rack::Builder.app do
-          not_found = lambda { |env| [404, {}, []] }
+          not_found = ->(_env) { [404, {}, []] }
           use Rack::Deflater
           use Rack::ShowExceptions
           map(maps_prefix) do

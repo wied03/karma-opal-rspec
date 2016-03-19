@@ -43,8 +43,8 @@ describe SprocketsMetadata do
 
       it do
         is_expected.to have_graph(file_mapping: {
-          'single_file.js' => absolute_path('single_file.rb')
-        },
+                                    'single_file.js' => absolute_path('single_file.rb')
+                                  },
                                   dependencies: {
                                     'single_file.js' => []
                                   })
@@ -61,9 +61,9 @@ describe SprocketsMetadata do
 
       it do
         is_expected.to have_graph(file_mapping: {
-          'other_file.js' => absolute_path('other_file.rb'),
-          'single_file.js' => absolute_path('single_file.rb')
-        },
+                                    'other_file.js' => absolute_path('other_file.rb'),
+                                    'single_file.js' => absolute_path('single_file.rb')
+                                  },
                                   dependencies: {
                                     'single_file.js' => %w(other_file.js),
                                     'other_file.js' => []
@@ -80,12 +80,10 @@ describe SprocketsMetadata do
       let(:files) { %w(single_file) }
 
       it do
-        is_expected.to eq({
-                            file_mapping: {},
-                            dependencies: {},
-                            errors: {
-                              absolute_path('single_file.rb') => "Sprockets::FileNotFound - couldn't find file 'other_file' with type 'application/javascript'"
-                            }
+        is_expected.to eq(file_mapping: {},
+                          dependencies: {},
+                          errors: {
+                            absolute_path('single_file.rb') => "Sprockets::FileNotFound - couldn't find file 'other_file' with type 'application/javascript'"
                           })
       end
     end
@@ -101,10 +99,10 @@ describe SprocketsMetadata do
 
       it do
         is_expected.to have_graph(file_mapping: {
-          'level3.js' => absolute_path('level3.rb'),
-          'level2.js' => absolute_path('level2.rb'),
-          'single_file.js' => absolute_path('single_file.rb')
-        },
+                                    'level3.js' => absolute_path('level3.rb'),
+                                    'level2.js' => absolute_path('level2.rb'),
+                                    'single_file.js' => absolute_path('single_file.rb')
+                                  },
                                   dependencies: {
                                     'single_file.js' => %w(level3.js level2.js),
                                     'level3.js' => [],
@@ -124,9 +122,9 @@ describe SprocketsMetadata do
 
       it do
         is_expected.to have_graph(file_mapping: {
-          'other_file.js' => absolute_path('other_file.rb'),
-          'single_file.js' => absolute_path('single_file.rb')
-        },
+                                    'other_file.js' => absolute_path('other_file.rb'),
+                                    'single_file.js' => absolute_path('single_file.rb')
+                                  },
                                   dependencies: {
                                     'single_file.js' => %w(other_file.js),
                                     'other_file.js' => %w(single_file.js)
@@ -145,10 +143,10 @@ describe SprocketsMetadata do
 
       it do
         is_expected.to have_graph(file_mapping: {
-          'other_file.js' => absolute_path('other_file.rb'),
-          'single_file.js' => absolute_path('single_file.rb'),
-          'third_file.js' => absolute_path('third_file.rb')
-        },
+                                    'other_file.js' => absolute_path('other_file.rb'),
+                                    'single_file.js' => absolute_path('single_file.rb'),
+                                    'third_file.js' => absolute_path('third_file.rb')
+                                  },
                                   dependencies: {
                                     'single_file.js' => %w(other_file.js),
                                     'other_file.js' => [],
@@ -167,9 +165,9 @@ describe SprocketsMetadata do
 
       it do
         is_expected.to have_graph(file_mapping: {
-          'other_file.js' => absolute_path('other_file.rb'),
-          'single_file.js' => absolute_path('single_file.js')
-        },
+                                    'other_file.js' => absolute_path('other_file.rb'),
+                                    'single_file.js' => absolute_path('single_file.js')
+                                  },
                                   dependencies: {
                                     'single_file.js' => %w(other_file.js),
                                     'other_file.js' => []
@@ -189,10 +187,10 @@ describe SprocketsMetadata do
 
         it do
           is_expected.to have_graph(file_mapping: {
-            'other_file.js' => absolute_path('other_file.rb'),
-            'single_file.js' => absolute_path('single_file.rb'),
-            'third_file.js' => absolute_path('third_file.rb')
-          },
+                                      'other_file.js' => absolute_path('other_file.rb'),
+                                      'single_file.js' => absolute_path('single_file.rb'),
+                                      'third_file.js' => absolute_path('third_file.rb')
+                                    },
                                     dependencies: {
                                       'single_file.js' => %w(other_file.js),
                                       'other_file.js' => [],
@@ -212,11 +210,11 @@ describe SprocketsMetadata do
 
         it do
           is_expected.to have_graph(file_mapping: {
-            'other_file.js' => absolute_path('other_file.rb'),
-            'single_file.js' => absolute_path('single_file.rb'),
-            'yet_another_file.js' => absolute_path('yet_another_file.rb'),
-            'third_file.js' => absolute_path('third_file.rb')
-          },
+                                      'other_file.js' => absolute_path('other_file.rb'),
+                                      'single_file.js' => absolute_path('single_file.rb'),
+                                      'yet_another_file.js' => absolute_path('yet_another_file.rb'),
+                                      'third_file.js' => absolute_path('third_file.rb')
+                                    },
                                     dependencies: {
                                       'single_file.js' => %w(other_file.js),
                                       'other_file.js' => [],
@@ -249,9 +247,9 @@ describe SprocketsMetadata do
 
       it do
         is_expected.to eq('/some/dir/file1.rb' => {
-          logical_path: 'file1.js',
-          roll_up: false
-        },
+                            logical_path: 'file1.js',
+                            roll_up: false
+                          },
                           '/some/dir/file2.rb' => {
                             logical_path: 'file2.js',
                             roll_up: false
@@ -272,8 +270,8 @@ describe SprocketsMetadata do
 
       it do
         is_expected.to eq('/single_file.rb' => {
-          error: "Sprockets::FileNotFound - couldn't find file 'other_file' with type 'application/javascript'"
-        })
+                            error: "Sprockets::FileNotFound - couldn't find file 'other_file' with type 'application/javascript'"
+                          })
       end
     end
 
@@ -296,9 +294,9 @@ describe SprocketsMetadata do
 
       it do
         is_expected.to eq('/some/dir/file3.rb' => {
-          logical_path: 'file3.js',
-          roll_up: false
-        },
+                            logical_path: 'file3.js',
+                            roll_up: false
+                          },
                           '/some/dir/file1.rb' => {
                             logical_path: 'file1.js',
                             roll_up: false
@@ -333,9 +331,9 @@ describe SprocketsMetadata do
 
       it do
         is_expected.to eq('/some/dir/file1.rb' => {
-          logical_path: 'file1.js',
-          roll_up: true
-        },
+                            logical_path: 'file1.js',
+                            roll_up: true
+                          },
                           '/some/dir/file2.rb' => {
                             logical_path: 'file2.js',
                             roll_up: false
@@ -366,9 +364,9 @@ describe SprocketsMetadata do
 
       it do
         is_expected.to eq('/some/dir/something/file1.rb' => {
-          logical_path: 'something/file1.js',
-          roll_up: true
-        },
+                            logical_path: 'something/file1.js',
+                            roll_up: true
+                          },
                           '/some/dir/file2.rb' => {
                             logical_path: 'file2.js',
                             roll_up: false
@@ -393,15 +391,15 @@ describe SprocketsMetadata do
             'file2.js' => ['file3.js'],
             'file3.js' => []
           },
-          errors: { }
+          errors: {}
         }
       end
 
       it do
         is_expected.to eq('/some/dir/file1.rb' => {
-          logical_path: 'file1.js',
-          roll_up: true
-        },
+                            logical_path: 'file1.js',
+                            roll_up: true
+                          },
                           '/some/dir/file2.rb' => {
                             logical_path: 'file2.js',
                             roll_up: false
@@ -432,9 +430,9 @@ describe SprocketsMetadata do
 
       it do
         is_expected.to eq('/some/dir/file1.rb' => {
-          logical_path: 'file1.js',
-          roll_up: true
-        },
+                            logical_path: 'file1.js',
+                            roll_up: true
+                          },
                           '/some/dir/file2.rb' => {
                             logical_path: 'file2.js',
                             roll_up: false
