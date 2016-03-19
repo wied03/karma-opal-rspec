@@ -118,26 +118,26 @@ Feature: Default pattern
     }
     """
 
-  Scenario: File added
-    Given the simple tests
-    And I run the Karma test and keep Karma running
-    And the test passes with JSON results:
-    """
-    {
-        "something nested": {
-            "should eq 42": "PASSED"
-        }
-    }
-    """
-    When I add a new spec file
-    Then the test passes with JSON results:
-    """
-    {
-        "something nested": {
-            "should eq 42": "PASSED"
-        },
-        "else": {
-          "should eq 43": "PASSED"
-        }
-    }
-    """
+#  Scenario: File added
+#    Given the simple tests
+#    And I run the Karma test and keep Karma running
+#    And the test passes with JSON results:
+#    """
+#    {
+#        "something nested": {
+#            "should eq 42": "PASSED"
+#        }
+#    }
+#    """
+#    When I add a new spec file
+#    Then the test passes with JSON results:
+#    """
+#    {
+#        "something nested": {
+#            "should eq 42": "PASSED"
+#        },
+#        "else": {
+#          "should eq 43": "PASSED"
+#        }
+#    }
+#    """
