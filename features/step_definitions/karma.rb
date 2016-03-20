@@ -233,9 +233,13 @@ When(/^I modify the spec file with a new dependency and wait$/) do
   write_dependency(text)
 end
 
-And(/^dependencies are not reloaded$/) do
+def kill_karma_get_output
   kill_running_karma_process
   output = File.read @karma_output
+end
+
+And(/^dependencies are not reloaded$/) do
+  output = kill_karma_get_output
   opal_loads = output.scan(/Processing .*opal\.rb" as.*opal\.js/).length
   expect(opal_loads).to eq 1
 end
@@ -303,4 +307,10 @@ end
     file << text
   end
   sleep 3
+end
+
+And(/^dependencies are reloaded$/) do
+  output = kill_karma_get_output
+  opal_loads = output.scan(/Processing .*opal\.rb" as.*opal\.js/).length
+  expect(opal_loads).to be > 1
 end

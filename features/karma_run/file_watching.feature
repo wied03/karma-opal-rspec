@@ -51,6 +51,7 @@ Feature: Watch files
         }
     }
     """
+    And dependencies are reloaded
 
   Scenario: Dependency contents changes
     Given the 'customLoadPath.js' Karma config file
@@ -154,6 +155,7 @@ Feature: Watch files
         }
     }
     """
+    And dependencies are reloaded
 
   Scenario: Spec changed with dependency typo
     Given the 'customLoadPath.js' Karma config file
@@ -181,6 +183,7 @@ Feature: Watch files
         }
     }
     """
+    And dependencies are reloaded
 
   Scenario: Spec removed
     Given the 'multiplePatterns.js' Karma config file
