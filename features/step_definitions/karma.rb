@@ -187,5 +187,4 @@ end
     file << text
   end
   sleep 3
-  pending
 end
