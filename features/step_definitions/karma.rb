@@ -232,3 +232,14 @@ And(/^dependencies are not reloaded$/) do
   opal_loads = output.scan(regex).length
   expect(opal_loads).to eq 1
 end
+
+When(/^I remove (\S+) and wait$/) do |test_file|
+  path = File.expand_path(File.join(aruba.config.working_directory, 'spec', test_file))
+  File.delete path
+  sleep 3
+end
+
+Then(/^the running Karma process shows "([^"]*)"$/) do |expected_output|
+  output = File.read @karma_output
+  expect(output).to include expected_output
+end

@@ -105,4 +105,20 @@ Feature: Watch files
     """
 
   Scenario: File removed
-    Given a complete scenario
+    Given the 'multiplePatterns.js' Karma config file
+    And the mult_patterns tests
+    And I run the Karma test and keep Karma running
+    And the test passes with JSON results:
+    """
+    {
+        "something nested": {
+            "should eq 42": "PASSED"
+        },
+        "other nested": {
+            "should eq 42": "PASSED"
+        }
+    }
+    """
+    When I remove other_test.rb and wait
+    Then the running Karma process shows "Executed 1 of 1 SUCCESS"
+    And dependencies are not reloaded
