@@ -143,3 +143,27 @@ end
   end
   sleep 3
 end
+
+When(/^I add a new spec file with dependencies and wait$/) do
+  source_dir = File.expand_path(File.join(aruba.config.working_directory, 'src_dir'))
+  source_file = File.join(source_dir, 'foo_dependency.rb')
+  File.open source_file, 'w' do |file|
+    file << 'class Howdy; def self.foo; [123]; end; end'
+  end
+
+  dest = File.expand_path(File.join(aruba.config.working_directory, 'spec', 'a_new_spec.rb'))
+  puts "Writing new test file to #{dest}"
+  File.open dest, 'w' do |file|
+    text = <<-SPEC
+require 'foo_dependency'
+
+describe Howdy do
+  subject { Howdy.foo }
+
+  it { is_expected.to eq [123] }
+end
+    SPEC
+    file << text
+  end
+  sleep 3
+end
