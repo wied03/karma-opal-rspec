@@ -14,7 +14,8 @@ Feature: Source maps
           }
       }
       """
-    And the output should contain "tmp/aruba/spec/main_spec.rb:5 in `(undefined)'"
+    And the stack trace should be:
+      | /testdir/spec/main_spec.rb:5 in `(undefined)' |
 
   Scenario: Pure Opal
     Given the simple tests

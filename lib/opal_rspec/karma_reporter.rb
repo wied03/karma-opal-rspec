@@ -7,7 +7,7 @@ module Karma
       # :reek:TooManyInstanceVariables: { max_instance_variables: 5 }
       class KarmaReporter
         # In the future, might want to make this configurable
-        FILTER_STACKTRACE = %w(opal.js opal-rspec.js karma-opal-rspec/lib/runner.js karma.js context.html)
+        FILTER_STACKTRACE = %w(opal.js opal-rspec.js lib/karma_sprockets/runner.js karma.js context.html)
         # avoid lots of nested constant resolution
         FAILED_EXAMPLE_NOTIFY = ::RSpec::Core::Notifications::FailedExampleNotification
         EXAMPLE_NOTIFY = ::RSpec::Core::Notifications::ExampleNotification

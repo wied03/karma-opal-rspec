@@ -314,3 +314,18 @@ And(/^dependencies are reloaded$/) do
   opal_loads = output.scan(/Processing .*opal\.rb" as.*opal\.js/).length
   expect(opal_loads).to be > 1
 end
+
+And(/^the stack trace should be:$/) do |expected_table|
+  combined_output = all_commands.map do |c|
+    c.stop
+    c.output.chomp
+  end.join("\n")
+  actual_stack_trace = /\(compared using ==\).(.*?)Phantom/m
+                         .match(combined_output)
+                         .captures[0]
+                         .strip
+                         .split("\n")
+                         .map(&:strip)
+                         .map { |trace| trace.gsub(File.expand_path(aruba.config.working_directory), '/testdir') }
+  expect(actual_stack_trace).to eq expected_table.raw.flatten
+end
