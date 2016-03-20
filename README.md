@@ -50,6 +50,8 @@ module.exports = function(config) {
 
 That's it!
 
+NOTE: Currently, your tests MUST end in _spec.rb.
+
 If you have a lot of tests, Karma might time out waiting for opal-rspec to run all of your tests. If you find Karma is giving you a `Disconnected (1 times), because no message in` error followed by a `No captured browser` error, add a `browserNoActivityTimeout` setting to karma.conf.js that is greater than the default of 10,000ms.
 
 ## FAQ
