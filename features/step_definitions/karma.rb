@@ -167,3 +167,25 @@ end
   end
   sleep 3
 end
+
+And(/^I modify the spec file and wait$/) do
+  dest = File.expand_path(File.join(aruba.config.working_directory, 'spec', 'main_spec.rb'))
+  File.open dest, 'w' do |file|
+    text = <<-SPEC
+describe 'something' do
+  subject { 42 }
+
+  context 'nested' do
+    it { is_expected.to eq 42 }
+  end
+
+  context 'nested 2' do
+    it { is_expected.to eq 42 }
+  end
+end
+    SPEC
+    file << text
+  end
+  sleep 3
+  pending
+end

@@ -52,7 +52,29 @@ Feature: Watch files
     """
 
   Scenario: File changes without dependency change
-    Given a complete scenario
+    Given the 'singlePattern.js' Karma config file
+    And the simple tests
+    And I run the Karma test and keep Karma running
+    And the test passes with JSON results:
+    """
+    {
+        "something nested": {
+            "should eq 42": "PASSED"
+        }
+    }
+    """
+    And I modify the spec file and wait
+    Then the test passes with JSON results:
+    """
+    {
+        "something nested": {
+            "should eq 42": "PASSED"
+        },
+        "something nested 2": {
+            "should eq 42": "PASSED"
+        }
+    }
+    """
 
   Scenario: File changes with dependency change
     Given a complete scenario
