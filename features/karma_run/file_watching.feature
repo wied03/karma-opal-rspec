@@ -26,7 +26,7 @@ Feature: Watch files
     """
     And dependencies are not reloaded
 
-  Scenario: New spec and dependency added
+  Scenario: New spec with dependency added
     Given the 'customLoadPath.js' Karma config file
     And the add_to_load_path/spec tests
     And I copy spec/integration/add_to_load_path/src_dir to the working directory
@@ -52,7 +52,7 @@ Feature: Watch files
     }
     """
 
-  Scenario: A dependency changes
+  Scenario: Dependency contents changes
     Given the 'customLoadPath.js' Karma config file
     And the add_to_load_path/spec tests
     And I copy spec/integration/add_to_load_path/src_dir to the working directory
@@ -74,8 +74,9 @@ Feature: Watch files
         }
     }
     """
+    And dependencies are not reloaded
 
-  Scenario: File has dependencies and changes but dependencies are same
+  Scenario: Spec has dependencies and only contents change
     Given the 'customLoadPath.js' Karma config file
     And the add_to_load_path/spec tests
     And I copy spec/integration/add_to_load_path/src_dir to the working directory
@@ -102,7 +103,7 @@ Feature: Watch files
     """
     And dependencies are not reloaded
 
-  Scenario: File changes without dependency change
+  Scenario: Spec has no dependencies and only contents change
     Given the 'singlePattern.js' Karma config file
     And the simple tests
     And I run the Karma test and keep Karma running
@@ -128,7 +129,7 @@ Feature: Watch files
     """
     And dependencies are not reloaded
 
-  Scenario: File changes with dependency change
+  Scenario: Spec has dependencies and contents and dependencies change
     Given the 'customLoadPath.js' Karma config file
     And the add_to_load_path/spec tests
     And I copy spec/integration/add_to_load_path/src_dir to the working directory
@@ -154,7 +155,7 @@ Feature: Watch files
     }
     """
 
-  Scenario: File changed with dependency typo
+  Scenario: Spec changed with dependency typo
     Given the 'customLoadPath.js' Karma config file
     And the add_to_load_path/spec tests
     And I copy spec/integration/add_to_load_path/src_dir to the working directory
@@ -181,7 +182,7 @@ Feature: Watch files
     }
     """
 
-  Scenario: File removed
+  Scenario: Spec removed
     Given the 'multiplePatterns.js' Karma config file
     And the mult_patterns tests
     And I run the Karma test and keep Karma running
