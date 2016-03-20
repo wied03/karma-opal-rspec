@@ -40,7 +40,7 @@ Follow Karma steps to create a karma.conf.js file for your project. You can see 
 module.exports = function(config) {
   config.set({
     files: [
-      'spec/**/*_spec.rb' // set this to wherever your Opal specs are
+      'spec/**/*_spec.rb' // set this to wherever your Opal specs are, only include a spec pattern here
     ],
     frameworks: ['opal'],
     middleware: ['opal_sourcemap'],
@@ -97,7 +97,7 @@ module.exports = function(config) {
 }
 ```
 
-NOTE: You should only include your specs under files. This plugin will automatically determine dependencies from
+*NOTE:* You should only include your specs under files. This plugin will automatically determine dependencies from
 your spec files.
 
 ### Additional requires
@@ -141,6 +141,7 @@ module.exports = function(config) {
   - PhantomJS stack traces work best with PhantomJS >= 2.0. 1.9.8 does not work.
   - Do not work for rolled up files (any asset coming from a GEM by default). It's hard to do this in Opal right now unless each file is broken out
   - Non opal assets (e.g. jquery.min) SMs do not work either - [open issue](https://github.com/wied03/karma-opal-rspec/issues/14)
+- Absolute paths are not supported in Karma's file config
 - If multiple files are being rolled up and they use similar requires that are not part of opal core (e.g. stdlib), the dependency will be duplicated in the rolled up file. This is because the plugin does not interfere with sprockets' self/pipeline process
 - This is arguably a strength, but this plugin assumes Sprockets is in charge of your assets (not webpack, browserify, etc.). If it makes sense, a future version might allow excluding sprockets and instead just focus on preprocessing and opal-rspec.
 
