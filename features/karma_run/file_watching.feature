@@ -45,8 +45,8 @@ Feature: Watch files
         "ClassUnderTest nested": {
             "should eq 42": "PASSED"
         },
-        "else": {
-          "should eq 43": "PASSED"
+        "Howdy": {
+          "should eq [123]": "PASSED"
         }
     }
     """
