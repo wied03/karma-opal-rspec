@@ -235,7 +235,7 @@ end
 
 def kill_karma_get_output
   kill_running_karma_process
-  output = File.read @karma_output
+  File.read @karma_output
 end
 
 And(/^dependencies are not reloaded$/) do
