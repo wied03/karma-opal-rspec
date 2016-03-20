@@ -192,7 +192,6 @@ end
   sleep 3
 end
 
-
 When(/^I modify the spec file with a new dependency and wait$/) do
   source_dir = File.expand_path(File.join(aruba.config.working_directory, 'src_dir'))
   source_file = File.join(source_dir, 'foo_dependency.rb')
