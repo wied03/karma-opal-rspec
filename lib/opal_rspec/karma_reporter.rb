@@ -66,6 +66,7 @@ module Karma
           # Most progress has already been reported after each example
           # If we have failures, then we'll have asynchronous things to wait on first before we declare victory
           Promise.when(*@promises).then do
+            # no need to deal with promises here since no stack trace/promise will be invoked for these
             log_filtered_examples
             @karma.JS.complete
           end
