@@ -12,4 +12,4 @@ roll_up_list = roll_up_list.map do |r|
   regexp_match ? Regexp.new(regexp_match.captures[0]) : r
 end
 
-run Karma::Opal::AssetServer.new(load_paths, default_path, mri_requires, roll_up_list)
+run Karma::SprocketsServer::AssetServer.new(load_paths, default_path, mri_requires, roll_up_list)

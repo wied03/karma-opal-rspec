@@ -1,5 +1,5 @@
 Rails.application.configure do
-  config.app_generators.javascript_engine :opal
+  config.app_generators.javascript_engine :opal_rspec
   Opal.append_path 'app/view_models'
 
   app = Rails.application

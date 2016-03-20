@@ -3,7 +3,7 @@ require 'native'
 
 describe 'opalSourceMapTranslator' do
   subject do
-    func = `require(process.cwd()+'/lib/opalSourceMapTranslator')`
+    func = `require(process.cwd()+'/lib/karma_sprockets/opalSourceMapTranslator')`
     native_source_map = existing_source_map.to_n
     result = `#{func}(#{native_source_map}, #{request_url})`
     Hash.new(result)

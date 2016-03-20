@@ -2,9 +2,10 @@ require 'rack'
 require 'metadata_server'
 require 'rails_detector'
 require 'environment'
+require 'opal_processor_patch'
 
 module Karma
-  module Opal
+  module SprocketsServer
     class AssetServer
       include RailsDetector
 
@@ -29,10 +30,10 @@ module Karma
       private
 
       def create_app(sprockets_env, roll_up_list)
-        ::Opal::Processor.source_map_enabled = true
+        Opal::Processor.source_map_enabled = true
         maps_prefix = SOURCE_MAPS_PREFIX_PATH
         maps_app = ::Opal::SourceMapServer.new(sprockets_env, maps_prefix)
-        ::Opal::Sprockets::SourceMapHeaderPatch.inject!(maps_prefix)
+        Opal::Sprockets::SourceMapHeaderPatch.inject!(maps_prefix)
         metadata_server = MetadataServer.new(sprockets_env, roll_up_list)
         Rack::Builder.app do
           not_found = ->(_env) { [404, {}, []] }

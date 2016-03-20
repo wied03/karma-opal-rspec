@@ -11,7 +11,7 @@ describe 'rack server' do
   let(:rails_env) { nil } # in case travis or local env has something here
 
   let(:app) do
-    config_path = File.expand_path('../../../../lib/rack_server.ru', __FILE__)
+    config_path = File.expand_path('../../../../lib/sprockets_server/rack_server.ru', __FILE__)
     ENV['OPAL_LOAD_PATH'] = ''
     ENV['OPAL_DEFAULT_PATH'] = @temp_dir
     ENV['MRI_REQUIRES'] = mri_requires

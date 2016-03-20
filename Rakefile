@@ -13,7 +13,7 @@ desc 'Node specs on code that can be run without Karma running'
 Opal::RSpec::RakeTask.new(:spec_opal) do |server, task|
   task.pattern = 'spec/unit/opal/**/*_spec.rb'
   task.default_path = 'spec/unit/opal'
-  server.append_path 'lib'
+  server.append_path 'lib/karma_sprockets'
   task.runner = :node
 end
 

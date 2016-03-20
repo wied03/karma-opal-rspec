@@ -1,5 +1,5 @@
 require_relative 'spec_helper'
-require_relative '../../../lib/opal_processor_patch'
+require 'opal_processor_patch'
 
 describe Opal::Processor do
   describe ':#process_requires' do

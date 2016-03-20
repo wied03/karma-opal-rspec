@@ -1,8 +1,8 @@
 require_relative 'spec_helper'
-require 'sprockets_metadata'
+require 'metadata'
 require 'opal/rspec/rake_task'
 
-describe SprocketsMetadata do
+describe Karma::SprocketsServer::Metadata do
   describe '::get_dependency_graph' do
     include_context :temp_dir
 
@@ -32,7 +32,7 @@ describe SprocketsMetadata do
       original_env.cached
     end
 
-    subject { SprocketsMetadata.get_dependency_graph sprockets_env, files }
+    subject { Karma::SprocketsServer::Metadata.get_dependency_graph sprockets_env, files }
 
     context 'no other dependencies' do
       before do
@@ -228,7 +228,7 @@ describe SprocketsMetadata do
 
   describe '::get_metadata' do
     let(:roll_up_list) { [] }
-    subject { SprocketsMetadata.get_metadata dependency_graph, roll_up_list }
+    subject { Karma::SprocketsServer::Metadata.get_metadata dependency_graph, roll_up_list }
 
     context 'no dependencies' do
       let(:dependency_graph) do
@@ -442,7 +442,7 @@ describe SprocketsMetadata do
   end
 
   describe '::default_roll_up_list' do
-    subject { SprocketsMetadata.default_roll_up_list }
+    subject { Karma::SprocketsServer::Metadata.default_roll_up_list }
 
     context 'mocked' do
       before do

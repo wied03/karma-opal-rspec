@@ -1,9 +1,9 @@
 require_relative 'spec_helper'
-require File.expand_path('../../../../lib/metadata_server.rb', __FILE__)
+require 'metadata_server'
 require 'rack/test'
 require 'opal'
 
-describe Karma::Opal::MetadataServer do
+describe Karma::SprocketsServer::MetadataServer do
   include_context :temp_dir
   include Rack::Test::Methods
 
@@ -19,8 +19,8 @@ describe Karma::Opal::MetadataServer do
     sprockets = Sprockets::Environment.new
     ::Opal.paths.each { |p| sprockets.append_path(p) }
     sprockets.append_path @temp_dir
-    allow(SprocketsMetadata).to receive(:default_roll_up_list).and_return default_roll_up_list
-    Karma::Opal::MetadataServer.new(sprockets, roll_up_list)
+    allow(Karma::SprocketsServer::Metadata).to receive(:default_roll_up_list).and_return default_roll_up_list
+    Karma::SprocketsServer::MetadataServer.new(sprockets, roll_up_list)
   end
 
   let(:roll_up_list) { [] }
