@@ -12,6 +12,7 @@ What does it do?
 - Rolls up certain assets to reduce how many requests the browser makes during testing (speed)
 - Matches up source maps to the location in the tree next to the original source
 - Works with any Karma browser/launcher
+- Watches your specs (and their dependencies) for changes if you configure Karma to do so
 
 How does it speed up test runs?
 - Uses the sprockets file cache to persist dependencies/etc. between test runs (this is also easy to do with the opal-rspec rake task)
@@ -48,9 +49,7 @@ module.exports = function(config) {
 }
 ```
 
-That's it!
-
-NOTE: Currently, your tests MUST end in _spec.rb.
+That's it! 
 
 If you have a lot of tests, Karma might time out waiting for opal-rspec to run all of your tests. If you find Karma is giving you a `Disconnected (1 times), because no message in` error followed by a `No captured browser` error, add a `browserNoActivityTimeout` setting to karma.conf.js that is greater than the default of 10,000ms.
 
@@ -97,6 +96,9 @@ module.exports = function(config) {
     ...
 }
 ```
+
+NOTE: You should only include your specs under files. This plugin will automatically determine dependencies from
+your spec files.
 
 ### Additional requires
 
