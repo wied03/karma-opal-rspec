@@ -271,3 +271,20 @@ And(/^I modify the spec file with a broken dependency and wait$/) do
 
   write_dependency(text)
 end
+
+
+When(/^I modify the spec file that has a dependency and wait$/) do
+  text = <<-SPEC
+  require 'class_under_test'
+
+  describe ClassUnderTest do
+    subject { ClassUnderTest.howdy }
+
+    context 'nested_something' do
+      it { is_expected.to eq 42 }
+    end
+  end
+  SPEC
+
+  write_dependency(text)
+end
