@@ -236,8 +236,7 @@ end
 And(/^dependencies are not reloaded$/) do
   kill_running_karma_process
   output = File.read @karma_output
-  regex = Regexp.new(Regexp.escape('GET /assets/opal.js'))
-  opal_loads = output.scan(regex).length
+  opal_loads = output.scan(/Processing .*opal\.rb" as.*opal\.js/).length
   expect(opal_loads).to eq 1
 end
 
