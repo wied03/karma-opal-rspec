@@ -228,6 +228,7 @@ end
 
 And(/^dependencies are not reloaded$/) do
   output = File.read @karma_output
-  opal_loads = Regexp.new(Regexp.escape('GET /assets/opal.js')).match(output).length
+  regex = Regexp.new(Regexp.escape('GET /assets/opal.js'))
+  opal_loads = output.scan(regex).length
   expect(opal_loads).to eq 1
 end
