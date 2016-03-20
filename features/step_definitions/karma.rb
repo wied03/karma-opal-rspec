@@ -192,7 +192,7 @@ end
   sleep 3
 end
 
-When(/^I modify the spec file with a new dependency and wait$/) do
+def write_dependency(spec_text)
   source_dir = File.expand_path(File.join(aruba.config.working_directory, 'src_dir'))
   source_file = File.join(source_dir, 'foo_dependency.rb')
   File.open source_file, 'w' do |file|
@@ -202,27 +202,32 @@ When(/^I modify the spec file with a new dependency and wait$/) do
   dest = File.expand_path(File.join(aruba.config.working_directory, 'spec', 'main_spec.rb'))
   puts "Overwriting test file to #{dest}"
   File.open dest, 'w' do |file|
-    text = <<-SPEC
-require 'class_under_test'
-require 'foo_dependency'
-
-describe ClassUnderTest do
-  subject { ClassUnderTest.howdy }
-
-  context 'nested' do
-    it { is_expected.to eq 42 }
-  end
-end
-
-describe Howdy do
-  subject { Howdy.foo }
-
-  it { is_expected.to eq [123] }
-end
-    SPEC
-    file << text
+    file << spec_text
   end
   sleep 3
+end
+
+When(/^I modify the spec file with a new dependency and wait$/) do
+  text = <<-SPEC
+  require 'class_under_test'
+  require 'foo_dependency'
+
+  describe ClassUnderTest do
+    subject { ClassUnderTest.howdy }
+
+    context 'nested' do
+      it { is_expected.to eq 42 }
+    end
+  end
+
+  describe Howdy do
+    subject { Howdy.foo }
+
+    it { is_expected.to eq [123] }
+  end
+  SPEC
+
+  write_dependency(text)
 end
 
 And(/^dependencies are not reloaded$/) do
@@ -241,4 +246,28 @@ end
 Then(/^the running Karma process shows "([^"]*)"$/) do |expected_output|
   output = File.read @karma_output
   expect(output).to include expected_output
+end
+
+
+And(/^I modify the spec file with a broken dependency and wait$/) do
+  text = <<-SPEC
+  require 'class_under_test'
+  require 'foo_dependency2'
+
+  describe ClassUnderTest do
+    subject { ClassUnderTest.howdy }
+
+    context 'nested' do
+      it { is_expected.to eq 42 }
+    end
+  end
+
+  describe Howdy do
+    subject { Howdy.foo }
+
+    it { is_expected.to eq [123] }
+  end
+  SPEC
+
+  write_dependency(text)
 end
