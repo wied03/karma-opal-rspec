@@ -52,6 +52,29 @@ Feature: Watch files
     }
     """
 
+  Scenario: A dependency changes
+    Given the 'customLoadPath.js' Karma config file
+    And the add_to_load_path/spec tests
+    And I copy spec/integration/add_to_load_path/src_dir to the working directory
+    And I run the Karma test and keep Karma running
+    And the test passes with JSON results:
+    """
+    {
+        "ClassUnderTest nested": {
+            "should eq 42": "PASSED"
+        }
+    }
+    """
+    When I change the dependency and wait
+    Then the test fails with JSON results:
+    """
+    {
+        "ClassUnderTest nested": {
+            "should eq 42": "FAILED"
+        }
+    }
+    """
+
   Scenario: File has dependencies and changes but dependencies are same
     Given the 'customLoadPath.js' Karma config file
     And the add_to_load_path/spec tests

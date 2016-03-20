@@ -292,3 +292,18 @@ When(/^I modify the spec file that has a dependency and wait$/) do
 
   write_dependency(text)
 end
+
+When(/^I change the dependency and wait$/) do
+  source = File.expand_path(File.join(aruba.config.working_directory, 'src_dir', 'class_under_test.rb'))
+  File.open source, 'w' do |file|
+    text = <<-DEP
+class ClassUnderTest
+  def self.howdy
+    43
+  end
+end
+    DEP
+    file << text
+  end
+  sleep 3
+end
