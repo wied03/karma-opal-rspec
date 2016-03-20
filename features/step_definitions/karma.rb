@@ -321,11 +321,11 @@ And(/^the stack trace should be:$/) do |expected_table|
     c.output.chomp
   end.join("\n")
   actual_stack_trace = /\(compared using ==\).(.*?)Phantom/m
-                         .match(combined_output)
-                         .captures[0]
-                         .strip
-                         .split("\n")
-                         .map(&:strip)
-                         .map { |trace| trace.gsub(File.expand_path(aruba.config.working_directory), '/testdir') }
+                       .match(combined_output)
+                       .captures[0]
+                       .strip
+                       .split("\n")
+                       .map(&:strip)
+                       .map { |trace| trace.gsub(File.expand_path(aruba.config.working_directory), '/testdir') }
   expect(actual_stack_trace).to eq expected_table.raw.flatten
 end
