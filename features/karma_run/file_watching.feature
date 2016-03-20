@@ -24,6 +24,7 @@ Feature: Watch files
         }
     }
     """
+    And dependencies are not reloaded
 
   Scenario: New spec and dependency added
     Given the 'customLoadPath.js' Karma config file
@@ -75,6 +76,7 @@ Feature: Watch files
         }
     }
     """
+    And dependencies are not reloaded
 
   Scenario: File changes with dependency change
     Given the 'customLoadPath.js' Karma config file

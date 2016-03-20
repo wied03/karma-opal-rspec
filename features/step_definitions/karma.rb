@@ -17,9 +17,11 @@ class FileNotFoundError < StandardError
 end
 
 When(/^I run the Karma test and keep Karma running$/) do
+  @karma_output = File.expand_path(File.join(aruba.config.working_directory, 'karma_output.txt'))
   @karma_still_running = Process.spawn('./node_modules/karma/bin/karma start --no-colors --log-level debug',
                                        chdir: aruba.config.working_directory,
-                                       pgroup: true)
+                                       pgroup: true,
+                                       [:out, :err] => @karma_output)
   puts "Started Karma with new process group at PID #{@karma_still_running}"
   # karma/node start another process, so we want to be able to keep track of these
   @karma_still_running = Process.getpgid @karma_still_running
@@ -42,6 +44,7 @@ After do
     Process.waitall
     ps_output = `ps ux`
     puts "Current processes after wait are #{ps_output}"
+    puts "Karma output is #{File.read(@karma_output)}"
   end
 end
 
@@ -221,4 +224,10 @@ end
     file << text
   end
   sleep 3
+end
+
+And(/^dependencies are not reloaded$/) do
+  output = File.read @karma_output
+  opal_loads = Regexp.new(Regexp.escape('GET /assets/opal.js')).match(output).length
+  expect(opal_loads).to eq 1
 end
