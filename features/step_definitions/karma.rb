@@ -252,7 +252,6 @@ Then(/^the running Karma process shows "([^"]*)"$/) do |expected_output|
   expect(output).to include expected_output
 end
 
-
 And(/^I modify the spec file with a broken dependency and wait$/) do
   text = <<-SPEC
   require 'class_under_test'
@@ -275,7 +274,6 @@ And(/^I modify the spec file with a broken dependency and wait$/) do
 
   write_dependency(text)
 end
-
 
 When(/^I modify the spec file that has a dependency and wait$/) do
   text = <<-SPEC
