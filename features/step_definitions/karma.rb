@@ -36,16 +36,19 @@ Before do
   ENV['RAILS_ENV'] = nil # in case travis or local env has something here
 end
 
+def kill_running_karma_process
+  group = -1 * @karma_still_running
+  puts "Sending SIGINT to process group ID #{group}"
+  Process.kill 'SIGINT', group
+  Process.waitall
+  ps_output = `ps ux`
+  puts "Current processes after wait are #{ps_output}"
+  puts "Karma output is #{File.read(@karma_output)}"
+  @karma_still_running = nil
+end
+
 After do
-  if @karma_still_running
-    group = -1 * @karma_still_running
-    puts "Sending SIGINT to process group ID #{group}"
-    Process.kill 'SIGINT', group
-    Process.waitall
-    ps_output = `ps ux`
-    puts "Current processes after wait are #{ps_output}"
-    puts "Karma output is #{File.read(@karma_output)}"
-  end
+  kill_running_karma_process if @karma_still_running
 end
 
 Then(/^the test (passes|fails) with JSON results:$/) do |pass_fail, expected_json|
@@ -231,6 +234,7 @@ When(/^I modify the spec file with a new dependency and wait$/) do
 end
 
 And(/^dependencies are not reloaded$/) do
+  kill_running_karma_process
   output = File.read @karma_output
   regex = Regexp.new(Regexp.escape('GET /assets/opal.js'))
   opal_loads = output.scan(regex).length
