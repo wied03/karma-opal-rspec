@@ -77,7 +77,30 @@ Feature: Watch files
     """
 
   Scenario: File changes with dependency change
-    Given a complete scenario
+    Given the 'customLoadPath.js' Karma config file
+    And the add_to_load_path/spec tests
+    And I copy spec/integration/add_to_load_path/src_dir to the working directory
+    And I run the Karma test and keep Karma running
+    And the test passes with JSON results:
+    """
+    {
+        "ClassUnderTest nested": {
+            "should eq 42": "PASSED"
+        }
+    }
+    """
+    When I modify the spec file with a new dependency and wait
+    Then the test passes with JSON results:
+    """
+    {
+        "ClassUnderTest nested": {
+            "should eq 42": "PASSED"
+        },
+        "Howdy": {
+          "should eq [123]": "PASSED"
+        }
+    }
+    """
 
   Scenario: File removed
     Given a complete scenario
