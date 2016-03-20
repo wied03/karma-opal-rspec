@@ -197,8 +197,8 @@ When(/^I modify the spec file with a new dependency and wait$/) do
     file << 'class Howdy; def self.foo; [123]; end; end'
   end
 
-  dest = File.expand_path(File.join(aruba.config.working_directory, 'spec', 'a_new_spec.rb'))
-  puts "Writing new test file to #{dest}"
+  dest = File.expand_path(File.join(aruba.config.working_directory, 'spec', 'main_spec.rb'))
+  puts "Overwriting test file to #{dest}"
   File.open dest, 'w' do |file|
     text = <<-SPEC
 require 'class_under_test'
