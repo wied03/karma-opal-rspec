@@ -12,6 +12,9 @@ Feature: Rails
     {
         "ClassUnderTest ::howdy": {
             "should eq 42": "PASSED"
+        },
+        "GEM Pure JS": {
+            "should include \"0.14\"": "PASSED"
         }
     }
     """
