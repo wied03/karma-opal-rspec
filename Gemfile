@@ -18,3 +18,9 @@ gem 'sqlite3'
 
 gem 'rubocop', require: false
 gem 'reek', '~> 3.0'
+
+# Need a pure JS GEM
+
+source 'https://rails-assets.org' do
+  gem 'rails-assets-react', '~> 0.14'
+end
