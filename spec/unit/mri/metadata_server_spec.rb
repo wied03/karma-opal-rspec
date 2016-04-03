@@ -27,7 +27,6 @@ describe Karma::SprocketsServer::MetadataServer do
   let(:default_roll_up_list) { [] }
 
   before do
-    # TODO: Remove exclude_self, derive watch from whether it's a GEM
     contents = {
       files: [*requested_files],
       watch: watch
