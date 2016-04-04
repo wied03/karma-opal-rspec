@@ -36,7 +36,8 @@
     "glob": "^7.0.3",
     "lodash": "^4.6.1",
     "retry": "^0.9.0",
-    "stacktrace-js": "^1.0.4"
+    "stacktrace-js": "^1.0.4",
+    "urllib-sync": "^1.1.2"
   },
   "engines": {
     "node": ">= 4.1"
