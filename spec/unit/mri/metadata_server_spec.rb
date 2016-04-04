@@ -78,8 +78,8 @@ describe Karma::SprocketsServer::MetadataServer do
     end
   end
 
-  describe '::default_roll_up_list' do
-    subject { Karma::SprocketsServer::Metadata.default_roll_up_list }
+  describe '#default_roll_up_list' do
+    subject { Karma::SprocketsServer::MetadataServer.new.send(:default_roll_up_list) }
 
     context 'mocked' do
       before do

@@ -1,7 +1,6 @@
 require 'rack'
 require 'json'
 require 'opal_processor_patch'
-require 'metadata'
 
 module Karma
   module SprocketsServer
