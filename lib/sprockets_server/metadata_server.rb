@@ -22,7 +22,6 @@ module Karma
         all_deps = core_deps.merge spec_deps
         only_roll_up = all_deps.select { |_, meta| meta[:roll_up] }
         metadata = {
-          load_paths: @sprockets_env.paths,
           roll_ups: only_roll_up
         }
         [200, {}, [metadata.to_json]]

@@ -32,7 +32,7 @@ describe Karma::SprocketsServer::MetadataServer do
   let(:opal_rspec_opal) { File.join(opal_rspec_base, 'opal') }
 
   describe '#call' do
-    subject do
+    subject(:response) do
       result = app.call
       raw = JSON.parse(result[2][0])
       # symbolize for ease of matching
@@ -41,13 +41,7 @@ describe Karma::SprocketsServer::MetadataServer do
 
     context 'default roll up' do
       it do
-        is_expected.to include(load_paths: include(opal_dir,
-                                                   opal_stdlib,
-                                                   opal_lib,
-                                                   opal_rspec_opal,
-                                                   load_path_absolute,
-                                                   karma_opal_rspec_dir),
-                               roll_ups: include(File.join(opal_dir, 'opal.rb'),
+        is_expected.to include(roll_ups: include(File.join(opal_dir, 'opal.rb'),
                                                  File.join(opal_rspec_opal, 'opal-rspec.rb')))
       end
     end
@@ -56,13 +50,7 @@ describe Karma::SprocketsServer::MetadataServer do
       let(:roll_up_list) { [/test_dep/] }
 
       it do
-        is_expected.to include(load_paths: include(opal_dir,
-                                                   opal_stdlib,
-                                                   opal_lib,
-                                                   opal_rspec_opal,
-                                                   load_path_absolute,
-                                                   karma_opal_rspec_dir),
-                               roll_ups: include(File.expand_path('stuff/impl/test_dep.rb')))
+        is_expected.to include(roll_ups: include(File.expand_path('stuff/impl/test_dep.rb')))
       end
     end
   end
