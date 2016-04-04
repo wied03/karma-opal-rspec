@@ -9,6 +9,7 @@ module Karma
     class MetadataServer
       def initialize(sprockets_env, roll_up_list, spec_pattern)
         @sprockets_env = sprockets_env
+        # Uses specs only to tease out specific locations of rolled up/GEM based assets
         @specs = FileList[*spec_pattern].map { |file| File.absolute_path file }
         @roll_up_list = roll_up_list.any? ? roll_up_list : MetadataServer.default_roll_up_list
       end

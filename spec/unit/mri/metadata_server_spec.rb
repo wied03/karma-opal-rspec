@@ -40,7 +40,7 @@ describe Karma::SprocketsServer::MetadataServer do
     end
 
     context 'default roll up' do
-      it {
+      it do
         is_expected.to include(load_paths: include(opal_dir,
                                                    opal_stdlib,
                                                    opal_lib,
@@ -49,17 +49,21 @@ describe Karma::SprocketsServer::MetadataServer do
                                                    karma_opal_rspec_dir),
                                roll_ups: include(File.join(opal_dir, 'opal.rb'),
                                                  File.join(opal_rspec_opal, 'opal-rspec.rb')))
-      }
+      end
     end
 
     context 'custom roll up' do
-      let(:roll_up_list) { [/dependent/] }
+      let(:roll_up_list) { [/test_dep/] }
 
-      pending 'write this'
-    end
-
-    context 'additional load paths' do
-      pending 'write this'
+      it do
+        is_expected.to include(load_paths: include(opal_dir,
+                                                   opal_stdlib,
+                                                   opal_lib,
+                                                   opal_rspec_opal,
+                                                   load_path_absolute,
+                                                   karma_opal_rspec_dir),
+                               roll_ups: include(File.expand_path('stuff/impl/test_dep.rb')))
+      end
     end
   end
 
