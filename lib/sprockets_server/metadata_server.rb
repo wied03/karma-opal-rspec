@@ -21,6 +21,15 @@ module Karma
         metadata = Metadata.get_metadata dependency_graph, @roll_up_list
         [200, {}, [metadata.to_json]]
       end
+
+      private
+
+      def default_roll_up_list
+        # use find all to catch pre-release
+        opal_spec = Gem::Specification.find_all_by_name('opal').first
+        gems_dir = File.expand_path('..', opal_spec.gem_dir)
+        [Regexp.new(Regexp.escape(gems_dir))]
+      end
     end
   end
 end

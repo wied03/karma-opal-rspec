@@ -77,4 +77,22 @@ describe Karma::SprocketsServer::MetadataServer do
                         absolute_path('other_file.rb') => { 'logical_path' => 'other_file.js', 'roll_up' => false })
     end
   end
+
+  describe '::default_roll_up_list' do
+    subject { Karma::SprocketsServer::Metadata.default_roll_up_list }
+
+    context 'mocked' do
+      before do
+        stuff = double
+        allow(Gem::Specification).to receive(:find_all_by_name).with('opal').and_return([stuff])
+        allow(stuff).to receive(:gem_dir).and_return('/some/path/to/gems/opal')
+      end
+
+      it { is_expected.to eq [%r{/some/path/to/gems}] }
+    end
+
+    context 'real' do
+      it { is_expected.to include(be_a(Regexp)) }
+    end
+  end
 end
