@@ -9,6 +9,7 @@ describe 'rack server' do
 
   let(:mri_requires) { '' }
   let(:rails_env) { nil } # in case travis or local env has something here
+  let(:patterns) { ['**/*.rb'] }
 
   let(:app) do
     config_path = File.expand_path('../../../../lib/sprockets_server/rack_server.ru', __FILE__)
@@ -16,6 +17,7 @@ describe 'rack server' do
     ENV['OPAL_DEFAULT_PATH'] = @temp_dir
     ENV['MRI_REQUIRES'] = mri_requires
     ENV['RAILS_ENV'] = rails_env
+    ENV['PATTERN'] = patterns.join ','
     Rack::Builder.new_from_string(File.read(config_path))
   end
 
@@ -38,6 +40,14 @@ describe 'rack server' do
       subject { last_response }
 
       it { is_expected.to have_attributes status: 404 }
+    end
+
+    describe 'metadata' do
+      before { get '/metadata' }
+
+      subject { JSON.parse(last_response.body) }
+
+      it { is_expected.to include 'load_paths', 'roll_ups' }
     end
 
     it 'fetches an asset properly multiple times' do

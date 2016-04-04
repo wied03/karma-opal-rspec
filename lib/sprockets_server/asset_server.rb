@@ -11,7 +11,7 @@ module Karma
 
       SOURCE_MAPS_PREFIX_PATH = '/__OPAL_SOURCE_MAPS__'
 
-      def initialize(load_paths, default_path, mri_requires, roll_up_list)
+      def initialize(load_paths, default_path, mri_requires, roll_up_list, spec_patterns)
         if in_rails?
           require File.expand_path('config/environment')
         else
@@ -20,7 +20,7 @@ module Karma
 
         mri_requires.each { |file| require file }
         sprockets_env = Environment.new load_paths, default_path
-        @app = create_app sprockets_env, roll_up_list
+        @app = create_app sprockets_env, roll_up_list, spec_patterns
       end
 
       def call(env)
@@ -29,12 +29,12 @@ module Karma
 
       private
 
-      def create_app(sprockets_env, roll_up_list)
+      def create_app(sprockets_env, roll_up_list, spec_patterns)
         Opal::Processor.source_map_enabled = true
         maps_prefix = SOURCE_MAPS_PREFIX_PATH
         maps_app = ::Opal::SourceMapServer.new(sprockets_env, maps_prefix)
         Opal::Sprockets::SourceMapHeaderPatch.inject!(maps_prefix)
-        metadata_server = MetadataServer.new(sprockets_env, roll_up_list)
+        metadata_server = MetadataServer.new(sprockets_env, roll_up_list, spec_patterns)
         Rack::Builder.app do
           not_found = ->(_env) { [404, {}, []] }
           use Rack::Deflater
