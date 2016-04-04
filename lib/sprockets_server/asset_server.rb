@@ -11,7 +11,7 @@ module Karma
 
       SOURCE_MAPS_PREFIX_PATH = '/__OPAL_SOURCE_MAPS__'
 
-      def initialize(load_paths, default_path, mri_requires, roll_up_list, spec_patterns)
+      def initialize(load_paths, mri_requires, roll_up_list, spec_patterns)
         if in_rails?
           require File.expand_path('config/environment')
         else
@@ -19,7 +19,7 @@ module Karma
         end
 
         mri_requires.each { |file| require file }
-        sprockets_env = Environment.new load_paths, default_path
+        sprockets_env = Environment.new load_paths
         @app = create_app sprockets_env, roll_up_list, spec_patterns
       end
 

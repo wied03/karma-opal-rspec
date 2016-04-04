@@ -15,12 +15,12 @@ describe Karma::SprocketsServer::MetadataServer do
   end
 
   let(:app) do
-    sprockets = Karma::SprocketsServer::Environment.new load_paths, 'spec'
+    sprockets = Karma::SprocketsServer::Environment.new load_paths
     Karma::SprocketsServer::MetadataServer.new(sprockets, roll_up_list, patterns)
   end
 
   let(:patterns) { 'spec/**/*_spec.rb' }
-  let(:load_paths) { %w(stuff) }
+  let(:load_paths) { %w(spec stuff) }
   let(:load_path_absolute) { File.expand_path load_paths[0] }
   let(:roll_up_list) { [] }
   let(:opal_base_dir) { Gem::Specification.find_all_by_name('opal').first.gem_dir }

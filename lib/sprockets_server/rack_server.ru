@@ -2,10 +2,9 @@ require 'asset_server'
 
 patterns = ENV['PATTERN'].split(',')
 load_paths = ENV['OPAL_LOAD_PATH'].split(',')
-mri_requires = ENV['MRI_REQUIRES'].split(',')
-default_path = ENV['OPAL_DEFAULT_PATH']
 # undefined as sent as empty string across env from JS
-default_path = 'spec' if default_path.empty?
+load_paths << 'spec' if load_paths.empty?
+mri_requires = ENV['MRI_REQUIRES'].split(',')
 roll_up_list = (ENV['OPAL_ROLL_UP'] || '').split(',')
 roll_up_list = roll_up_list.map do |r|
   # convert JS supplied regexps back into Ruby regexps if necessary
@@ -13,4 +12,4 @@ roll_up_list = roll_up_list.map do |r|
   regexp_match ? Regexp.new(regexp_match.captures[0]) : r
 end
 
-run Karma::SprocketsServer::AssetServer.new(load_paths, default_path, mri_requires, roll_up_list, patterns)
+run Karma::SprocketsServer::AssetServer.new(load_paths, mri_requires, roll_up_list, patterns)

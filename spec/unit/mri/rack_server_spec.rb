@@ -13,8 +13,7 @@ describe 'rack server' do
 
   let(:app) do
     config_path = File.expand_path('../../../../lib/sprockets_server/rack_server.ru', __FILE__)
-    ENV['OPAL_LOAD_PATH'] = ''
-    ENV['OPAL_DEFAULT_PATH'] = @temp_dir
+    ENV['OPAL_LOAD_PATH'] = @temp_dir
     ENV['MRI_REQUIRES'] = mri_requires
     ENV['RAILS_ENV'] = rails_env
     ENV['PATTERN'] = patterns.join ','
@@ -47,7 +46,7 @@ describe 'rack server' do
 
       subject { JSON.parse(last_response.body) }
 
-      it { is_expected.to include 'load_paths', 'roll_ups' }
+      it { is_expected.to include 'roll_ups' }
     end
 
     it 'fetches an asset properly multiple times' do
