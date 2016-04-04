@@ -13,14 +13,8 @@ module Karma
         dependencies = result[:dependencies]
 
         files.each do |file_asset|
-          asset = begin
-            file_asset.is_a?(::Sprockets::Asset) ? file_asset : sprockets_env.find_asset(file_asset)
-          rescue ::Sprockets::FileNotFound => exception
-            uri, = sprockets_env.resolve(file_asset, compat: false)
-            filename, = ::Sprockets::URIUtils.parse_asset_uri(uri)
-            result[:errors][filename] = "#{exception.class} - #{exception.message}"
-            next
-          end
+          asset = file_asset.is_a?(::Sprockets::Asset) ? file_asset : sprockets_env.find_asset(file_asset)
+          raise "Unable to find asset #{file_asset}" unless asset
           our_logical_path = asset.logical_path
           dependency_assets = get_dependent_assets(asset, current_dependency_chain, sprockets_env)
           dependent_logical_paths = dependency_assets.map(&:logical_path)
@@ -46,13 +40,6 @@ module Karma
         end
         # Don't want to include ourselves
         all_assets.reject { |other_asset| other_asset.filename == asset.filename }
-      end
-
-      def self.default_roll_up_list
-        # use find all to catch pre-release
-        opal_spec = Gem::Specification.find_all_by_name('opal').first
-        gems_dir = File.expand_path('..', opal_spec.gem_dir)
-        [Regexp.new(Regexp.escape(gems_dir))]
       end
 
       def self.get_metadata(dependency_graph, roll_up_list)
