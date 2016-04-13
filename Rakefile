@@ -9,21 +9,6 @@ Cucumber::Rake::Task.new(:cucumber) do |t|
   t.cucumber_opts = 'features --format pretty'
 end
 
-desc 'Node specs on code that can be run without Karma running'
-Opal::RSpec::RakeTask.new(:spec_opal) do |server, task|
-  task.pattern = 'spec/unit/opal/**/*_spec.rb'
-  task.default_path = 'spec/unit/opal'
-  server.append_path 'lib'
-  task.runner = :node
-end
-
-desc 'MRI only specs'
-RSpec::Core::RakeTask.new(:spec_mri) do |task|
-  task.pattern = 'spec/unit/mri/**/*_spec.rb'
-end
-
-task spec: [:spec_mri, :spec_opal]
-
 desc 'JS Hint on JScode'
 task :js_hint do
   sh 'node_modules/jshint/bin/jshint lib/*.js'
@@ -47,4 +32,4 @@ Reek::Rake::Task.new do |task|
   task.instance_variable_set :@source_files, files
 end
 
-task default: [:js_hint, :es_lint, :rubocop, :reek, :spec, :cucumber]
+task default: [:js_hint, :es_lint, :rubocop, :reek, :cucumber]
