@@ -41,7 +41,7 @@ module.exports = function(config) {
     files: [
       'spec/**/*_spec.rb' // set this to wherever your Opal specs are
     ],
-    frameworks: ['opal'],
+    frameworks: ['opal_rspec'],
     middleware: ['opal_sourcemap'],
     ...
     })
