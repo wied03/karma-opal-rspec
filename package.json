@@ -33,9 +33,9 @@
   },
   "dependencies": {
     "lodash": "^4.6.1",
+    "opal-webpack": "^1.0.1",
     "stacktrace-js": "^1.0.4",
-    "tmp": "0.0.28",
-    "urllib-sync": "^1.1.2"
+    "webpack": "^1.12.15"
   },
   "engines": {
     "node": ">= 4.1"
