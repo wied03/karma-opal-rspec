@@ -1,8 +1,0 @@
-Opal.require('opal/rspec');
-<%=
-  environment.get_opal_spec_requires.map do |req|
-    logical_path = environment.find_asset(req).logical_path
-    no_ext = logical_path.sub(File.extname(logical_path), '')
-    "Opal.require('#{no_ext}');\n"
-  end
-%>
