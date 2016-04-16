@@ -29,7 +29,8 @@
     "karma-chrome-launcher": "^0.2.1",
     "karma-phantomjs2-launcher": "^0.5.0",
     "karma-orspec-json-reporter": "file:./spec/karma-orspec-json-reporter",
-    "require-self": "^0.1.0"
+    "require-self": "^0.1.0",
+    "karma-webpack_2": "^1.0.0"
   },
   "dependencies": {
     "lodash": "^4.6.1",
