@@ -5,11 +5,11 @@ Feature: error handling
     And the missing_require tests
     When I run the Karma test
     Then the test fails
-    And the output should contain "SprocketsAssetException: Unable to fetch asset metadata from Sprockets, error details: Sprockets::FileNotFound: couldn't find file 'missing_file' with type 'application/javascript'"
+    And the output should contain "Module build failed: Error: Cannot find file - missing_file"
 
-  Scenario: Invalid MRI require causes Rack crash
+  Scenario: Invalid MRI require causes error in webpack loader
     Given the 'invalidRackConfig.js' Karma config file
     And the simple tests
     When I run the Karma test
     Then the test fails
-    And the output should contain "SprocketsAssetException: Connection to Rack server refused, tried 50 times but hit max limit of 50."
+    And the output should contain "cannot load such file -- foobar"
