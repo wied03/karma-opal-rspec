@@ -7,6 +7,9 @@ Given(/^the '(.*)' Karma config file$/) do |config_path|
   dest = File.expand_path(File.join(aruba.config.working_directory, 'karma.conf.js'))
   # FileUtils cp was doing weird stuff for some reason
   `cp -f #{src} #{dest}`
+  src = File.expand_path(File.join(File.dirname(__FILE__), '../../spec/integration/entry_points', config_path))
+  dest = File.expand_path(File.join(aruba.config.working_directory, 'entry_point.js'))
+  `cp -f #{src} #{dest}`
 end
 
 When(/^I run the Karma test$/) do

@@ -4,3 +4,4 @@ Gemfile.lock
 /tmp
 test_run.json
 Gemfile.mac*
+vendor/*.js
