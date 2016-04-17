@@ -11,21 +11,30 @@ module.exports = function (config) {
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
         frameworks: ['opal_rspec'],
 
-        middleware: ['opal_sourcemap'],
-
         // list of files / patterns to load in the browser
-        files: [
-            'spec/**/*_spec.rb'
-        ],
+        files: [],
+
+        middleware: ['webpack'],
+
+        webpack: {
+            entry: ['./entry_point.js'],
+            module: {
+                loaders: [
+                    {
+                        test: /\.rb$/,
+                        loader: 'opal-webpack'
+                    }
+                ]
+            },
+            devtool: 'source-map'
+        },
+
+        karmaWebpack: {
+          sourceMapResults: false
+        },
 
         // list of files to exclude
         exclude: [],
-
-        // preprocess matching files before serving them to the browser
-        // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-        // TODO: https://github.com/karma-runner/karma/blob/master/test/unit/preprocessor.spec.js
-        // PR to include {dot: true} on mm call
-
 
         // test results reporter to use
         // possible values: 'dots', 'progress'
