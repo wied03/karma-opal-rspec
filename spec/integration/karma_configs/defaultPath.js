@@ -12,22 +12,24 @@ module.exports = function (config) {
         frameworks: ['opal_rspec'],
 
         // list of files / patterns to load in the browser
-        files: [
-            'spec/foobar/**/*_spec.rb'
-        ],
+        files: [],
 
-        opal: {
-            defaultPath: 'spec/foobar'
+        middleware: ['webpack'],
+
+        webpack: {
+            entry: ['./entry_point.js'],
+            module: {
+                loaders: [
+                    {
+                        test: /\.rb$/,
+                        loader: 'opal-webpack'
+                    }
+                ]
+            }
         },
 
         // list of files to exclude
         exclude: [],
-
-        // preprocess matching files before serving them to the browser
-        // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-        // TODO: https://github.com/karma-runner/karma/blob/master/test/unit/preprocessor.spec.js
-        // PR to include {dot: true} on mm call
-
 
         // test results reporter to use
         // possible values: 'dots', 'progress'
