@@ -27,18 +27,6 @@ Feature: Default pattern
     }
     """
 
-  Scenario: Sprockets require
-    Given the sprockets_require tests
-    When I run the Karma test
-    Then the test passes with JSON results:
-    """
-    {
-        "something via sprockets": {
-            "should eq 22": "PASSED"
-        }
-    }
-    """
-
   Scenario: Ruby require
     Given the ruby_require tests
     When I run the Karma test
