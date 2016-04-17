@@ -2,10 +2,17 @@ require 'opal'
 require 'opal-rspec'
 
 destination_filename = File.join(File.dirname(__FILE__), '../vendor', "opal-#{Opal::VERSION}-rspec-#{Opal::RSpec::VERSION}.js")
+KARMA_REPORTER_FILENAME = 'karma_reporter.rb'
+
+REPORTER_FILTER = [
+  File.basename(destination_filename),
+  File.expand_path('../runner.js', __FILE__),
+  'karma.js',
+  'context.html'
+]
 
 unless File.exist? destination_filename
   begin
-    Opal.append_path File.dirname(__FILE__)
     is_opal_09 = Opal::VERSION.include?('0.9')
     stubs = is_opal_09 ? Opal::Processor.stubbed_files : Opal::Config.stubbed_files
     # no accidental opal dupes in our RSpec code, etc.
@@ -18,7 +25,10 @@ unless File.exist? destination_filename
       file << opal_src
       spec_source = rspec_builder.build 'opal-rspec', { dynamic_require_severity: :ignore }.merge(go_arity)
       file << spec_source
-      reporter = rspec_builder.build 'karma_reporter', go_arity
+      reporter_src = File.read(File.join(File.dirname(__FILE__), KARMA_REPORTER_FILENAME))
+      # we reference this filename in the reporter for stack trace filtering
+      reporter_src.gsub!('THE_OPAL_RSPEC_PATH', REPORTER_FILTER.inspect)
+      reporter = rspec_builder.build_str reporter_src, KARMA_REPORTER_FILENAME, go_arity
       file << reporter
     end
   rescue
