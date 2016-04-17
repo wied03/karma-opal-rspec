@@ -1,6 +1,8 @@
 // Karma configuration
 // Generated on Mon Nov 09 2015 15:27:11 GMT-0700 (MST)
 
+process.env.OPAL_LOAD_PATH = 'spec/foobar'
+
 module.exports = function (config) {
     config.set({
 
