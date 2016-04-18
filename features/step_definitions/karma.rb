@@ -13,7 +13,7 @@ Given(/^the '(.*)' Karma config file$/) do |config_path|
 end
 
 When(/^I run the Karma test$/) do
-  step 'I run `bundle exec ./node_modules/karma/bin/karma start --single-run --no-colors --log-level debug`'
+  step 'I run `./node_modules/karma/bin/karma start --single-run --no-colors --log-level debug`'
 end
 
 class FileNotFoundError < StandardError
