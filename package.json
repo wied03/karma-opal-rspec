@@ -34,7 +34,7 @@
     "karma-webpack_2": "^1.0.0"
   },
   "dependencies": {
-    "opal-webpack": "^1.0.5",
+    "opal-webpack": "^1.0.6",
     "stacktrace-js": "^1.0.4",
     "webpack": "^1.12.15"
   },
