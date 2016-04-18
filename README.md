@@ -4,7 +4,7 @@
 [![Quality](http://img.shields.io/codeclimate/github/wied03/karma-opal-rspec.svg?style=flat-square)](https://codeclimate.com/github/wied03/karma-opal-rspec)
 [![Version](https://img.shields.io/npm/v/karma-opal-rspec.svg?style=flat-square)](https://www.npmjs.com/package/karma-opal-rspec)
 
-Allow Karma to run opal-rspec tests (and pull the dependency graph from Sprockets) and speed the workflow of typical opal-rspec testing in applications
+Allow Karma to run Opal-RSpec tests (and pull the dependency graph from Sprockets) and speed the workflow of typical opal-rspec testing in applications
 
 What does it do?
 - Reports opal-rspec test results into Karma
@@ -74,6 +74,9 @@ Karma has already done a decent job of dealing with browser startup/shutdown, te
 
 ### Why is this an NPM package and not a GEM?
 Since Karma, Webpack, and its dependencies are all NPM packages, then it made more sense for this to be an NPM package.
+
+### Why webpack?
+Versions 1.1 and older just used Sprockets directly. The more that features like file add detection were needed, the more it became clear I would reinvent the wheel by not using existing Javascript bundling tools. You can use this tool and still use Sprockets for your runtime assets. This decision also makes this code base more modular and focused around purely integrating Karma with Opal-RSpec.
 
 ## Other options
 
