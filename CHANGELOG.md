@@ -1,3 +1,8 @@
+## 1.2.0
+
+* Significant change, migrate to Webpack. This should improve source maps, file watching, and performance
+* Utilize the [Opal webpack loader](https://github.com/cj/opal-webpack)
+
 ## 1.1.0
 
 * Add in stacktrace-js for source maps in stack traces and hide Opal/Opal-RSpec/Karma code from test failure traces
