@@ -27,6 +27,19 @@ module.exports = function (config) {
                         loader: 'opal-webpack'
                     }
                 ]
+            },
+            opal: {
+                // https://github.com/cj/opal-webpack/issues/24
+                stubs: [
+                    'mutex_m',
+                    'jruby/synchronized',
+                    'monitor',
+                    'thread_safe/jruby_cache_backend',
+                    'atomic',
+                    'jruby',
+                    'logger',
+                    'active_support/inflector/methods'
+                ]
             }
         },
 
