@@ -18,8 +18,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "files": [
-    "lib",
-    "vendor/.keep"
+    "lib"
   ],
   "author": "wied03",
   "license": "BSD-2-Clause",

@@ -1,24 +1,26 @@
 require 'opal'
 require 'opal-rspec'
 
-destination_filename = File.join(File.dirname(__FILE__), '../vendor', "opal-#{Opal::VERSION}-rspec-#{Opal::RSpec::VERSION}.js")
+DESTINATION_DIR = 'tmp'
+Dir.mkdir(DESTINATION_DIR) unless Dir.exist? DESTINATION_DIR
+DESTINATION_FILENAME = File.join(DESTINATION_DIR, "opal-#{Opal::VERSION}-rspec-#{Opal::RSpec::VERSION}.js")
 KARMA_REPORTER_FILENAME = 'karma_reporter.rb'
 
 REPORTER_FILTER = [
-  File.basename(destination_filename),
+  File.basename(DESTINATION_FILENAME),
   File.expand_path('../runner.js', __FILE__),
   'karma.js',
   'context.html'
 ]
 
-unless File.exist? destination_filename
+unless File.exist? DESTINATION_FILENAME
   begin
     is_opal_09 = Opal::VERSION.include?('0.9')
     stubs = is_opal_09 ? Opal::Processor.stubbed_files : Opal::Config.stubbed_files
     # no accidental opal dupes in our RSpec code, etc.
     stubs += %w(opal opal/mini opal/full)
     rspec_builder = Opal::Builder.new(stubs: stubs)
-    File.open destination_filename, 'w' do |file|
+    File.open DESTINATION_FILENAME, 'w' do |file|
       go_arity = { arity_check: !is_opal_09 } # arity checking not supported with opal-rspec on 0.9
       opal_builder = Opal::Builder.new
       opal_src = opal_builder.build 'opal', go_arity
@@ -32,10 +34,10 @@ unless File.exist? destination_filename
       file << reporter
     end
   rescue
-    File.delete destination_filename if File.exist?(destination_filename)
+    File.delete DESTINATION_FILENAME if File.exist?(DESTINATION_FILENAME)
     raise
   end
 end
 
 # for the JS side
-puts File.expand_path(destination_filename)
+puts File.expand_path(DESTINATION_FILENAME)
