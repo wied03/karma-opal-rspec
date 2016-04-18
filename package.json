@@ -1,6 +1,6 @@
 {
   "name": "karma-opal-rspec",
-  "version": "1.2.0-beta1",
+  "version": "1.2.0-beta2",
   "description": "Run opal-rspec tests under Karma",
   "keywords": [
     "karma-plugin"
@@ -30,12 +30,12 @@
     "karma-phantomjs2-launcher": "^0.5.0",
     "karma-orspec-json-reporter": "file:./spec/karma-orspec-json-reporter",
     "require-self": "^0.1.0",
-    "karma-webpack_2": "^1.0.0"
+    "karma-webpack_2": "^1.0.0",
+    "opal-webpack": "git+https://github.com/cj/opal-webpack.git#bundler_stubs",
+    "webpack": "^1.12.15"
   },
   "dependencies": {
-    "opal-webpack": "git+https://github.com/cj/opal-webpack.git#bundler_stubs",
-    "stacktrace-js": "^1.0.4",
-    "webpack": "^1.12.15"
+    "stacktrace-js": "^1.0.4"
   },
   "engines": {
     "node": ">= 4.1"
