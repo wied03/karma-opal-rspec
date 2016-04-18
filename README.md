@@ -99,9 +99,7 @@ process.env.OPAL_LOAD_PATH = '/some/other/dir'
   - Are provided by [stacktrace-jS](https://www.stacktracejs.com/#!).
   - They work best in Chrome because Firefox/Safari aren't including stack traces in expectation failures
   - PhantomJS stack traces work best with PhantomJS >= 2.0. 1.9.8 does not work.
-  - Do not work for rolled up files (any asset coming from a GEM by default). It's hard to do this in Opal right now unless each file is broken out
-  - Non opal assets (e.g. jquery.min) SMs do not work either - [open issue](https://github.com/wied03/karma-opal-rspec/issues/14)
-
+  - Are not provided for the rolled up Opal runtime + Opal-RSpec code. Ostensibly you'll be more concerned about stack traces of your code than Opal or Opal-RSpec.
 ## License
 
 Authors: Brady Wied
