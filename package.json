@@ -33,7 +33,7 @@
     "karma-webpack_2": "^1.0.0"
   },
   "dependencies": {
-    "opal-webpack": "^1.0.6",
+    "opal-webpack": "git+https://github.com/cj/opal-webpack.git#bundler_stubs",
     "stacktrace-js": "^1.0.4",
     "webpack": "^1.12.15"
   },
