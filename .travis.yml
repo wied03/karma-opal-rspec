@@ -13,7 +13,7 @@ before_script:
   - "nvm install"
   - "nvm use"
   - "node -v"
-  - "npm install --no-bin-links"
+  - "npm install"
 
 script:
   - "bundle exec rake"
