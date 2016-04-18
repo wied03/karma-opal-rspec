@@ -1,3 +1,6 @@
 {
-  "esnext": true
+  "esnext": true,
+  "strict": true,
+  "node": true,
+  "asi": true
 }
