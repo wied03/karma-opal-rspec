@@ -51,7 +51,7 @@ module.exports = function(config) {
                 }
             ]
         }
-        devtool: 'source-map
+        devtool: 'source-map'
     },
     karmaWebpack: {
       sourceMapResults: false // this section is optional, but it will speed up your tests since
