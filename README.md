@@ -56,7 +56,8 @@ module.exports = function(config) {
     karmaWebpack: {
       sourceMapResults: false // this section is optional, but it will speed up your tests since
                               // karma-opal-rspec will retrieve source maps for test failures by itself
-                              // if sourcemaps are enabled in the webpack config
+                              // only when tests fail
+                              // This all assumes sourcemaps are enabled in the webpack config (devtool)
     }
     ...
   })
