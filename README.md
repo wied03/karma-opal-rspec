@@ -64,7 +64,7 @@ module.exports = function(config) {
 }
 ```
 
-Create a test entry point for Webpack like this:
+4) Create a test entry point for Webpack like this:
 
 entry_point.js
 ```js
