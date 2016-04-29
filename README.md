@@ -12,9 +12,9 @@ What does it do?
 - Works with any Karma browser/launcher
 
 How does it speed up test runs?
-- On the first run for a given Opal and Opal-RSpec version, the Opal runtime and Opal-RSpec code are compiled and bundled together
+- On the first run for a given Opal and Opal-RSpec version, the Opal runtime and Opal-RSpec code are compiled and bundled together (will eventually change, see [issue](https://github.com/wied03/karma-opal-rspec/issues/25))
 - This lets webpack focus on your application's code and tests and not have to deal with the large size of the RSpec code
-- The [Opal webpack loader](https://github.com/cj/opal-webpack) is the primary supported Webpack loader that should provide a good test feedback loop
+- The [Opal webpack loader](https://github.com/cj/opal-webpack) is the primary supported Webpack loader and that should provide a good test feedback loop
 
 ## Usage
 
@@ -26,8 +26,10 @@ gem 'opal', '~> 0.9'
 
 2) Install (assuming you already have a basic package.json setup for your project)
 ```bash
-npm install karma karma-opal-rspec karma-chrome-launcher --save-dev
+npm install karma karma-webpack_2 karma-opal-rspec karma-chrome-launcher --save-dev
 ```
+
+Right now the tool is tested with and assumes you are using karma-webpack_2. It's not necessarily required though (see below)
 
 3) Configure Karma
 
@@ -49,7 +51,13 @@ module.exports = function(config) {
                 }
             ]
         }
+        devtool: 'source-map
     },
+    karmaWebpack: {
+      sourceMapResults: false // this section is optional, but it will speed up your tests since
+                              // karma-opal-rspec will retrieve source maps for test failures by itself
+                              // if sourcemaps are enabled in the webpack config
+    }
     ...
   })
 }
@@ -93,6 +101,23 @@ If you have additional paths you'd like added to the Opal load path, then add a 
 ```js
 process.env.OPAL_LOAD_PATH = '/some/other/dir'
 ```
+
+### Karma-webpack options
+
+This tool uses karma-webpack_2 in its tests and configures a few things with the assumption that you are using that plugin. If not, it should still work but you might want to configure the opal-webpack loader with the following webpack options:
+
+```js
+{
+  entry: { ... },
+  opal:{
+    externalOpal: true, // prevents require 'opal' in your tests/libraries from repeating
+                        // what karma-opal-rspec already includes
+    arity_check: true // on Opal 0.10, should use false on 0.9
+  }
+}
+```
+
+For best results with seeing source mapped stack traces in failures, you'll want to ensure karma-webpack makes source maps available to the browser you're running in (karma_webpack_2 handles this for you).
 
 ## Limitations
 - Source maps
